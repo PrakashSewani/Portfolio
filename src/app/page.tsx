@@ -5,8 +5,10 @@ import HomePage from '@/pages/homePage';
 
 export default function Home() {
   return (
-    <ChakraProvider>
-      <HomePage />
-    </ChakraProvider>
+    <div className='font-mono'>
+      <ChakraProvider>
+        <HomePage />
+      </ChakraProvider>
+    </div>
   );
 }

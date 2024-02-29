@@ -16,10 +16,14 @@ export default function HomePage() {
                             <Button variant={"ghost"} colorScheme={"teal"}>Contact</Button>
                         </nav>
                     </div>
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-around p-16">
                         <div className="flex flex-col items-center justify-center w-4/5">
-                            <h1 className="text-4xl font-bold text-white">Hello, I'm Prakash Sewani</h1>
-                            <p className="text-lg text-gray-500 text-white">I'm a full stack web developer and a competitive programmer</p>
+                            <p className="text-4xl relative w-[max-content] before:absolute before:inset-0 before:animate-typewriter before:bg-[#20242D] after:absolute after:inset-0 after:w-[0.125em] after:animate-caret after:bg-white animate-pulse text-white mb-5">Hello, I am Prakash Sewani</p>
+                            <span className="text-lg text-gray-500 text-white text-justify mb-5">
+                                Welcome to my portfolio! Here, I showcase my skills in coding, passion for gaming, and knack for creative problem-solving.
+                                Take a look at my projects to see how I turn challenges into opportunities, blending code and creativity seamlessly.
+                                Each piece reflects my dedication to coding, gaming, and strategic problem-solving.
+                            </span>
                             <div className="flex space-x-4 mt-4">
                                 <Button colorScheme={"teal"} variant={"solid"}>Download CV</Button>
                                 <Button rightIcon={<ExternalLinkIcon />} colorScheme={"teal"} variant={"outline"}>Projects</Button>
