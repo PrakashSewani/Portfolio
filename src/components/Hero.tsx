@@ -53,19 +53,26 @@ export default function Hero() {
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="relative group"
+                  className="relative group p-[2px] overflow-hidden"
                 >
+                  {/* Border Beam Effect - Thicker and more visible */}
+                  <motion.div
+                    initial={{ rotate: 0 }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0_200deg,#3b82f6_240deg,#ef4444_280deg,#eab308_320deg,#22c55e_360deg)] opacity-100"
+                  />
+                  
+                  {/* Enhanced Glow - Larger and more intense */}
+                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/40 via-red-500/40 to-green-500/40 opacity-100 blur-3xl -z-10" />
+                  
                   <a
                     href="/resume.pdf"
                     download="Prakash_Sewani_Resume.pdf"
-                    className="px-8 py-4 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest flex items-center gap-2 transition-all group-hover:shadow-[0_0_30px_rgba(20,20,20,0.2)] dark:group-hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                    className="relative px-8 py-4 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest flex items-center gap-2 transition-all"
                   >
                     Download Resume <Download size={16} />
                   </a>
-                  <motion.div 
-                    className="absolute -inset-1 bg-gradient-to-r from-gray-200 to-gray-100 dark:from-white/10 dark:to-white/5 -z-10 opacity-0 group-hover:opacity-100 blur-sm transition-opacity"
-                    layoutId="buttonGlow"
-                  />
                 </motion.div>
                 
                 <a href="#contact" className="text-xs uppercase font-bold tracking-widest border-b-2 border-[#141414] dark:border-white pb-1 text-[#141414] dark:text-white hover:text-gray-500 dark:hover:text-white/60 transition-colors">
