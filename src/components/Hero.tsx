@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowDownRight } from 'lucide-react';
+import { ArrowDownRight, Download } from 'lucide-react';
 
 export default function Hero() {
   return (
@@ -38,10 +38,11 @@ export default function Hero() {
                 <motion.a
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  href="#projects"
+                  href="/resume.pdf"
+                  download="Prakash_Sewani_Resume.pdf"
                   className="px-8 py-4 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest flex items-center gap-2 transition-colors"
                 >
-                  View Selected Work <ArrowDownRight size={16} />
+                  Download Resume <Download size={16} />
                 </motion.a>
                 
                 <a href="#contact" className="text-xs uppercase font-bold tracking-widest border-b-2 border-[#141414] dark:border-white pb-1 text-[#141414] dark:text-white">

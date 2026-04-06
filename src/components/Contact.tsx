@@ -3,8 +3,8 @@ import { Mail, Github, Linkedin, Twitter, ArrowRight, MapPin } from 'lucide-reac
 
 const socialLinks = [
   { name: 'Email', icon: <Mail size={20} />, href: 'mailto:prakashsewani1994@gmail.com' },
-  { name: 'LinkedIn', icon: <Linkedin size={20} />, href: 'https://linkedin.com' },
-  { name: 'GitHub', icon: <Github size={20} />, href: 'https://github.com' },
+  { name: 'LinkedIn', icon: <Linkedin size={20} />, href: 'https://www.linkedin.com/in/prakash-s-2a389721a/' },
+  { name: 'GitHub', icon: <Github size={20} />, href: 'https://github.com/PrakashSewani' },
 ];
 
 export default function Contact() {

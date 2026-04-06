@@ -8,7 +8,7 @@ const projects = [
     tech: ['Python', 'Flask', 'BERT', 'BeautifulSoup', 'Transformers'],
     image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=800&h=600&auto=format&fit=crop',
     link: '#',
-    github: '#',
+    github: 'https://github.com/PrakashSewani/SMART-EDUCATION-BOT',
     category: 'NLP / AI',
   },
   {
@@ -17,7 +17,7 @@ const projects = [
     tech: ['Python', 'Selenium', 'Discord.py', 'Windows Task Scheduler'],
     image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=800&h=600&auto=format&fit=crop',
     link: '#',
-    github: '#',
+    github: 'https://github.com/PrakashSewani/AdvAutomation',
     category: 'Automation',
   },
 ];
@@ -58,12 +58,6 @@ export default function Projects() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-[#141414]/0 group-hover:bg-[#141414]/40 dark:group-hover:bg-white/20 transition-colors duration-500 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
-                  <a
-                    href={project.link}
-                    className="w-12 h-12 bg-white dark:bg-[#0a0a0a] text-[#141414] dark:text-white flex items-center justify-center rounded-full hover:scale-110 transition-transform"
-                  >
-                    <ExternalLink size={20} />
-                  </a>
                   <a
                     href={project.github}
                     className="w-12 h-12 bg-white dark:bg-[#0a0a0a] text-[#141414] dark:text-white flex items-center justify-center rounded-full hover:scale-110 transition-transform"
