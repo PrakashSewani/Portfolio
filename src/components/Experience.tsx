@@ -24,10 +24,10 @@ const journey = [
 
 export default function Experience() {
   return (
-    <section id="journey" className="py-24 px-6 md:px-12 bg-white transition-colors">
+    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-24">
-          <h2 className="text-7xl md:text-9xl font-serif italic tracking-tighter text-[#141414] opacity-5 select-none absolute -top-12 left-0 pointer-events-none">
+        <div className="mb-16 md:mb-24">
+          <h2 className="text-5xl md:text-9xl font-serif italic tracking-tighter text-[#141414] opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
             Story
           </h2>
           <div className="flex flex-col gap-4 relative z-10">
@@ -44,7 +44,7 @@ export default function Experience() {
           {/* Timeline Line */}
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gray-100 -translate-x-1/2 hidden md:block" />
 
-          <div className="flex flex-col gap-24">
+          <div className="flex flex-col gap-16 md:gap-24">
             {journey.map((item, index) => (
               <motion.div
                 key={item.title}

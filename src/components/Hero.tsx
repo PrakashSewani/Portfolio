@@ -13,12 +13,12 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex flex-col gap-4"
         >
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-mono uppercase tracking-widest text-gray-400">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+            <span className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-gray-400">
               Senior Software Engineer
             </span>
-            <div className="h-[1px] w-12 bg-gray-200" />
-            <span className="text-xs font-mono uppercase tracking-widest text-gray-400">
+            <div className="hidden md:block h-[1px] w-12 bg-gray-200" />
+            <span className="text-[10px] md:text-xs font-mono uppercase tracking-widest text-gray-400">
               Microfrontends & Systems
             </span>
           </div>

@@ -39,7 +39,7 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          <span className="text-[10px] font-mono uppercase text-gray-400 hidden xs:inline">Ready for hire</span>
+          <span className="text-[10px] font-mono uppercase text-gray-400">Ready for hire</span>
         </div>
       </div>
     </motion.nav>
