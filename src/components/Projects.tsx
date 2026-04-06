@@ -24,18 +24,18 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-24 px-6 md:px-12 bg-white transition-colors">
+    <section id="projects" className="py-24 px-6 md:px-12 bg-white dark:bg-[#0a0a0a] transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
           <div className="flex flex-col gap-4">
-            <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400">
+            <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               Selected Work
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif italic tracking-tighter text-[#141414]">
+            <h2 className="text-5xl md:text-7xl font-serif italic tracking-tighter text-[#141414] dark:text-white">
               Projects
             </h2>
           </div>
-          <p className="text-lg text-gray-500 max-w-md leading-relaxed">
+          <p className="text-lg text-gray-500 dark:text-white/40 max-w-md leading-relaxed">
             A collection of technical challenges solved through engineering excellence and creative problem-solving.
           </p>
         </div>
@@ -50,23 +50,23 @@ export default function Projects() {
               transition={{ delay: index * 0.1 }}
               className="group flex flex-col gap-6"
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 border border-gray-100">
+              <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-white/5 border border-gray-100 dark:border-white/5">
                 <img
                   src={project.image}
                   alt={project.title}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-[#141414]/0 group-hover:bg-[#141414]/40 transition-colors duration-500 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
+                <div className="absolute inset-0 bg-[#141414]/0 group-hover:bg-[#141414]/40 dark:group-hover:bg-white/20 transition-colors duration-500 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
                   <a
                     href={project.link}
-                    className="w-12 h-12 bg-white text-[#141414] flex items-center justify-center rounded-full hover:scale-110 transition-transform"
+                    className="w-12 h-12 bg-white dark:bg-[#0a0a0a] text-[#141414] dark:text-white flex items-center justify-center rounded-full hover:scale-110 transition-transform"
                   >
                     <ExternalLink size={20} />
                   </a>
                   <a
                     href={project.github}
-                    className="w-12 h-12 bg-white text-[#141414] flex items-center justify-center rounded-full hover:scale-110 transition-transform"
+                    className="w-12 h-12 bg-white dark:bg-[#0a0a0a] text-[#141414] dark:text-white flex items-center justify-center rounded-full hover:scale-110 transition-transform"
                   >
                     <Github size={20} />
                   </a>
@@ -76,17 +76,17 @@ export default function Projects() {
               <div className="flex flex-col gap-4">
                 <div className="flex justify-between items-start">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400">
+                    <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
                       {project.category}
                     </span>
-                    <h3 className="text-3xl font-bold tracking-tight text-[#141414] group-hover:text-gray-600 transition-colors">
+                    <h3 className="text-3xl font-bold tracking-tight text-[#141414] dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors">
                       {project.title}
                     </h3>
                   </div>
-                  <ArrowUpRight size={24} className="text-gray-200 group-hover:text-[#141414] transition-colors" />
+                  <ArrowUpRight size={24} className="text-gray-200 dark:text-white/10 group-hover:text-[#141414] dark:group-hover:text-white transition-colors" />
                 </div>
 
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-gray-500 dark:text-white/40 leading-relaxed">
                   {project.description}
                 </p>
 
@@ -94,7 +94,7 @@ export default function Projects() {
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="text-[10px] font-mono font-medium px-2 py-1 bg-gray-50 text-gray-400 border border-gray-100"
+                      className="text-[10px] font-mono font-medium px-2 py-1 bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/20 border border-gray-100 dark:border-white/5"
                     >
                       {tech}
                     </span>

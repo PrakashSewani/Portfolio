@@ -24,17 +24,17 @@ const journey = [
 
 export default function Experience() {
   return (
-    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white transition-colors">
+    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white dark:bg-[#0a0a0a] transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 relative">
-          <h2 className="text-5xl md:text-9xl font-serif italic tracking-tighter text-[#141414] opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
+          <h2 className="text-5xl md:text-9xl font-serif italic tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
             Story
           </h2>
           <div className="flex flex-col gap-4 relative z-10">
-            <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400">
+            <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               The Narrative
             </span>
-            <p className="text-2xl md:text-4xl font-serif italic text-[#141414] max-w-2xl leading-tight">
+            <p className="text-2xl md:text-4xl font-serif italic text-[#141414] dark:text-white max-w-2xl leading-tight">
               A chronological evolution of technical mastery and professional impact.
             </p>
           </div>
@@ -42,7 +42,7 @@ export default function Experience() {
 
         <div className="relative">
           {/* Timeline Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gray-100 -translate-x-1/2 hidden md:block" />
+          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gray-100 dark:bg-white/5 -translate-x-1/2 hidden md:block" />
 
           <div className="flex flex-col gap-16 md:gap-24">
             {journey.map((item, index) => (
@@ -57,27 +57,27 @@ export default function Experience() {
                 }`}
               >
                 {/* Timeline Dot */}
-                <div className="absolute left-0 md:left-1/2 top-0 md:top-1/2 w-4 h-4 bg-[#141414] border-4 border-white rounded-full -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block" />
+                <div className="absolute left-0 md:left-1/2 top-0 md:top-1/2 w-4 h-4 bg-[#141414] dark:bg-white border-4 border-white dark:border-[#0a0a0a] rounded-full -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block" />
 
                 {/* Content Card */}
                 <div className="w-full md:w-[45%]">
-                  <div className="bg-gray-50 p-8 md:p-10 border border-gray-100 hover:border-gray-200 transition-colors group">
+                  <div className="bg-gray-50 dark:bg-white/5 p-8 md:p-10 border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-colors group">
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex flex-col gap-1">
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400">
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
                           {item.period}
                         </span>
-                        <h4 className="text-2xl font-bold tracking-tight text-[#141414] group-hover:text-gray-600 transition-colors">
+                        <h4 className="text-2xl font-bold tracking-tight text-[#141414] dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors">
                           {item.title}
                         </h4>
-                        <span className="text-sm font-serif italic text-gray-500">{item.institution}</span>
+                        <span className="text-sm font-serif italic text-gray-500 dark:text-white/40">{item.institution}</span>
                       </div>
-                      <div className="p-2 bg-white border border-gray-100 text-gray-400 group-hover:text-[#141414] transition-colors">
+                      <div className="p-2 bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 text-gray-400 dark:text-white/40 group-hover:text-[#141414] dark:group-hover:text-white transition-colors">
                         {item.icon}
                       </div>
                     </div>
 
-                    <p className="text-gray-500 leading-relaxed mb-8">
+                    <p className="text-gray-500 dark:text-white/40 leading-relaxed mb-8">
                       {item.description}
                     </p>
 
@@ -85,7 +85,7 @@ export default function Experience() {
                       {item.tech.map((tech) => (
                         <span
                           key={tech}
-                          className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 bg-white text-gray-400 border border-gray-100"
+                          className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 bg-white dark:bg-white/5 text-gray-400 dark:text-white/20 border border-gray-100 dark:border-white/5"
                         >
                           {tech}
                         </span>
