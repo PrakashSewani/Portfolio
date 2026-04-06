@@ -50,17 +50,25 @@ export default function Hero() {
               </p>
               
               <div className="flex flex-wrap items-center gap-6">
-                <motion.a
+                <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  href="/resume.pdf"
-                  download="Prakash_Sewani_Resume.pdf"
-                  className="px-8 py-4 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest flex items-center gap-2 transition-colors"
+                  className="relative group"
                 >
-                  Download Resume <Download size={16} />
-                </motion.a>
+                  <a
+                    href="/resume.pdf"
+                    download="Prakash_Sewani_Resume.pdf"
+                    className="px-8 py-4 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest flex items-center gap-2 transition-all group-hover:shadow-[0_0_30px_rgba(20,20,20,0.2)] dark:group-hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                  >
+                    Download Resume <Download size={16} />
+                  </a>
+                  <motion.div 
+                    className="absolute -inset-1 bg-gradient-to-r from-gray-200 to-gray-100 dark:from-white/10 dark:to-white/5 -z-10 opacity-0 group-hover:opacity-100 blur-sm transition-opacity"
+                    layoutId="buttonGlow"
+                  />
+                </motion.div>
                 
-                <a href="#contact" className="text-xs uppercase font-bold tracking-widest border-b-2 border-[#141414] dark:border-white pb-1 text-[#141414] dark:text-white">
+                <a href="#contact" className="text-xs uppercase font-bold tracking-widest border-b-2 border-[#141414] dark:border-white pb-1 text-[#141414] dark:text-white hover:text-gray-500 dark:hover:text-white/60 transition-colors">
                   Get in touch
                 </a>
               </div>
