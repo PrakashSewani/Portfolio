@@ -3,7 +3,9 @@ import { ArrowDownRight, Download } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden transition-colors">
+    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors">
+      <div className="absolute inset-0 data-grid -z-10" />
+      
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

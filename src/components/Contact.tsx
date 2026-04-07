@@ -9,7 +9,7 @@ const socialLinks = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
+    <section id="contact" className="py-16 md:py-24 px-6 md:px-12 bg-white dark:bg-[#0a0a0a] transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
           <div className="flex flex-col gap-4">
