@@ -48,7 +48,7 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 flex flex-col bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-b border-gray-100 dark:border-white/10 transition-colors"
+      className="fixed top-0 left-0 right-0 z-50 flex flex-col bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-xl border-b border-gray-100 dark:border-white/10 transition-colors"
     >
       <div className="flex items-center justify-between px-4 md:px-6 py-4">
         <div className="flex items-center gap-2">

@@ -33,7 +33,7 @@ const journey = [
 
 export default function Experience() {
   return (
-    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white dark:bg-[#0a0a0a] transition-colors">
+    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 relative">
           <h2 className="text-5xl md:text-9xl font-serif italic tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">

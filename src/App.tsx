@@ -10,11 +10,14 @@ import Contact from './components/Contact';
 import Preloader from './components/Preloader';
 import { ThemeProvider } from './lib/ThemeContext';
 
+import Background from './components/Background';
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
     <ThemeProvider>
+      <Background />
       <AnimatePresence mode="wait">
         {isLoading ? (
           <Preloader key="preloader" onComplete={() => setIsLoading(false)} />

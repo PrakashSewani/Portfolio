@@ -34,7 +34,7 @@ const hobbies = [
 
 export default function Interests() {
   return (
-    <section id="interests" className="py-24 px-6 md:px-12 bg-gray-50 dark:bg-[#0f0f0f] transition-colors">
+    <section id="interests" className="py-24 px-6 md:px-12 bg-gray-50/50 dark:bg-[#0f0f0f]/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
           <div className="flex flex-col gap-4">
