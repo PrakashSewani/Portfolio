@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
 import { cn } from '@/src/lib/utils';
+import { useTheme } from '../lib/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 const navLinks = [
   { name: 'Expertise', href: '#expertise' },
@@ -11,6 +13,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useTheme();
   const [activeSection, setActiveSection] = useState('');
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -85,6 +88,13 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-6">
+          <button
+            onClick={(e) => toggleTheme(e)}
+            className="p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 text-gray-400 dark:text-white/40 hover:text-[#141414] dark:hover:text-white transition-all duration-300 cursor-pointer relative z-[60]"
+            aria-label="Toggle theme"
+          >
+            {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+          </button>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span className="text-[10px] font-mono uppercase text-gray-400 dark:text-white/40">Ready for hire</span>

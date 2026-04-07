@@ -7,15 +7,18 @@
   --font-serif: "Playfair Display", serif;
 }
 
+/* Force class-based dark mode strategy */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   body {
     --theme-hover-bg: #f9fafb;
-    @apply bg-white text-[#141414] font-sans selection:bg-[#141414] selection:text-white transition-colors duration-300;
+    @apply bg-white text-[#141414] font-sans selection:bg-[#141414] selection:text-white transition-colors duration-300 select-none;
   }
   
   .dark body {
     --theme-hover-bg: rgba(255, 255, 255, 0.05);
-    @apply bg-[#0a0a0a] text-white selection:bg-white selection:text-[#0a0a0a];
+    @apply bg-[#0a0a0a] text-white selection:bg-white selection:text-[#0a0a0a] select-none;
   }
 }
 

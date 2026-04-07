@@ -1,7 +1,45 @@
-import { motion } from 'motion/react';
+import { motion, useAnimationControls } from 'motion/react';
 import { ArrowDownRight, Download } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function Hero() {
+  const controls = useAnimationControls();
+  const [isIdle, setIsIdle] = useState(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      setIsIdle(false);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => setIsIdle(true), 10000);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    timeout = setTimeout(() => setIsIdle(true), 10000);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isIdle) {
+      controls.start({
+        y: [0, -15, 0],
+        transition: {
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }
+      });
+    } else {
+      controls.stop();
+      controls.set({ y: 0 });
+    }
+  }, [isIdle, controls]);
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors">
       <div className="absolute inset-0 data-grid -z-10" />
@@ -67,11 +105,11 @@ export default function Hero() {
                   <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/40 via-red-500/40 to-green-500/40 opacity-100 blur-3xl -z-10" />
                   
                   <a
-                    href="/resume.pdf"
-                    download="Prakash_Sewani_Resume.pdf"
+                    href="/resume.html"
+                    target="_blank"
                     className="relative px-8 py-4 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest flex items-center gap-2 transition-all"
                   >
-                    Download Resume <Download size={16} />
+                    View Resume <Download size={16} />
                   </a>
                 </motion.div>
                 
@@ -108,8 +146,13 @@ export default function Hero() {
         transition={{ delay: 1, duration: 1 }}
         className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 hidden sm:flex"
       >
-        <span className="text-[10px] uppercase tracking-widest font-bold text-gray-300 dark:text-white/20">Scroll to explore</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-gray-200 to-transparent dark:from-white/10" />
+        <motion.div 
+          animate={controls}
+          className="flex flex-col items-center gap-4"
+        >
+          <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/40">Scroll to explore</span>
+          <div className="w-[2px] h-16 bg-gradient-to-b from-gray-300 to-transparent dark:from-white/20" />
+        </motion.div>
       </motion.div>
     </section>
   );
