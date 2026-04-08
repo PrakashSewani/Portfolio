@@ -14,27 +14,14 @@ import { ThemeProvider } from './lib/ThemeContext';
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-      document.documentElement.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-      document.documentElement.style.overflow = 'unset';
-    };
-  }, [isLoading]);
-
   const handlePreloaderComplete = () => {
     setIsLoading(false);
   };
 
   return (
     <ThemeProvider>
-      <AnimatePresence>
+      <div className="scanline" />
+      <AnimatePresence mode="wait">
         {isLoading ? (
           <Preloader key="preloader" onComplete={handlePreloaderComplete} />
         ) : (
@@ -42,7 +29,7 @@ export default function App() {
             key="main"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1 }}
             className="relative min-h-screen"
           >
             <Navbar />
