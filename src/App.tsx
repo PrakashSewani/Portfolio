@@ -15,28 +15,13 @@ import { ThemeProvider } from './lib/ThemeContext';
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const lastShown = localStorage.getItem('preloader_last_shown');
-    const now = Date.now();
-    const oneHour = 60 * 60 * 1000;
-
-    if (lastShown && now - parseInt(lastShown) < oneHour) {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const handlePreloaderComplete = () => {
-    localStorage.setItem('preloader_last_shown', Date.now().toString());
-    setIsLoading(false);
-  };
-
   return (
     <ThemeProvider>
-      <div className="scanline" />
+      <div className="noise-overlay" />
       <CustomCursor />
       <AnimatePresence mode="wait">
         {isLoading ? (
-          <Preloader key="preloader" onComplete={handlePreloaderComplete} />
+          <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
         ) : (
           <motion.main
             key="main"

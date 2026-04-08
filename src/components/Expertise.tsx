@@ -37,7 +37,7 @@ const expertiseItems = [
 
 export default function Expertise() {
   return (
-    <section id="expertise" className="py-24 px-6 md:px-12 bg-gray-50 dark:bg-[#000000] transition-colors">
+    <section id="expertise" className="py-24 px-6 md:px-12 bg-gray-50 dark:bg-[#0f0f0f] transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -47,7 +47,7 @@ export default function Expertise() {
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               Technical Stack
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white matrix-glow">
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white">
               Expertise
             </h2>
           </div>
@@ -64,7 +64,7 @@ export default function Expertise() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-[#000000] p-8 md:p-12 flex flex-col gap-8 group transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
+              className="bg-white dark:bg-[#0a0a0a] p-8 md:p-12 flex flex-col gap-8 group transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
             >
               <div className="flex justify-between items-start">
                 <div className="p-4 bg-gray-50 dark:bg-white/5 text-[#141414] dark:text-white group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-[#0a0a0a] transition-colors">

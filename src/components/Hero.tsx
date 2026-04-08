@@ -44,7 +44,12 @@ export default function Hero() {
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden bg-white dark:bg-[#000000] transition-colors">
+    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors">
+      <motion.div 
+        style={{ y: y1 }}
+        className="absolute inset-0 data-grid -z-10" 
+      />
+      
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -76,7 +81,7 @@ export default function Hero() {
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[14vw] md:text-[10vw] font-serif leading-[0.85] tracking-tighter text-[#141414] dark:text-white select-none relative z-10 matrix-glow"
+                className="text-[14vw] md:text-[10vw] font-serif leading-[0.85] tracking-tighter text-[#141414] dark:text-white select-none relative z-10"
               >
                 Prakash <br />
                 Sewani
