@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import Expertise from './components/Expertise';
 import Projects from './components/Projects';
 import Experience from './components/Experience';
+import Certifications from './components/Certifications';
 import Interests from './components/Interests';
 import Contact from './components/Contact';
 import Preloader from './components/Preloader';
@@ -31,6 +32,7 @@ export default function App() {
             <Expertise />
             <Projects />
             <Experience />
+            <Certifications />
             <Interests />
             <Contact />
           </motion.main>

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
+import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react';
 import { cn } from '@/src/lib/utils';
 import { useTheme } from '../lib/ThemeContext';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Menu, X } from 'lucide-react';
 
 const navLinks = [
   { name: 'Expertise', href: '#expertise' },
   { name: 'Projects', href: '#projects' },
   { name: 'Journey', href: '#journey' },
+  { name: 'Certs', href: '#certifications' },
   { name: 'Interests', href: '#interests' },
   { name: 'Contact', href: '#contact' },
 ];
@@ -15,6 +16,7 @@ const navLinks = [
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [activeSection, setActiveSection] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -47,6 +49,11 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  // Close menu when clicking a link
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -63,6 +70,7 @@ export default function Navbar() {
           </span>
         </div>
 
+        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
@@ -87,20 +95,69 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 md:gap-6">
           <button
             onClick={(e) => toggleTheme(e)}
-            className="p-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 text-gray-400 dark:text-white/40 hover:text-[#141414] dark:hover:text-white transition-all duration-300 cursor-pointer relative z-[60]"
+            className="w-10 h-10 flex items-center justify-center bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 text-gray-400 dark:text-white/40 hover:text-[#141414] dark:hover:text-white transition-all duration-300 cursor-pointer relative z-[60]"
             aria-label="Toggle theme"
           >
-            {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
           </button>
-          <div className="flex items-center gap-2">
+
+          <div className="hidden sm:flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span className="text-[10px] font-mono uppercase text-gray-400 dark:text-white/40">Ready for hire</span>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden w-10 h-10 flex items-center justify-center bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 text-gray-400 dark:text-white/40 hover:text-[#141414] dark:hover:text-white transition-all duration-300 relative z-[60]"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="md:hidden bg-white dark:bg-[#0a0a0a] border-t border-gray-100 dark:border-white/10 overflow-hidden"
+          >
+            <div className="flex flex-col p-6 gap-6">
+              {navLinks.map((link, index) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  onClick={handleLinkClick}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className={cn(
+                    "text-lg uppercase tracking-[0.2em] font-bold transition-all",
+                    activeSection === link.href.slice(1) 
+                      ? "text-[#141414] dark:text-white" 
+                      : "text-gray-300 dark:text-white/20"
+                  )}
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+              
+              <div className="pt-6 border-t border-gray-100 dark:border-white/10 flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-xs font-mono uppercase text-gray-400 dark:text-white/40 tracking-widest">Ready for hire</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* Scroll Progress Bar */}
       <motion.div

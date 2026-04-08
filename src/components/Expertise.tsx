@@ -1,5 +1,8 @@
 import { motion } from 'motion/react';
-import { Database, Globe, Cpu, Layers, Terminal, ShieldCheck } from 'lucide-react';
+import { 
+  Database, Globe, Cpu, Layers, Terminal, ShieldCheck, 
+  Cpu as WasmIcon, Sparkles, Cloud, Network 
+} from 'lucide-react';
 
 const expertiseItems = [
   {
@@ -102,10 +105,10 @@ export default function Expertise() {
           </motion.div>
           <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
             {[
-              { title: 'WebAssembly', desc: 'Exploring high-performance computing in the browser for complex visualizations.' },
-              { title: 'AI-Driven Dev', desc: 'Integrating LLMs into the development workflow for enhanced productivity.' },
-              { title: 'Cloud Native', desc: 'Deepening expertise in Kubernetes and serverless architectures.' },
-              { title: 'Advanced GraphQL', desc: 'Optimizing federated schemas and real-time data orchestration.' },
+              { title: 'WebAssembly', desc: 'Exploring high-performance computing in the browser for complex visualizations.', icon: <WasmIcon size={16} className="text-blue-500" /> },
+              { title: 'AI-Driven Dev', desc: 'Integrating LLMs into the development workflow for enhanced productivity.', icon: <Sparkles size={16} className="text-purple-500" /> },
+              { title: 'Cloud Native', desc: 'Deepening expertise in Kubernetes and serverless architectures.', icon: <Cloud size={16} className="text-emerald-500" /> },
+              { title: 'Advanced GraphQL', desc: 'Optimizing federated schemas and real-time data orchestration.', icon: <Network size={16} className="text-amber-500" /> },
             ].map((interest, idx) => (
               <motion.div 
                 key={interest.title} 
@@ -113,10 +116,15 @@ export default function Expertise() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="flex flex-col gap-2"
+                className="flex flex-col gap-3 group"
               >
-                <h4 className="font-bold text-sm uppercase tracking-wider text-[#141414] dark:text-white">{interest.title}</h4>
-                <p className="text-sm text-gray-500 dark:text-white/40 leading-relaxed">{interest.desc}</p>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gray-100 dark:bg-white/5 transition-colors group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-[#0a0a0a]">
+                    {interest.icon}
+                  </div>
+                  <h4 className="font-bold text-sm uppercase tracking-wider text-[#141414] dark:text-white">{interest.title}</h4>
+                </div>
+                <p className="text-sm text-gray-500 dark:text-white/40 leading-relaxed pl-11">{interest.desc}</p>
               </motion.div>
             ))}
           </div>
