@@ -158,6 +158,12 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Scroll Progress Bar at bottom of Nav */}
+      <motion.div
+        className="h-[2px] bg-[#141414] dark:bg-white origin-left"
+        style={{ scaleX }}
+      />
     </motion.nav>
   );
 }

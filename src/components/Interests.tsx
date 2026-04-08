@@ -84,11 +84,6 @@ export default function Interests() {
               key={hobby.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ 
-                y: -10,
-                zIndex: 20,
-                boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
-              }}
               viewport={{ once: true }}
               transition={{ 
                 type: "spring", 
@@ -96,7 +91,7 @@ export default function Interests() {
                 damping: 20,
                 delay: index * 0.1 
               }}
-              className={`group p-8 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-6 relative overflow-hidden ${
+              className={`group p-10 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-8 relative overflow-hidden ${
                 index === 0 ? 'md:col-span-4 md:row-span-1' : 
                 index === 1 ? 'md:col-span-2 md:row-span-2' :
                 index === 2 ? 'md:col-span-2 md:row-span-1' :

@@ -29,8 +29,8 @@
 
 /* Custom Cursor */
 .cursor-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background-color: #141414;
   border-radius: 50%;
   position: fixed;
@@ -40,28 +40,29 @@
 }
 
 .cursor-outline {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border: 1px solid #141414;
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
   z-index: 9998;
-  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .dark .cursor-dot { background-color: white; }
 .dark .cursor-outline { border-color: white; }
 
 .cursor-hover .cursor-outline {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(20, 20, 20, 0.05);
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  mix-blend-mode: difference;
   border-color: transparent;
 }
 
-.dark .cursor-hover .cursor-outline {
-  background-color: rgba(255, 255, 255, 0.1);
+.cursor-hover .cursor-dot {
+  opacity: 0;
 }
 
 /* Noise Texture Overlay */
