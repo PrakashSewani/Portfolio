@@ -105,8 +105,9 @@ export default function Hero() {
                   <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/40 via-red-500/40 to-green-500/40 opacity-100 blur-3xl -z-10" />
                   
                   <a
-                    href="/resume.html"
+                    href="https://prakashsewaniresume.tiiny.site"
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="relative px-8 py-4 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest flex items-center gap-2 transition-all"
                   >
                     View Resume <Download size={16} />
