@@ -29,7 +29,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
 
     const draw = () => {
       // Subtle trail effect
-      ctx.fillStyle = 'rgba(20, 20, 20, 0.1)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = '#00ff41'; // Matrix Green
@@ -79,7 +79,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
     <motion.div
       exit={{ y: '-100%' }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#141414] text-white overflow-hidden"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#000000] text-white overflow-hidden"
     >
       <canvas
         ref={canvasRef}

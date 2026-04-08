@@ -9,7 +9,7 @@ const socialLinks = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
+    <section id="contact" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#000000]/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -19,7 +19,7 @@ export default function Contact() {
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               Get in touch
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white">
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white matrix-glow">
               Contact
             </h2>
           </div>
@@ -58,7 +58,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-8 bg-gray-50 dark:bg-white/5 p-8 md:p-12 border border-gray-100 dark:border-white/5">
+          <div className="flex flex-col gap-8 bg-gray-50 dark:bg-[#000000] p-8 md:p-12 border border-gray-100 dark:border-white/5">
             <div className="flex flex-col gap-2">
               <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">Current Status</span>
               <div className="flex items-center gap-2">

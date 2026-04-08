@@ -33,7 +33,7 @@ const journey = [
 
 export default function Experience() {
   return (
-    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
+    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#000000]/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -43,7 +43,7 @@ export default function Experience() {
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               The Narrative
             </span>
-            <p className="text-2xl md:text-4xl font-serif text-[#141414] dark:text-white max-w-2xl leading-tight">
+            <p className="text-2xl md:text-4xl font-serif text-[#141414] dark:text-white max-w-2xl leading-tight matrix-glow">
               A chronological evolution of technical mastery and professional impact.
             </p>
           </div>
@@ -70,7 +70,7 @@ export default function Experience() {
 
                 {/* Content Card */}
                 <div className="w-full md:w-[45%]">
-                  <div className="bg-gray-50 dark:bg-white/5 p-8 md:p-10 border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-colors group">
+                  <div className="bg-gray-50 dark:bg-[#000000] p-8 md:p-10 border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-colors group">
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex flex-col gap-1">
                         <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
