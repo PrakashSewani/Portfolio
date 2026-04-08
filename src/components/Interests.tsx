@@ -78,7 +78,7 @@ export default function Interests() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:auto-rows-[320px]">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
           {hobbies.map((hobby, index) => (
             <motion.div
               key={hobby.title}
@@ -91,7 +91,7 @@ export default function Interests() {
                 damping: 20,
                 delay: index * 0.1 
               }}
-              className={`group p-10 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-8 relative overflow-hidden ${
+              className={`group p-10 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-8 relative overflow-hidden min-h-[320px] ${
                 index === 0 ? 'md:col-span-4 md:row-span-1' : 
                 index === 1 ? 'md:col-span-2 md:row-span-2' :
                 index === 2 ? 'md:col-span-2 md:row-span-1' :
@@ -116,11 +116,11 @@ export default function Interests() {
                 </p>
               </div>
 
-              <div className="mt-auto flex flex-wrap gap-2">
+              <div className="mt-auto flex flex-wrap gap-3">
                 {hobby.tags.map((tag) => (
                   <span
                     key={tag.name}
-                    className="text-[9px] uppercase tracking-widest font-bold px-2 py-1 bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/20 border border-gray-100 dark:border-white/5 flex items-center gap-1.5"
+                    className="text-[9px] uppercase tracking-widest font-bold px-3 py-1.5 bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/20 border border-gray-100 dark:border-white/5 flex items-center gap-2 whitespace-nowrap"
                   >
                     {tag.icon}
                     {tag.name}

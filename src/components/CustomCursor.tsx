@@ -35,14 +35,27 @@ export default function CustomCursor() {
   }, [dotX, dotY, outlineX, outlineY]);
 
   return (
-    <div className={`hidden md:block ${isHovering ? 'cursor-hover' : ''}`}>
+    <div className="hidden md:block pointer-events-none fixed inset-0 z-[9999]">
       <motion.div
-        className="cursor-dot"
+        className="cursor-dot fixed top-0 left-0"
         style={{ x: dotX, y: dotY }}
+        animate={{
+          scale: isHovering ? 0 : 1,
+          opacity: isHovering ? 0 : 1
+        }}
       />
       <motion.div
-        className="cursor-outline"
+        className="cursor-outline fixed top-0 left-0"
         style={{ x: outlineX, y: outlineY }}
+        animate={{
+          width: isHovering ? 80 : 32,
+          height: isHovering ? 80 : 32,
+          backgroundColor: isHovering ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0)",
+          mixBlendMode: isHovering ? "difference" : "normal" as any,
+          x: isHovering ? outlineX.get() - 24 : outlineX.get(),
+          y: isHovering ? outlineY.get() - 24 : outlineY.get(),
+        }}
+        transition={{ type: "spring", stiffness: 250, damping: 25 }}
       />
     </div>
   );
