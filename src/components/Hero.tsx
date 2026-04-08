@@ -1,4 +1,4 @@
-import { motion, useAnimationControls } from 'motion/react';
+import { motion, useAnimationControls, useScroll, useTransform } from 'motion/react';
 import { ArrowDownRight, Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -40,9 +40,15 @@ export default function Hero() {
     }
   }, [isIdle, controls]);
 
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors">
-      <div className="absolute inset-0 data-grid -z-10" />
+      <motion.div 
+        style={{ y: y1 }}
+        className="absolute inset-0 data-grid -z-10" 
+      />
       
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
@@ -66,15 +72,22 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[14vw] md:text-[10vw] font-serif leading-[0.85] tracking-tighter italic text-[#141414] dark:text-white select-none"
-          >
-            Prakash <br />
-            Sewani
-          </motion.h1>
+          <div className="relative">
+            <h2 className="text-[14vw] md:text-[18vw] font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-24 left-0 pointer-events-none">
+              ENGINEER
+            </h2>
+            <div className="overflow-hidden">
+              <motion.h1 
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="text-[14vw] md:text-[10vw] font-serif leading-[0.85] tracking-tighter text-[#141414] dark:text-white select-none relative z-10"
+              >
+                Prakash <br />
+                Sewani
+              </motion.h1>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
             <motion.div 

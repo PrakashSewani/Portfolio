@@ -39,12 +39,15 @@ export default function Expertise() {
   return (
     <section id="expertise" className="py-24 px-6 md:px-12 bg-gray-50 dark:bg-[#0f0f0f] transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
+          <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
+            STACK
+          </h2>
+          <div className="flex flex-col gap-4 relative z-10">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               Technical Stack
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif italic tracking-tighter text-[#141414] dark:text-white">
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white">
               Expertise
             </h2>
           </div>
@@ -67,7 +70,7 @@ export default function Expertise() {
                 <div className="p-4 bg-gray-50 dark:bg-white/5 text-[#141414] dark:text-white group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-[#0a0a0a] transition-colors">
                   {item.icon}
                 </div>
-                <span className="text-4xl font-serif italic text-gray-100 dark:text-white/5 group-hover:text-gray-200 dark:group-hover:text-white/10 transition-colors">
+                <span className="text-4xl font-serif text-gray-100 dark:text-white/5 group-hover:text-gray-200 dark:group-hover:text-white/10 transition-colors">
                   {item.number}
                 </span>
               </div>
@@ -101,7 +104,7 @@ export default function Expertise() {
             className="flex flex-col gap-4"
           >
             <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">Learning Lab</span>
-            <h3 className="text-2xl font-bold tracking-tight italic font-serif text-[#141414] dark:text-white">Current Interests</h3>
+            <h3 className="text-2xl font-bold tracking-tight font-serif text-[#141414] dark:text-white">Current Interests</h3>
           </motion.div>
           <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
             {[

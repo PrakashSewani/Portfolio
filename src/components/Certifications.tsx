@@ -26,12 +26,15 @@ export default function Certifications() {
   return (
     <section id="certifications" className="py-24 px-6 md:px-12 bg-white dark:bg-[#0a0a0a] transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
+          <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
+            VERIFIED
+          </h2>
+          <div className="flex flex-col gap-4 relative z-10">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               Verified Skills
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif italic tracking-tighter text-[#141414] dark:text-white">
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white">
               Certifications
             </h2>
           </div>

@@ -61,12 +61,15 @@ export default function Interests() {
   return (
     <section id="interests" className="py-24 px-6 md:px-12 bg-gray-50 dark:bg-[#0f0f0f] transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
+          <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
+            LIFE
+          </h2>
+          <div className="flex flex-col gap-4 relative z-10">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               Beyond the Code
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif italic tracking-tighter text-[#141414] dark:text-white">
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white">
               Interests
             </h2>
           </div>
@@ -75,15 +78,14 @@ export default function Interests() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:auto-rows-[240px]">
           {hobbies.map((hobby, index) => (
             <motion.div
               key={hobby.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ 
-                scale: 1.05, 
-                rotate: hobby.tilt,
+                y: -10,
                 zIndex: 20,
                 boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
               }}
@@ -94,8 +96,18 @@ export default function Interests() {
                 damping: 20,
                 delay: index * 0.1 
               }}
-              className="group p-8 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-6 relative"
+              className={`group p-8 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-6 relative overflow-hidden ${
+                index === 0 ? 'md:col-span-4 md:row-span-1' : 
+                index === 1 ? 'md:col-span-2 md:row-span-2' :
+                index === 2 ? 'md:col-span-2 md:row-span-1' :
+                'md:col-span-2 md:row-span-1'
+              }`}
             >
+              {/* Abstract Background Shape */}
+              <div className="absolute -right-4 -bottom-4 opacity-[0.03] dark:opacity-[0.05] group-hover:opacity-[0.08] transition-opacity">
+                {hobby.icon}
+              </div>
+
               <div className={`w-12 h-12 flex items-center justify-center bg-gray-50 dark:bg-white/5 ${hobby.accent.split(' ')[1]} transition-colors group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-[#0a0a0a]`}>
                 {hobby.icon}
               </div>

@@ -26,12 +26,15 @@ export default function Projects() {
   return (
     <section id="projects" className="py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
+          <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
+            WORK
+          </h2>
+          <div className="flex flex-col gap-4 relative z-10">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               Selected Work
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif italic tracking-tighter text-[#141414] dark:text-white">
+            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white">
               Projects
             </h2>
           </div>
@@ -40,59 +43,71 @@ export default function Projects() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 gap-24">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group flex flex-col gap-6"
+              transition={{ duration: 0.8, delay: index * 0.2 }}
+              className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-white/5 border border-gray-100 dark:border-white/5">
+              <div className="w-full lg:w-3/5 relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-white/5 border border-gray-100 dark:border-white/5 group">
                 <img
                   src={project.image}
                   alt={project.title}
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-[#141414]/0 group-hover:bg-[#141414]/40 dark:group-hover:bg-white/20 transition-colors duration-500 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
+                <div className="absolute inset-0 bg-[#141414]/20 group-hover:bg-[#141414]/0 transition-colors duration-700" />
+                
+                <div className="absolute top-6 right-6">
                   <a
                     href={project.github}
-                    className="w-12 h-12 bg-white dark:bg-[#0a0a0a] text-[#141414] dark:text-white flex items-center justify-center rounded-full hover:scale-110 transition-transform"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 bg-white dark:bg-[#0a0a0a] text-[#141414] dark:text-white flex items-center justify-center rounded-full shadow-xl hover:scale-110 transition-transform"
                   >
                     <Github size={20} />
                   </a>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
-                      {project.category}
-                    </span>
-                    <h3 className="text-3xl font-bold tracking-tight text-[#141414] dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <ArrowUpRight size={24} className="text-gray-200 dark:text-white/10 group-hover:text-[#141414] dark:group-hover:text-white transition-colors" />
+              <div className="w-full lg:w-2/5 flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs font-mono uppercase tracking-[0.3em] font-bold text-gray-400 dark:text-white/20">
+                    {project.category}
+                  </span>
+                  <h3 className="text-4xl md:text-5xl font-bold tracking-tighter text-[#141414] dark:text-white">
+                    {project.title}
+                  </h3>
                 </div>
 
-                <p className="text-gray-500 dark:text-white/40 leading-relaxed">
+                <p className="text-lg text-gray-500 dark:text-white/40 leading-relaxed">
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="text-[10px] font-mono font-medium px-2 py-1 bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/20 border border-gray-100 dark:border-white/5"
+                      className="text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/40 border border-gray-100 dark:border-white/5"
                     >
                       {tech}
                     </span>
                   ))}
+                </div>
+
+                <div className="pt-4">
+                  <a 
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-xs uppercase font-bold tracking-widest border-b-2 border-[#141414] dark:border-white pb-1 text-[#141414] dark:text-white hover:gap-4 transition-all"
+                  >
+                    Explore Project <ArrowUpRight size={16} />
+                  </a>
                 </div>
               </div>
             </motion.div>

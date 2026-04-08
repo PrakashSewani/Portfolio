@@ -36,14 +36,14 @@ export default function Experience() {
     <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 relative">
-          <h2 className="text-5xl md:text-9xl font-serif italic tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
+          <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
             Story
           </h2>
           <div className="flex flex-col gap-4 relative z-10">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               The Narrative
             </span>
-            <p className="text-2xl md:text-4xl font-serif italic text-[#141414] dark:text-white max-w-2xl leading-tight">
+            <p className="text-2xl md:text-4xl font-serif text-[#141414] dark:text-white max-w-2xl leading-tight">
               A chronological evolution of technical mastery and professional impact.
             </p>
           </div>
@@ -79,7 +79,7 @@ export default function Experience() {
                         <h4 className="text-2xl font-bold tracking-tight text-[#141414] dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors">
                           {item.title}
                         </h4>
-                        <span className="text-sm font-serif italic text-gray-500 dark:text-white/40">{item.institution}</span>
+                        <span className="text-sm font-serif text-gray-500 dark:text-white/40">{item.institution}</span>
                       </div>
                       <div className="p-2 bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 text-gray-400 dark:text-white/40 group-hover:text-[#141414] dark:group-hover:text-white transition-colors">
                         {item.icon}
