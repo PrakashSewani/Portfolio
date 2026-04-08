@@ -78,7 +78,7 @@ export default function Interests() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:auto-rows-[240px]">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:auto-rows-[320px]">
           {hobbies.map((hobby, index) => (
             <motion.div
               key={hobby.title}

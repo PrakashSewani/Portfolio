@@ -14,7 +14,12 @@
   body {
     --theme-hover-bg: #f9fafb;
     @apply bg-white text-[#141414] font-sans selection:bg-[#141414] selection:text-white transition-colors duration-300 select-none overflow-x-hidden;
-    cursor: none;
+  }
+  
+  @media (min-width: 768px) {
+    body, a, button, .group, [role="button"] {
+      cursor: none !important;
+    }
   }
   
   .dark body {

@@ -16,23 +16,21 @@ export default function CustomCursor() {
       outlineY.set(e.clientY - 20);
     };
 
-    const handleHover = () => setIsHovering(true);
-    const handleUnhover = () => setIsHovering(false);
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('a, button, .group')) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
 
     window.addEventListener('mousemove', moveCursor);
-    
-    const interactiveElements = document.querySelectorAll('a, button, .group');
-    interactiveElements.forEach((el) => {
-      el.addEventListener('mouseenter', handleHover);
-      el.addEventListener('mouseleave', handleUnhover);
-    });
+    window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
-      interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', handleHover);
-        el.removeEventListener('mouseleave', handleUnhover);
-      });
+      window.removeEventListener('mouseover', handleMouseOver);
     };
   }, [dotX, dotY, outlineX, outlineY]);
 
