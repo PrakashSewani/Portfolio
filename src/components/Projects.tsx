@@ -24,7 +24,7 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
+    <section id="projects" className="py-24 px-6 md:px-12 bg-white/50 dark:bg-black/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -67,7 +67,7 @@ export default function Projects() {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 bg-white dark:bg-[#0a0a0a] text-[#141414] dark:text-white flex items-center justify-center rounded-full shadow-xl hover:scale-110 transition-transform"
+                    className="w-12 h-12 bg-white dark:bg-black text-[#141414] dark:text-white flex items-center justify-center rounded-full shadow-xl hover:scale-110 transition-transform"
                   >
                     <Github size={20} />
                   </a>

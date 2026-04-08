@@ -1,5 +1,6 @@
-import { motion } from 'motion/react';
+import { motion, useScroll, useSpring } from 'motion/react';
 import { Briefcase, GraduationCap } from 'lucide-react';
+import { useRef } from 'react';
 
 const journey = [
   {
@@ -32,8 +33,20 @@ const journey = [
 ];
 
 export default function Experience() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end end"]
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   return (
-    <section id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
+    <section ref={containerRef} id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#000000]/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -43,7 +56,7 @@ export default function Experience() {
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
               The Narrative
             </span>
-            <p className="text-2xl md:text-4xl font-serif text-[#141414] dark:text-white max-w-2xl leading-tight">
+            <p className="text-2xl md:text-4xl font-serif text-[#141414] dark:text-white max-w-2xl leading-tight matrix-glow">
               A chronological evolution of technical mastery and professional impact.
             </p>
           </div>
@@ -52,6 +65,12 @@ export default function Experience() {
         <div className="relative">
           {/* Timeline Line */}
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gray-100 dark:bg-white/5 -translate-x-1/2 hidden md:block" />
+          
+          {/* Animated Progress Line */}
+          <motion.div 
+            style={{ scaleY, originY: 0 }}
+            className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[2px] bg-[#141414] dark:bg-white -translate-x-1/2 hidden md:block z-20"
+          />
 
           <div className="flex flex-col gap-16 md:gap-24">
             {journey.map((item, index) => (
@@ -70,7 +89,7 @@ export default function Experience() {
 
                 {/* Content Card */}
                 <div className="w-full md:w-[45%]">
-                  <div className="bg-gray-50 dark:bg-white/5 p-8 md:p-10 border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-colors group">
+                  <div className="bg-gray-50 dark:bg-[#000000] p-8 md:p-10 border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-colors group">
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex flex-col gap-1">
                         <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">

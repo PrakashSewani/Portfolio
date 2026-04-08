@@ -1,10 +1,36 @@
-import { motion, useAnimationControls, useScroll, useTransform } from 'motion/react';
+import { motion, useAnimationControls, useScroll, useTransform, useMotionValue, useSpring } from 'motion/react';
 import { ArrowDownRight, Download } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function Hero() {
   const controls = useAnimationControls();
   const [isIdle, setIsIdle] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Magnetic effect for the name
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 25, stiffness: 150 };
+  const magneticX = useSpring(mouseX, springConfig);
+  const magneticY = useSpring(mouseY, springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distanceX = e.clientX - centerX;
+    const distanceY = e.clientY - centerY;
+    
+    // Limit the magnetic pull
+    mouseX.set(distanceX * 0.1);
+    mouseY.set(distanceY * 0.1);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -43,13 +69,30 @@ export default function Hero() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
 
+  const name = "Prakash Sewani";
+  const firstName = "Prakash";
+  const lastName = "Sewani";
+
+  const renderCharacters = (text: string) => {
+    return text.split("").map((char, i) => (
+      <motion.span
+        key={i}
+        whileHover={{ 
+          y: -15,
+          scale: 1.1,
+          rotate: Math.random() * 6 - 3,
+          color: "#3b82f6",
+          transition: { type: "spring", stiffness: 400, damping: 10 }
+        }}
+        className="inline-block cursor-default transition-colors duration-200"
+      >
+        {char === " " ? "\u00A0" : char}
+      </motion.span>
+    ));
+  };
+
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors">
-      <motion.div 
-        style={{ y: y1 }}
-        className="absolute inset-0 data-grid -z-10" 
-      />
-      
+    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-32 md:pb-12 overflow-hidden bg-white dark:bg-[#000000] transition-colors">
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -72,21 +115,32 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          <div className="relative">
+          <div 
+            ref={containerRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="relative"
+          >
             <h2 className="text-[14vw] md:text-[18vw] font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-24 left-0 pointer-events-none">
               ENGINEER
             </h2>
-            <div className="overflow-hidden">
+            <motion.div 
+              style={{ x: magneticX, y: magneticY }}
+              className="overflow-hidden"
+            >
               <motion.h1 
+                layoutId="hero-name"
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="text-[14vw] md:text-[10vw] font-serif leading-[0.85] tracking-tighter text-[#141414] dark:text-white select-none relative z-10"
               >
-                Prakash <br />
-                Sewani
+                <div className="flex flex-wrap gap-x-[0.2em]">
+                  <div className="flex">{renderCharacters(firstName)}</div>
+                  <div className="flex">{renderCharacters(lastName)}</div>
+                </div>
               </motion.h1>
-            </div>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">

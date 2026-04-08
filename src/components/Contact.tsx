@@ -9,7 +9,7 @@ const socialLinks = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#0a0a0a]/50 backdrop-blur-sm transition-colors">
+    <section id="contact" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-black/50 backdrop-blur-sm transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -75,7 +75,7 @@ export default function Contact() {
             <motion.a
               whileHover={{ x: 10 }}
               href="mailto:prakashsewani1994@gmail.com"
-              className="mt-auto flex items-center justify-between p-6 bg-[#141414] dark:bg-white text-white dark:text-[#0a0a0a] text-xs uppercase font-bold tracking-widest group transition-colors"
+              className="mt-auto flex items-center justify-between p-6 bg-[#141414] dark:bg-white text-white dark:text-black text-xs uppercase font-bold tracking-widest group transition-colors"
             >
               Send an email <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
             </motion.a>

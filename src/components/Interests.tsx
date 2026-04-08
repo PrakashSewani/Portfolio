@@ -59,7 +59,7 @@ const hobbies = [
 
 export default function Interests() {
   return (
-    <section id="interests" className="py-24 px-6 md:px-12 bg-gray-50 dark:bg-[#0f0f0f] transition-colors">
+    <section id="interests" className="py-24 px-6 md:px-12 bg-gray-50/50 dark:bg-black/50 transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -78,7 +78,7 @@ export default function Interests() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:auto-rows-[320px]">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:auto-rows-[400px]">
           {hobbies.map((hobby, index) => (
             <motion.div
               key={hobby.title}
@@ -91,7 +91,7 @@ export default function Interests() {
                 damping: 20,
                 delay: index * 0.1 
               }}
-              className={`group p-10 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-8 relative overflow-hidden ${
+              className={`group p-10 bg-white dark:bg-black border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-8 relative overflow-hidden ${
                 index === 0 ? 'md:col-span-4 md:row-span-1' : 
                 index === 1 ? 'md:col-span-2 md:row-span-2' :
                 index === 2 ? 'md:col-span-2 md:row-span-1' :
@@ -103,7 +103,7 @@ export default function Interests() {
                 {hobby.icon}
               </div>
 
-              <div className={`w-12 h-12 flex items-center justify-center bg-gray-50 dark:bg-white/5 ${hobby.accent.split(' ')[1]} transition-colors group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-[#0a0a0a]`}>
+              <div className={`w-12 h-12 flex items-center justify-center bg-gray-50 dark:bg-white/5 ${hobby.accent.split(' ')[1]} transition-colors group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black`}>
                 {hobby.icon}
               </div>
               

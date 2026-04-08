@@ -24,7 +24,7 @@ const certifications = [
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="py-24 px-6 md:px-12 bg-white dark:bg-[#0a0a0a] transition-colors">
+    <section id="certifications" className="py-24 px-6 md:px-12 bg-white/50 dark:bg-black/50 transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
           <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
@@ -56,7 +56,7 @@ export default function Certifications() {
                 zIndex: 10,
                 boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
               }}
-              className="group p-8 bg-gray-50 dark:bg-[#0f0f0f] border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-6 relative overflow-hidden"
+              className="group p-8 bg-gray-50 dark:bg-black border border-gray-100 dark:border-white/5 hover:border-gray-200 dark:hover:border-white/10 transition-all flex flex-col gap-6 relative overflow-hidden"
             >
               {/* Background Decoration */}
               <div className="absolute top-0 right-0 -mt-4 -mr-4 opacity-[0.03] dark:opacity-[0.05] group-hover:opacity-[0.08] transition-opacity">
@@ -64,7 +64,7 @@ export default function Certifications() {
               </div>
 
               <div className="flex justify-between items-start relative z-10">
-                <div className={`w-12 h-12 flex items-center justify-center bg-white dark:bg-white/5 ${cert.accent.split(' ')[1]} transition-colors group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-[#0a0a0a]`}>
+                <div className={`w-12 h-12 flex items-center justify-center bg-white dark:bg-white/5 ${cert.accent.split(' ')[1]} transition-colors group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black`}>
                   <Award size={24} />
                 </div>
                 <a 
