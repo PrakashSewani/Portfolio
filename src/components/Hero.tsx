@@ -1,6 +1,7 @@
 import { motion, useAnimationControls, useScroll, useTransform, useMotionValue, useSpring } from 'motion/react';
 import { ArrowDownRight, Download } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
+import { cn } from '../lib/utils';
 
 export default function Hero() {
   const controls = useAnimationControls();
@@ -73,21 +74,45 @@ export default function Hero() {
   const firstName = "Prakash";
   const lastName = "Sewani";
 
+  const RollingChar = ({ char }: { char: string }) => {
+    if (char === " ") return <span className="inline-block w-[0.2em]">&nbsp;</span>;
+
+    return (
+      <motion.div
+        initial="initial"
+        whileHover="hovered"
+        className="relative inline-block overflow-hidden h-[1.1em] leading-[1.1em] cursor-default"
+      >
+        <motion.div
+          variants={{
+            initial: { y: 0 },
+            hovered: { y: "-100%" },
+          }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="inline-block text-[#141414] dark:text-white">
+            {char}
+          </span>
+        </motion.div>
+        <motion.div
+          className="absolute inset-0"
+          variants={{
+            initial: { y: "100%" },
+            hovered: { y: 0 },
+          }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="inline-block text-[#3b82f6]">
+            {char}
+          </span>
+        </motion.div>
+      </motion.div>
+    );
+  };
+
   const renderCharacters = (text: string) => {
     return text.split("").map((char, i) => (
-      <motion.span
-        key={i}
-        whileHover={{ 
-          y: -15,
-          scale: 1.1,
-          rotate: Math.random() * 6 - 3,
-          color: "#3b82f6",
-          transition: { type: "spring", stiffness: 400, damping: 10 }
-        }}
-        className="inline-block cursor-default transition-colors duration-200"
-      >
-        {char === " " ? "\u00A0" : char}
-      </motion.span>
+      <RollingChar key={i} char={char} />
     ));
   };
 
