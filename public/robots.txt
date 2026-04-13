@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://prakashsewani.in/sitemap.xml
+Sitemap: https://prakashsewani.com/sitemap.xml

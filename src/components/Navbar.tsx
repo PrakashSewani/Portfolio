@@ -25,6 +25,17 @@ export default function Navbar() {
   });
 
   useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const observerOptions = {
       root: null,
       rootMargin: '-20% 0px -70% 0px',
@@ -58,9 +69,14 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 flex flex-col bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-100 dark:border-white/10 transition-colors"
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 flex flex-col transition-all duration-300",
+        isMenuOpen 
+          ? "bg-white dark:bg-black h-screen" 
+          : "bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-100 dark:border-white/10"
+      )}
     >
-      <div className="flex items-center justify-between px-4 md:px-6 py-4">
+      <div className="flex items-center justify-between px-4 md:px-6 py-4 relative z-[70]">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-[#141414] dark:bg-white flex items-center justify-center text-white dark:text-black font-mono text-xs font-bold">
             PS
@@ -124,13 +140,13 @@ export default function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden bg-white dark:bg-black border-t border-gray-100 dark:border-white/10 overflow-hidden"
+            className="md:hidden flex flex-col pt-8 px-8 flex-1 overflow-y-auto"
           >
-            <div className="flex flex-col p-6 gap-6">
+            <div className="flex flex-col gap-8">
               {navLinks.map((link, index) => (
                 <motion.a
                   key={link.name}
@@ -138,21 +154,26 @@ export default function Navbar() {
                   onClick={handleLinkClick}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: index * 0.05 + 0.1 }}
                   className={cn(
-                    "text-lg uppercase tracking-[0.2em] font-bold transition-all",
+                    "text-4xl uppercase tracking-tighter font-serif transition-all",
                     activeSection === link.href.slice(1) 
                       ? "text-[#141414] dark:text-white" 
-                      : "text-gray-300 dark:text-white/20"
+                      : "text-gray-300 dark:text-white/20 hover:text-[#141414] dark:hover:text-white"
                   )}
                 >
                   {link.name}
                 </motion.a>
               ))}
               
-              <div className="pt-6 border-t border-gray-100 dark:border-white/10 flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-xs font-mono uppercase text-gray-400 dark:text-white/40 tracking-widest">Ready for hire</span>
+              <div className="mt-12 pt-8 border-t border-gray-100 dark:border-white/10 flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-xs font-mono uppercase text-gray-400 dark:text-white/40 tracking-widest">Ready for hire</span>
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-gray-300 dark:text-white/20">
+                  Prakash Sewani / 2026
+                </span>
               </div>
             </div>
           </motion.div>
