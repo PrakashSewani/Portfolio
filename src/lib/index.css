@@ -53,3 +53,27 @@
 .mask-fade {
   mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
+
+@keyframes rotate-gradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.tech-tag-animated {
+  @apply relative p-[1px] overflow-hidden inline-flex items-center justify-center bg-gray-200 dark:bg-white/10;
+}
+
+.tech-tag-animated::before {
+  content: '';
+  @apply absolute w-[200%] h-[200%] opacity-0 transition-opacity duration-500;
+  background: conic-gradient(from 0deg, transparent 0%, #3b82f6 25%, transparent 50%, #3b82f6 75%, transparent 100%);
+  animation: rotate-gradient 4s linear infinite;
+}
+
+.dark .tech-tag-animated::before {
+  @apply opacity-100;
+}
+
+.tech-tag-inner {
+  @apply relative bg-gray-50 dark:bg-[#0a0a0a] px-3 py-1 w-full h-full flex items-center justify-center z-10 transition-colors duration-300;
+}

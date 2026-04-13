@@ -1,6 +1,6 @@
 import { motion, useScroll, useSpring } from 'motion/react';
 import { Briefcase, GraduationCap } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 const journey = [
   {
@@ -34,6 +34,10 @@ const journey = [
 
 export default function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const firstItemRef = useRef<HTMLDivElement>(null);
+  const lastItemRef = useRef<HTMLDivElement>(null);
+  const [lineOffsets, setLineOffsets] = useState({ top: 0, bottom: 0 });
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end end"]
@@ -44,6 +48,21 @@ export default function Experience() {
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    const updateOffsets = () => {
+      if (firstItemRef.current && lastItemRef.current) {
+        setLineOffsets({
+          top: firstItemRef.current.offsetHeight / 2,
+          bottom: lastItemRef.current.offsetHeight / 2
+        });
+      }
+    };
+
+    updateOffsets();
+    window.addEventListener('resize', updateOffsets);
+    return () => window.removeEventListener('resize', updateOffsets);
+  }, []);
 
   return (
     <section ref={containerRef} id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#000000]/50 backdrop-blur-sm transition-colors">
@@ -64,18 +83,22 @@ export default function Experience() {
 
         <div className="relative">
           {/* Timeline Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gray-100 dark:bg-white/5 -translate-x-1/2 hidden md:block" />
+          <div 
+            className="absolute left-0 md:left-1/2 w-px bg-gray-100 dark:bg-white/5 -translate-x-1/2 hidden md:block" 
+            style={{ top: lineOffsets.top, bottom: lineOffsets.bottom }}
+          />
           
           {/* Animated Progress Line */}
           <motion.div 
-            style={{ scaleY, originY: 0 }}
-            className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[2px] bg-[#141414] dark:bg-white -translate-x-1/2 hidden md:block z-20"
+            style={{ scaleY, originY: 0, top: lineOffsets.top, bottom: lineOffsets.bottom }}
+            className="absolute left-0 md:left-1/2 w-[2px] bg-[#141414] dark:bg-white -translate-x-1/2 hidden md:block z-20"
           />
 
           <div className="flex flex-col gap-16 md:gap-24">
             {journey.map((item, index) => (
               <motion.div
                 key={item.title}
+                ref={index === 0 ? firstItemRef : index === journey.length - 1 ? lastItemRef : null}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -111,12 +134,13 @@ export default function Experience() {
 
                     <div className="flex flex-wrap gap-2">
                       {item.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 bg-white dark:bg-white/5 text-gray-400 dark:text-white/20 border border-gray-100 dark:border-white/5"
-                        >
-                          {tech}
-                        </span>
+                        <div key={tech} className="tech-tag-animated">
+                          <div className="tech-tag-inner">
+                            <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/40">
+                              {tech}
+                            </span>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </div>

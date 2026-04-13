@@ -118,13 +118,14 @@ export default function Interests() {
 
               <div className="mt-auto flex flex-wrap gap-2">
                 {hobby.tags.map((tag) => (
-                  <span
-                    key={tag.name}
-                    className="text-[9px] uppercase tracking-widest font-bold px-2 py-1 bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/20 border border-gray-100 dark:border-white/5 flex items-center gap-1.5"
-                  >
-                    {tag.icon}
-                    {tag.name}
-                  </span>
+                  <div key={tag.name} className="tech-tag-animated">
+                    <div className="tech-tag-inner">
+                      <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/40 flex items-center gap-1.5">
+                        {tag.icon}
+                        {tag.name}
+                      </span>
+                    </div>
+                  </div>
                 ))}
               </div>
             </motion.div>

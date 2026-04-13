@@ -90,12 +90,13 @@ export default function Projects() {
 
                 <div className="flex flex-wrap gap-3">
                   {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/40 border border-gray-100 dark:border-white/5"
-                    >
-                      {tech}
-                    </span>
+                    <div key={tech} className="tech-tag-animated">
+                      <div className="tech-tag-inner">
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/40">
+                          {tech}
+                        </span>
+                      </div>
+                    </div>
                   ))}
                 </div>
 
