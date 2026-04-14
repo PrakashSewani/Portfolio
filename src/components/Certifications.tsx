@@ -56,7 +56,7 @@ export default function Certifications() {
                 zIndex: 10,
                 boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
               }}
-              className="group p-8 bg-gray-50 dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/10 hover:border-gray-200 dark:hover:border-white/20 transition-all flex flex-col gap-6 relative overflow-hidden"
+              className="group p-8 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all flex flex-col gap-6 relative overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none"
             >
               {/* Background Decoration */}
               <div className="absolute top-0 right-0 -mt-4 -mr-4 opacity-[0.03] dark:opacity-[0.05] group-hover:opacity-[0.08] transition-opacity">

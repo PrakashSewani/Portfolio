@@ -91,7 +91,7 @@ export default function Interests() {
                 damping: 20,
                 delay: index * 0.1 
               }}
-              className={`group p-10 bg-white dark:bg-[#0a0a0a] border border-gray-100 dark:border-white/10 hover:border-gray-200 dark:hover:border-white/20 transition-all flex flex-col gap-8 relative overflow-hidden ${
+              className={`group p-10 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all flex flex-col gap-8 relative overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none ${
                 index === 0 ? 'md:col-span-4 md:row-span-1' : 
                 index === 1 ? 'md:col-span-2 md:row-span-2' :
                 index === 2 ? 'md:col-span-2 md:row-span-1' :

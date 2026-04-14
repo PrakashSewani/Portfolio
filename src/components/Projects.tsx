@@ -53,7 +53,7 @@ export default function Projects() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}
             >
-              <div className="w-full lg:w-3/5 relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-white/5 border border-gray-100 dark:border-white/5 group">
+              <div className="w-full lg:w-3/5 relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 group shadow-sm dark:shadow-none">
                 <img
                   src={project.image}
                   alt={project.title}

@@ -61,17 +61,18 @@
 
 .tech-tag-animated {
   @apply relative p-[1px] overflow-hidden inline-flex items-center justify-center bg-gray-200 dark:bg-white/10;
+  --tag-gradient-color: #6366f1; /* Indigo for light mode */
+}
+
+.dark .tech-tag-animated {
+  --tag-gradient-color: #3b82f6; /* Blue for dark mode */
 }
 
 .tech-tag-animated::before {
   content: '';
-  @apply absolute w-[200%] h-[200%] opacity-0 transition-opacity duration-500;
-  background: conic-gradient(from 0deg, transparent 0%, #3b82f6 25%, transparent 50%, #3b82f6 75%, transparent 100%);
+  @apply absolute w-[200%] h-[200%] opacity-100 transition-opacity duration-500;
+  background: conic-gradient(from 0deg, transparent 0%, var(--tag-gradient-color) 25%, transparent 50%, var(--tag-gradient-color) 75%, transparent 100%);
   animation: rotate-gradient 4s linear infinite;
-}
-
-.dark .tech-tag-animated::before {
-  @apply opacity-100;
 }
 
 .tech-tag-inner {

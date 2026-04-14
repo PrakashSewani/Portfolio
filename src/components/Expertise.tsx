@@ -56,7 +56,7 @@ export default function Expertise() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-px bg-gray-200 dark:bg-white/5 border border-gray-200 dark:border-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-px bg-gray-200 dark:bg-white/5 border border-gray-200 dark:border-white/5 shadow-sm dark:shadow-none">
           {expertiseItems.map((item, index) => (
             <motion.div
               key={item.title}
@@ -64,7 +64,7 @@ export default function Expertise() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-[#0a0a0a] p-8 md:p-12 flex flex-col gap-8 group transition-colors hover:bg-gray-50 dark:hover:bg-white/5 border border-transparent dark:border-white/5"
+              className="bg-white dark:bg-[#0a0a0a] p-8 md:p-12 flex flex-col gap-8 group transition-colors hover:bg-gray-50 dark:hover:bg-white/5 border border-gray-100 md:border-transparent dark:border-white/5"
             >
               <div className="flex justify-between items-start">
                 <div className="p-4 bg-gray-50 dark:bg-white/5 text-[#141414] dark:text-white group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-[#0a0a0a] transition-colors">

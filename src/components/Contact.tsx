@@ -58,7 +58,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-8 bg-gray-50 dark:bg-white/5 p-8 md:p-12 border border-gray-100 dark:border-white/5">
+          <div className="flex flex-col gap-8 bg-white dark:bg-white/5 p-8 md:p-12 border border-gray-200 dark:border-white/5 shadow-lg dark:shadow-none">
             <div className="flex flex-col gap-2">
               <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">Current Status</span>
               <div className="flex items-center gap-2">

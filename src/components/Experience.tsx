@@ -112,7 +112,7 @@ export default function Experience() {
 
                 {/* Content Card */}
                 <div className="w-full md:w-[45%]">
-                  <div className="bg-gray-50 dark:bg-[#0a0a0a] p-8 md:p-10 border border-gray-100 dark:border-white/10 hover:border-gray-200 dark:hover:border-white/20 transition-colors group shadow-xl dark:shadow-none">
+                  <div className="bg-white dark:bg-[#0a0a0a] p-8 md:p-10 border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-colors group shadow-lg dark:shadow-none">
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex flex-col gap-1">
                         <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
