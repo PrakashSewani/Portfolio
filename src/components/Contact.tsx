@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
-import { Mail, Github, Linkedin, Twitter, ArrowRight, MapPin } from 'lucide-react';
+import { Mail, Github, Linkedin, Twitter, ArrowRight, MapPin, Phone } from 'lucide-react';
 
 const socialLinks = [
-  { name: 'Email', icon: <Mail size={20} />, href: 'mailto:prakashsewani1994@gmail.com' },
+  { name: 'Email', icon: <Mail size={20} />, href: 'mailto:contact@prakashsewani.com' },
   { name: 'LinkedIn', icon: <Linkedin size={20} />, href: 'https://www.linkedin.com/in/prakash-s-2a389721a/' },
   { name: 'GitHub', icon: <Github size={20} />, href: 'https://github.com/PrakashSewani' },
 ];
@@ -40,6 +40,10 @@ export default function Contact() {
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3 text-gray-500 dark:text-white/40">
+                  <Phone size={18} />
+                  <a href="tel:+918850260072" className="text-sm font-medium hover:text-[#141414] dark:hover:text-white transition-colors">+91 88502 60072</a>
+                </div>
+                <div className="flex items-center gap-3 text-gray-500 dark:text-white/40">
                   <MapPin size={18} />
                   <span className="text-sm font-medium">Kalyan, Maharashtra, India</span>
                 </div>
@@ -72,9 +76,14 @@ export default function Contact() {
               <span className="text-lg font-bold tracking-tight text-[#141414] dark:text-white">IST (UTC+5:30)</span>
             </div>
 
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">Direct Contact</span>
+              <span className="text-lg font-bold tracking-tight text-[#141414] dark:text-white">+91 88502 60072</span>
+            </div>
+
             <motion.a
               whileHover={{ x: 10 }}
-              href="mailto:prakashsewani1994@gmail.com"
+              href="mailto:contact@prakashsewani.com"
               className="mt-auto flex items-center justify-between p-6 bg-[#141414] dark:bg-white text-white dark:text-black text-xs uppercase font-bold tracking-widest group transition-colors"
             >
               Send an email <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
