@@ -180,38 +180,6 @@
   opacity: 0;
 }
 
-/* Tag hover glow - rotating border colors */
-.project-card:hover .tag-hover-glow {
-  animation: tag-border-rotate 2.5s linear infinite;
-}
-
-@keyframes tag-border-rotate {
-  0% {
-    border-color: #00f0ff;
-    box-shadow: 0 0 5px rgba(0, 240, 255, 0.25), inset 0 0 4px rgba(0, 240, 255, 0.06);
-  }
-  33% {
-    border-color: #00ff41;
-    box-shadow: 0 0 8px rgba(0, 255, 65, 0.3), inset 0 0 6px rgba(0, 255, 65, 0.1);
-  }
-  66% {
-    border-color: #0080ff;
-    box-shadow: 0 0 8px rgba(0, 128, 255, 0.3), inset 0 0 6px rgba(0, 128, 255, 0.1);
-  }
-  100% {
-    border-color: #00f0ff;
-    box-shadow: 0 0 5px rgba(0, 240, 255, 0.25), inset 0 0 4px rgba(0, 240, 255, 0.06);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .project-card:hover .tag-hover-glow {
-    animation: none;
-    border-color: #00f0ff;
-    box-shadow: 0 0 5px rgba(0, 240, 255, 0.25);
-  }
-}
-
 /* Focus-visible for keyboard navigation */
 :focus-visible {
   outline: 2px solid var(--color-accent);

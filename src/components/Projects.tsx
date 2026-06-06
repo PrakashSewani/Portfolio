@@ -107,7 +107,7 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className={`project-card flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}
+              className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}
             >
               <div className="w-full lg:w-3/5 relative aspect-[16/9] overflow-hidden bg-surface border border-border group">
                 <ProjectImage src={project.image} alt={project.title} />
@@ -151,7 +151,7 @@ export default function Projects() {
                       key={tech}
                       text={tech}
                       delay={i * 100}
-                      className="tag-hover-glow bg-surface border border-border px-3 py-1 text-[10px] uppercase tracking-widest font-bold text-ink-dim font-mono transition-colors duration-300"
+                      className="bg-surface border border-border px-3 py-1 text-[10px] uppercase tracking-widest font-bold text-ink-dim font-mono transition-colors duration-300"
                     />
                   ))}
                 </div>
