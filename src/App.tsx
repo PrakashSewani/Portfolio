@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -9,7 +9,7 @@ import Certifications from './components/Certifications';
 import Interests from './components/Interests';
 import Contact from './components/Contact';
 import Preloader from './components/Preloader';
-import { ThemeProvider } from './lib/ThemeContext';
+import GlobalBackground from './components/GlobalBackground';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,13 +19,18 @@ export default function App() {
   };
 
   return (
-    <ThemeProvider>
-      <div className="scanline" />
+    <div className="relative min-h-screen bg-base text-ink">
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
+      <GlobalBackground />
+      <div className="scanline-overlay" />
       <AnimatePresence mode="wait">
         {isLoading ? (
           <Preloader key="preloader" onComplete={handlePreloaderComplete} />
         ) : (
           <motion.main
+            id="main"
             key="main"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -43,6 +48,6 @@ export default function App() {
           </motion.main>
         )}
       </AnimatePresence>
-    </ThemeProvider>
+    </div>
   );
 }

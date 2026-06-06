@@ -1,6 +1,8 @@
 import { motion, useScroll, useSpring } from 'motion/react';
 import { Briefcase, GraduationCap } from 'lucide-react';
 import { useRef, useState, useEffect } from 'react';
+import DecryptionText from './DecryptionText';
+import CodeAssemblyTag from './CodeAssemblyTag';
 
 const journey = [
   {
@@ -40,13 +42,13 @@ export default function Experience() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end end"]
+    offset: ['start end', 'end end'],
   });
 
   const scaleY = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export default function Experience() {
       if (firstItemRef.current && lastItemRef.current) {
         setLineOffsets({
           top: firstItemRef.current.offsetHeight / 2,
-          bottom: lastItemRef.current.offsetHeight / 2
+          bottom: lastItemRef.current.offsetHeight / 2,
         });
       }
     };
@@ -65,33 +67,36 @@ export default function Experience() {
   }, []);
 
   return (
-    <section ref={containerRef} id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-white/50 dark:bg-[#000000]/50 backdrop-blur-sm transition-colors">
+    <section ref={containerRef} id="journey" className="py-16 md:py-24 px-6 md:px-12 bg-base">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 relative">
-          <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
-            Story
+          <h2 className="watermark text-[12vw] md:text-[15vw] absolute -top-8 md:-top-12 left-0">
+            STORY
           </h2>
           <div className="flex flex-col gap-4 relative z-10">
-            <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
-              The Narrative
-            </span>
-            <p className="text-2xl md:text-4xl font-serif text-[#141414] dark:text-white max-w-2xl leading-tight matrix-glow">
-              A chronological evolution of technical mastery and professional impact.
-            </p>
+            <DecryptionText
+              text="Experience"
+              as="h2"
+              trigger="inview"
+              delay={0}
+              speed={40}
+              appendCursor
+              className="text-5xl md:text-7xl font-mono tracking-[-0.03em] text-ink"
+            />
           </div>
         </div>
 
         <div className="relative">
           {/* Timeline Line */}
-          <div 
-            className="absolute left-0 md:left-1/2 w-px bg-gray-100 dark:bg-white/5 -translate-x-1/2 hidden md:block" 
+          <div
+            className="absolute left-0 md:left-1/2 w-px bg-border -translate-x-1/2 hidden md:block"
             style={{ top: lineOffsets.top, bottom: lineOffsets.bottom }}
           />
-          
+
           {/* Animated Progress Line */}
-          <motion.div 
+          <motion.div
             style={{ scaleY, originY: 0, top: lineOffsets.top, bottom: lineOffsets.bottom }}
-            className="absolute left-0 md:left-1/2 w-[2px] bg-[#141414] dark:bg-white -translate-x-1/2 hidden md:block z-20"
+            className="absolute left-0 md:left-1/2 w-[2px] bg-accent -translate-x-1/2 hidden md:block z-20"
           />
 
           <div className="flex flex-col gap-16 md:gap-24">
@@ -107,40 +112,39 @@ export default function Experience() {
                   index % 2 === 0 ? 'md:flex-row-reverse' : ''
                 }`}
               >
-                {/* Timeline Dot */}
-                <div className="absolute left-0 md:left-1/2 top-0 md:top-1/2 w-4 h-4 bg-[#141414] dark:bg-white border-4 border-white dark:border-[#0a0a0a] rounded-full -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block" />
+                {/* Timeline Node */}
+                <div className="absolute left-0 md:left-1/2 top-0 md:top-1/2 w-4 h-4 bg-accent border-4 border-base -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block" />
 
                 {/* Content Card */}
                 <div className="w-full md:w-[45%]">
-                  <div className="bg-white dark:bg-[#0a0a0a] p-8 md:p-10 border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-colors group shadow-lg dark:shadow-none">
+                  <div className="bg-surface p-8 md:p-10 border border-border hover:border-border-hover transition-colors group">
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex flex-col gap-1">
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-ink-dim font-mono">
                           {item.period}
                         </span>
-                        <h4 className="text-2xl font-bold tracking-tight text-[#141414] dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors">
+                        <h4 className="text-2xl font-bold tracking-tight text-ink group-hover:text-accent transition-colors font-mono">
                           {item.title}
                         </h4>
-                        <span className="text-sm font-serif text-gray-500 dark:text-white/40">{item.institution}</span>
+                        <span className="text-sm font-mono text-ink-dim">{item.institution}</span>
                       </div>
-                      <div className="p-2 bg-white dark:bg-white/10 border border-gray-100 dark:border-white/5 text-gray-400 dark:text-white/40 group-hover:text-[#141414] dark:group-hover:text-white transition-colors">
+                      <div className="p-2 bg-surface-hover border border-border text-accent group-hover:bg-accent group-hover:text-base transition-colors">
                         {item.icon}
                       </div>
                     </div>
 
-                    <p className="text-gray-500 dark:text-white/40 leading-relaxed mb-8">
+                    <p className="text-ink-dim leading-relaxed mb-8 font-mono">
                       {item.description}
                     </p>
 
                     <div className="flex flex-wrap gap-2">
-                      {item.tech.map((tech) => (
-                        <div key={tech} className="tech-tag-animated">
-                          <div className="tech-tag-inner">
-                            <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/40">
-                              {tech}
-                            </span>
-                          </div>
-                        </div>
+                      {item.tech.map((tech, i) => (
+                        <CodeAssemblyTag
+                          key={tech}
+                          text={tech}
+                          delay={i * 80}
+                          className="bg-surface border border-border px-3 py-1 text-[10px] uppercase tracking-widest font-bold text-ink-dim font-mono"
+                        />
                       ))}
                     </div>
                   </div>

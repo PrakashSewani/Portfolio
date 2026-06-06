@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Award, ExternalLink, Calendar, User } from 'lucide-react';
+import DecryptionText from './DecryptionText';
 
 const certifications = [
   {
@@ -9,7 +10,6 @@ const certifications = [
     link: 'https://ude.my/UC-9257a19e-e08f-4630-9646-289d15e7580d',
     date: 'April 8, 2026',
     instructor: 'Kalyan Reddy Daida',
-    accent: 'border-blue-500/20 text-blue-500',
   },
   {
     title: '.NET 8 Web Api - Clean Architecture Full Guide',
@@ -18,32 +18,34 @@ const certifications = [
     link: 'https://ude.my/UC-3a89ea1f-7703-4a75-bd67-dd982a91586e',
     date: 'Nov 17, 2024',
     instructor: 'Junior Matlou',
-    accent: 'border-purple-500/20 text-purple-500',
   },
 ];
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="py-24 px-6 md:px-12 bg-white/50 dark:bg-black/50 transition-colors">
+    <section id="certifications" className="py-24 px-6 md:px-12 bg-base">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 relative">
-          <h2 className="text-5xl md:text-9xl font-serif tracking-tighter text-[#141414] dark:text-white opacity-5 select-none absolute -top-8 md:-top-12 left-0 pointer-events-none">
+          <h2 className="watermark text-[12vw] md:text-[15vw] absolute -top-8 md:-top-12 left-0">
             VERIFIED
           </h2>
           <div className="flex flex-col gap-4 relative z-10">
-            <span className="text-xs font-mono uppercase tracking-widest font-bold text-gray-400 dark:text-white/20">
-              Verified Skills
-            </span>
-            <h2 className="text-5xl md:text-7xl font-serif tracking-tighter text-[#141414] dark:text-white">
-              Certifications
-            </h2>
+            <DecryptionText
+              text="Certifications"
+              as="h2"
+              trigger="inview"
+              delay={0}
+              speed={40}
+              appendCursor
+              className="text-5xl md:text-7xl font-mono tracking-[-0.03em] text-ink"
+            />
           </div>
-          <p className="text-lg text-gray-500 dark:text-white/40 max-w-md leading-relaxed">
+          <p className="text-lg text-ink-dim max-w-md leading-relaxed font-mono">
             Continuous learning and professional validation in cloud architecture and modern development.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border">
           {certifications.map((cert, index) => (
             <motion.div
               key={cert.id}
@@ -51,27 +53,26 @@ export default function Certifications() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.02,
                 zIndex: 10,
-                boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
               }}
-              className="group p-8 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all flex flex-col gap-6 relative overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none"
+              className="group p-8 bg-surface border border-border hover:border-border-hover transition-all flex flex-col gap-6 relative overflow-hidden"
             >
               {/* Background Decoration */}
-              <div className="absolute top-0 right-0 -mt-4 -mr-4 opacity-[0.03] dark:opacity-[0.05] group-hover:opacity-[0.08] transition-opacity">
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity text-accent">
                 <Award size={160} />
               </div>
 
               <div className="flex justify-between items-start relative z-10">
-                <div className={`w-12 h-12 flex items-center justify-center bg-white dark:bg-white/5 ${cert.accent.split(' ')[1]} transition-colors group-hover:bg-[#141414] dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black`}>
+                <div className="w-12 h-12 flex items-center justify-center bg-surface-hover text-accent transition-colors group-hover:bg-accent group-hover:text-base">
                   <Award size={24} />
                 </div>
-                <a 
-                  href={cert.link} 
-                  target="_blank" 
+                <a
+                  href={cert.link}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-white dark:bg-white/5 text-gray-400 hover:text-[#141414] dark:hover:text-white transition-colors"
+                  className="p-3 bg-surface-hover text-ink-dim hover:text-accent transition-colors border border-border"
                 >
                   <ExternalLink size={18} />
                 </a>
@@ -79,35 +80,35 @@ export default function Certifications() {
 
               <div className="flex flex-col gap-4 relative z-10">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-blue-500 dark:text-blue-400">
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-accent font-mono">
                     {cert.source}
                   </span>
-                  <h3 className="text-2xl font-bold tracking-tight text-[#141414] dark:text-white leading-tight">
+                  <h3 className="text-2xl font-bold tracking-tight text-ink leading-tight font-mono">
                     {cert.title}
                   </h3>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-white/5">
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20 flex items-center gap-1">
+                    <span className="text-[9px] uppercase tracking-widest font-bold text-ink-dim flex items-center gap-1 font-mono">
                       <User size={10} /> Instructor
                     </span>
-                    <span className="text-xs font-medium text-gray-600 dark:text-white/60">
+                    <span className="text-xs font-medium text-ink-dim font-mono">
                       {cert.instructor}
                     </span>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400 dark:text-white/20 flex items-center gap-1">
+                    <span className="text-[9px] uppercase tracking-widest font-bold text-ink-dim flex items-center gap-1 font-mono">
                       <Calendar size={10} /> Issued
                     </span>
-                    <span className="text-xs font-medium text-gray-600 dark:text-white/60">
+                    <span className="text-xs font-medium text-ink-dim font-mono">
                       {cert.date}
                     </span>
                   </div>
                 </div>
 
                 <div className="pt-4">
-                  <span className="text-[9px] font-mono text-gray-400 dark:text-white/20 break-all">
+                  <span className="text-[9px] font-mono text-ink-subtle break-all">
                     ID: {cert.id}
                   </span>
                 </div>
