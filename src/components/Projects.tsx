@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowUpRight, Github, Check } from 'lucide-react';
+import { ArrowUpRight, Github, Check, Download } from 'lucide-react';
 import { projects } from '../data/portfolio';
 
 function ProjectVisual({ type }: { type: (typeof projects)[number]['visual'] }) {
@@ -56,7 +56,7 @@ function ProjectVisual({ type }: { type: (typeof projects)[number]['visual'] }) 
             <div className="roulette-discover-row"><span>Season 6</span><b>26 ep</b></div>
           </div>
         </div>
-        <div className="mockup-status"><span>Manifest V3</span><span>TypeScript</span><span>1 / 124 picked</span></div>
+        <div className="mockup-status"><span>Netflix + Prime Video</span><span>Manifest V3</span><span>1 / 124 picked</span></div>
       </div>
     );
   }
@@ -110,7 +110,7 @@ export default function Projects() {
               </div>
               <div className="project-links">
                 <a href={project.github} target="_blank" rel="noreferrer"><Github size={17} /> View source <ArrowUpRight size={15} /></a>
-                {'live' in project && project.live && <a href={project.live} target="_blank" rel="noreferrer">{('live' in project && project.liveLabel) || 'Live product'} <ArrowUpRight size={17} /></a>}
+                {'install' in project && project.install && <a className="project-install" href={project.install} target="_blank" rel="noreferrer"><Download size={17} /> {project.installLabel} <ArrowUpRight size={15} /></a>}
               </div>
             </div>
             <div className="project-visual"><ProjectVisual type={project.visual} /></div>
