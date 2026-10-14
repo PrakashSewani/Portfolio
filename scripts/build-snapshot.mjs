@@ -2,10 +2,14 @@
 /**
  * build-snapshot.mjs — bake `content/projects/*.json` into `public/api/projects.json`.
  *
- * This is the site's fallback content: the client prefers the live Worker/KV payload and falls
+ * This is the site's fallback content: the client prefers the live API/KV payload and falls
  * back to this file, so a KV outage degrades to "slightly stale" instead of a blank page.
  * The snapshot carries the COMPLETE project objects (not just the ledger rows), which is what
  * lets a case study still render with the API down. Runs automatically via `prebuild`.
+ *
+ * The artifact is committed, so the output is deliberately byte-deterministic: no `generatedAt`
+ * timestamp. A rebuild then leaves the working tree clean (the timestamp used to dirty it on every
+ * `npm run build`) and the committed fallback cannot misrepresent its age.
  *
  *   node scripts/build-snapshot.mjs [--dir content/projects] [--out public/api/projects.json]
  */
@@ -19,7 +23,6 @@ async function main() {
 
   const projects = await loadContent(dir);
   const payload = {
-    generatedAt: new Date().toISOString(),
     count: projects.length,
     projects,
   };
