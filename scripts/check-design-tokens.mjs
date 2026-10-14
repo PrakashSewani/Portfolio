@@ -31,12 +31,22 @@ const REQUIRED = [
   '--measure', '--radius', '--motion', '--ease',
 ];
 
-/** Distinct hex values allowed in the map. 12 declared, 2 of them shared → 10 real. */
+/**
+ * Distinct hex values allowed in the map. 12 declared, 2 of them shared → 10 real.
+ *
+ * Limitation (documented, not a bug — DESIGN.md §2): only `#hex` literals are counted. The rgba
+ * values (`--header-bg`, `--night-line`, and the three rgba literals inside rules) are not hex and
+ * never enter this budget, so the "≤ 14" claim bounds the hex palette only.
+ */
 const HEX_BUDGET = 14;
 
 /**
  * Declared text/surface pairs. `min` is the WCAG AA threshold for the *smallest* body
  * text that pair is used on: 4.5 normal text, 3.0 large text only.
+ *
+ * Kept in step with DESIGN.md §5. A pair used on a surface that cannot clear AA is deliberately
+ * absent and documented instead: `--muted` on `--soft` (4.45:1) and on any dark surface (3.32:1)
+ * are not allowed — those panels carry `--ink` / `--night-muted`.
  */
 const PAIRS = [
   { fg: '--ink', bg: '--canvas', use: 'body copy on the page, default', min: 4.5 },
@@ -45,9 +55,11 @@ const PAIRS = [
   { fg: '--ink', bg: '--accent-soft', use: 'callout strips, active palette row', min: 4.5 },
   { fg: '--muted', bg: '--canvas', use: 'mono labels and metadata', min: 4.5 },
   { fg: '--muted', bg: '--plate', use: 'metadata inside cards', min: 4.5 },
+  { fg: '--muted', bg: '--accent-soft', use: 'hint text on the active palette row', min: 4.5 },
   { fg: '--accent', bg: '--canvas', use: 'links, active nav, shipped pill', min: 4.5 },
   { fg: '--accent', bg: '--plate', use: 'links and counts inside cards', min: 4.5 },
   { fg: '--plate', bg: '--accent', use: 'small numbered markers on accent fill', min: 4.5 },
+  { fg: '--plate', bg: '--ink', use: 'solid CTA fill, wordmark, pressed filter chip', min: 4.5 },
   { fg: '--night-text', bg: '--night', use: 'dark specimen plate text', min: 4.5 },
   { fg: '--night-text', bg: '--ink', use: 'the ink/offscreen strip', min: 4.5 },
   { fg: '--night-muted', bg: '--night', use: 'dark specimen plate metadata', min: 4.5 },

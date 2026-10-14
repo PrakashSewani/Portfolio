@@ -41,7 +41,7 @@ specimen plates — there is no dark page scheme and no theme toggle.
 | `--canvas` | `#fbfaf9` | page background |
 | `--plate` | `#ffffff` | raised surface: cards, plates, tables |
 | `--ink` | `#16181c` | primary text, solid CTA fill |
-| `--muted` | `#6b6f76` | secondary text, metadata |
+| `--muted` | `#676b72` | secondary text, metadata |
 | `--hairline` | `#ddd8d0` | 1px rules and separators |
 | `--soft` | `#eceae4` | third surface step, inset areas |
 | `--accent` | `#2e5bff` | links, active nav, focus ring, one CTA |
@@ -108,21 +108,23 @@ from the CSS silently.
 | `--ink` on `--plate` | 17.77 | 4.5 (body) | pass |
 | `--ink` on `--soft` | 14.77 | 4.5 (body) | pass |
 | `--ink` on `--accent-soft` | 15.79 | 4.5 (body) | pass |
-| `--muted` on `--canvas` | 4.84 | 4.5 (body) | pass |
-| `--muted` on `--plate` | 5.05 | 4.5 (body) | pass |
+| `--muted` on `--canvas` | 5.14 | 4.5 (body) | pass |
+| `--muted` on `--plate` | 5.35 | 4.5 (body) | pass |
+| `--muted` on `--accent-soft` | 4.76 | 4.5 (body) | pass |
 | `--accent` on `--canvas` | 4.97 | 4.5 (body) | pass |
 | `--accent` on `--plate` | 5.18 | 4.5 (body) | pass |
 | `--plate` on `--accent` | 5.18 | 4.5 (body) | pass |
+| `--plate` on `--ink` | 17.77 | 4.5 (body) | pass |
 | `--night-text` on `--night` | 15.60 | 4.5 (body) | pass |
 | `--night-text` on `--ink` | 15.60 | 4.5 (body) | pass |
 | `--night-muted` on `--night` | 6.83 | 4.5 (body) | pass |
 
-**`--muted` on `--soft` is 4.20:1 and therefore not allowed.** Text on a `--soft` surface is
+**`--muted` on `--soft` is 4.45:1 and therefore not allowed.** Text on a `--soft` surface is
 `--ink`; secondary emphasis there comes from size and weight, not from a lighter colour. That is
 why `.impact-intro`, `.about-copy`, `.career-education`, `.answer-block` and `.project-context`
 carry ink text rather than muted.
 
-**`--muted` on any dark surface is 3.50:1 and therefore not allowed either.** Labels on `--night`
+**`--muted` on any dark surface is 3.32:1 and therefore not allowed either.** Labels on `--night`
 or `--ink` (the offscreen strip, the dark specimen figures, `.mockup-status`) use
 `--night-muted` at 6.83:1 — that is the second shared metadata rule.
 
