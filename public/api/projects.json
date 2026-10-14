@@ -330,7 +330,7 @@
       ],
       "kicker": "Infrastructure / self-hosted AI gateway",
       "year": 2026,
-      "ownership": "Designed and built the gateway, routing and tenant model end to end.",
+      "ownership": "Designed the gateway, routing and tenant model; built the Phase 1 and 2 foundation end to end.",
       "featured": false,
       "order": 7
     },
@@ -385,7 +385,7 @@
       "stack": [
         "TypeScript",
         "Astro",
-        "Local-first"
+        "Cloudflare Workers"
       ],
       "links": [
         {
@@ -398,7 +398,7 @@
       "evidence": [
         {
           "label": "Tagged releases",
-          "value": "5"
+          "value": "7"
         },
         {
           "label": "License",
@@ -492,6 +492,7 @@
       "summary": "Plays a sound when your AI agent, script, build or workflow finishes, so you stop staring at terminals.",
       "status": "shipped",
       "stack": [
+        "Node.js",
         "CLI"
       ],
       "links": [
@@ -537,7 +538,7 @@
       "evidence": [
         {
           "label": "Tagged releases",
-          "value": "v0.1.0"
+          "value": "1"
         },
         {
           "label": "License",
@@ -691,8 +692,9 @@
       "summary": "Warns you when a site you are visiting sits on a freshly registered domain, the common signature of a phishing page.",
       "status": "shipped",
       "stack": [
-        "Cloudflare Workers",
-        "RDAP"
+        "JavaScript",
+        "Manifest V3",
+        "Cloudflare Workers"
       ],
       "links": [
         {

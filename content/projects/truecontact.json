@@ -6,7 +6,7 @@
   "stack": [
     "TypeScript",
     "Astro",
-    "Local-first"
+    "Cloudflare Workers"
   ],
   "links": [
     {
@@ -19,7 +19,7 @@
   "evidence": [
     {
       "label": "Tagged releases",
-      "value": "5"
+      "value": "7"
     },
     {
       "label": "License",

@@ -4,8 +4,9 @@
   "summary": "Warns you when a site you are visiting sits on a freshly registered domain, the common signature of a phishing page.",
   "status": "shipped",
   "stack": [
-    "Cloudflare Workers",
-    "RDAP"
+    "JavaScript",
+    "Manifest V3",
+    "Cloudflare Workers"
   ],
   "links": [
     {

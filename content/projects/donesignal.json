@@ -4,6 +4,7 @@
   "summary": "Plays a sound when your AI agent, script, build or workflow finishes, so you stop staring at terminals.",
   "status": "shipped",
   "stack": [
+    "Node.js",
     "CLI"
   ],
   "links": [
