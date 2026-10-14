@@ -270,7 +270,7 @@ p { max-width: var(--measure); }
 .rail-head { padding: var(--s-3); border-bottom: var(--line); color: var(--muted); }
 .rail-row { display: grid; grid-template-columns: minmax(84px, auto) 1fr; gap: var(--s-3); padding: 10px var(--s-3); border-bottom: var(--line); align-items: baseline; }
 .rail-row dt { color: var(--muted); }
-.rail-row dd { overflow-wrap: anywhere;  font-size: var(--t-small); line-height: 1.5; overflow-wrap: anywhere; }
+.rail-row dd { font-size: var(--t-small); line-height: 1.5; overflow-wrap: anywhere; }
 .rail-notes { padding: var(--s-3); display: grid; gap: 8px; counter-reset: note; }
 .rail-notes li { display: grid; grid-template-columns: 20px 1fr; gap: 8px; color: var(--muted); font-size: var(--t-small); line-height: 1.5; }
 .rail-notes li::before { counter-increment: note; content: counter(note); color: var(--accent); font: 500 11px var(--mono); }
