@@ -2,8 +2,34 @@
   "slug": "jury-forge",
   "title": "Jury Forge",
   "kicker": "Developer tooling / AI review pipeline",
+  "year": 2026,
   "status": "in-progress",
   "summary": "Your own AI code-review team for GitHub \u2014 self-hosted, on your own Cloudflare account.",
+  "challenge": "Give every pull request a full review without sending the repository, the code or the model keys to somebody else's server.",
+  "decisions": [
+    "One deployable: the Worker serves the dashboard, takes the GitHub webhooks and runs the reviews",
+    "A Durable Object coordinates each review run, so the free tier still fits",
+    "Reviewer model bindings are AES-256-GCM encrypted with a master key held as a Worker secret",
+    "Every reviewer gets its own instructions, its own model and its own base URL"
+  ],
+  "evidence": [
+    {
+      "label": "License",
+      "value": "MIT"
+    },
+    {
+      "label": "Default reviewers",
+      "value": "7 + custom"
+    },
+    {
+      "label": "Review output",
+      "value": "1 consolidated review, inline comments"
+    },
+    {
+      "label": "Deployment",
+      "value": "Your own Cloudflare account"
+    }
+  ],
   "stack": [
     "TypeScript",
     "Astro",
@@ -16,13 +42,28 @@
       "href": "https://github.com/PrakashSewani/jury-forge"
     }
   ],
-  "year": 2026,
-  "evidence": [
-    {
-      "label": "License",
-      "value": "MIT"
-    }
-  ],
+  "specimen": {
+    "kind": "review",
+    "caption": "Review dashboard \u2014 verdicts, comments, webhook",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "The pull request under review, with its changed-file count."
+      },
+      {
+        "n": 2,
+        "text": "Three of the configured reviewers; each one carries its own instructions and model."
+      },
+      {
+        "n": 3,
+        "text": "Findings arrive as inline comments on one consolidated review."
+      },
+      {
+        "n": 4,
+        "text": "The run is started by the GitHub webhook, not by polling."
+      }
+    ]
+  },
   "featured": true,
   "order": 6
 }

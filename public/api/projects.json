@@ -265,6 +265,13 @@
       ],
       "kicker": "macOS utility / developer workflow",
       "year": 2026,
+      "challenge": "Free up a project's disk space without ever risking the repository behind it — every byte removed has to be confidently regenerable, and every restore has to be verifiable.",
+      "decisions": [
+        "Classify before deleting: nothing goes unless it is confidently regenerable",
+        "Archive into ~/.dormant/store/ and verify the archive before the working copy is removed",
+        "Restore checks every file against the manifest checksums, then asks before running any install",
+        "A missing `code` command is a hard error, never a silent Finder fallback (D-015)"
+      ],
       "evidence": [
         {
           "label": "Tagged releases",
@@ -277,9 +284,35 @@
         {
           "label": "Live",
           "value": "dormant.prakashsewani.com"
+        },
+        {
+          "label": "Distribution",
+          "value": "Homebrew tap + DMG"
+        },
+        {
+          "label": "Data",
+          "value": "Local-only, no telemetry"
         }
       ],
       "ownership": "Designed and built the macOS workspace utility end to end.",
+      "specimen": {
+        "kind": "workspace",
+        "caption": "Workspace rail — clean, archive, restore",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "Each local workspace, with the disk it is currently occupying."
+          },
+          {
+            "n": 2,
+            "text": "The three lifecycle actions, from the Finder menu or the menu bar app."
+          },
+          {
+            "n": 3,
+            "text": "What the last clean and archive actually reclaimed."
+          }
+        ]
+      },
       "featured": true,
       "order": 5
     },
@@ -301,13 +334,54 @@
       ],
       "kicker": "Developer tooling / AI review pipeline",
       "year": 2026,
+      "challenge": "Give every pull request a full review without sending the repository, the code or the model keys to somebody else's server.",
+      "decisions": [
+        "One deployable: the Worker serves the dashboard, takes the GitHub webhooks and runs the reviews",
+        "A Durable Object coordinates each review run, so the free tier still fits",
+        "Reviewer model bindings are AES-256-GCM encrypted with a master key held as a Worker secret",
+        "Every reviewer gets its own instructions, its own model and its own base URL"
+      ],
       "evidence": [
         {
           "label": "License",
           "value": "MIT"
+        },
+        {
+          "label": "Default reviewers",
+          "value": "7 + custom"
+        },
+        {
+          "label": "Review output",
+          "value": "1 consolidated review, inline comments"
+        },
+        {
+          "label": "Deployment",
+          "value": "Your own Cloudflare account"
         }
       ],
       "ownership": "Designed and built the review pipeline and its dashboard end to end.",
+      "specimen": {
+        "kind": "review",
+        "caption": "Review dashboard — verdicts, comments, webhook",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "The pull request under review, with its changed-file count."
+          },
+          {
+            "n": 2,
+            "text": "Three of the configured reviewers; each one carries its own instructions and model."
+          },
+          {
+            "n": 3,
+            "text": "Findings arrive as inline comments on one consolidated review."
+          },
+          {
+            "n": 4,
+            "text": "The run is started by the GitHub webhook, not by polling."
+          }
+        ]
+      },
       "featured": true,
       "order": 6
     },
@@ -330,7 +404,55 @@
       ],
       "kicker": "Infrastructure / self-hosted AI gateway",
       "year": 2026,
+      "challenge": "Give applications one stable OpenAI-compatible API while provider credentials, routing, budgets, rate limits and audit history live in one place.",
+      "decisions": [
+        "Normalize every provider behind an adapter; clients only ever see a gateway model alias",
+        "PostgreSQL is the durable truth and Redis holds only disposable rate-limit and deny state",
+        "Money is integer nanos of an ISO 4217 currency — binary floating point is banned",
+        "Attempts are recorded before dispatch, so potentially billable work is never treated as unstarted",
+        "Fail closed: losing Redis stops finite limits, losing PostgreSQL stops untracked dispatch"
+      ],
+      "evidence": [
+        {
+          "label": "Providers verified",
+          "value": "OpenAI · Anthropic · Ollama"
+        },
+        {
+          "label": "Durable truth",
+          "value": "PostgreSQL; Redis is disposable"
+        },
+        {
+          "label": "Deployment",
+          "value": "Docker Compose, self-hosted"
+        },
+        {
+          "label": "Ingress",
+          "value": "Traefik; optional Cloudflare Tunnel"
+        }
+      ],
       "ownership": "Designed and built the gateway, routing and tenant model end to end.",
+      "specimen": {
+        "kind": "gateway",
+        "caption": "Request flow — routing, providers, accounting",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "Clients hold a NexusRelay key and a gateway model alias, never a provider key."
+          },
+          {
+            "n": 2,
+            "text": "The gateway authenticates, applies organization policy and picks an eligible route."
+          },
+          {
+            "n": 3,
+            "text": "Provider adapters translate the normalized request; OpenAI, Anthropic and Ollama are the verified targets."
+          },
+          {
+            "n": 4,
+            "text": "Tokens and cost are attributed per attempt, in integer nanos, before the request closes."
+          }
+        ]
+      },
       "featured": true,
       "order": 7
     },
@@ -435,7 +557,54 @@
       ],
       "kicker": "Developer tooling / secret protection",
       "year": 2026,
+      "challenge": "Keep a live API key, wallet address or seed phrase out of the stream while you still see it locally — and do it without adding stream delay.",
+      "decisions": [
+        "Blur rectangles over exact screen regions: the local socket carries coordinates and rule ids, never secret text",
+        "Detect in the editor where the text is exact, and fall back to OCR only for windows with no detector",
+        "Redact inside the OBS encode pipeline rather than switching the whole scene",
+        "Detection rules adapted from gitleaks, seed phrases from the BIP-39 wordlist"
+      ],
+      "evidence": [
+        {
+          "label": "Phases shipped",
+          "value": "1a + 1b"
+        },
+        {
+          "label": "Detectors",
+          "value": "Keys, tokens, JWTs, seed phrases, cards"
+        },
+        {
+          "label": "Leak surface",
+          "value": "Coordinates and rule ids only"
+        },
+        {
+          "label": "Phase 2",
+          "value": "Native OBS filter, pre-encode"
+        }
+      ],
       "ownership": "Designed and built the detection layer and the Windows client end to end.",
+      "specimen": {
+        "kind": "redact",
+        "caption": "Capture frame — the key, then the redaction",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "The key stays visible in your own editor."
+          },
+          {
+            "n": 2,
+            "text": "On the stream the same line is a blur rectangle."
+          },
+          {
+            "n": 3,
+            "text": "A seed phrase counts as one secret spanning twelve words."
+          },
+          {
+            "n": 4,
+            "text": "How many secrets the detector is masking right now."
+          }
+        ]
+      },
       "featured": false,
       "order": 11
     },
@@ -458,7 +627,54 @@
       ],
       "kicker": "Hackathon build / code intelligence",
       "year": 2026,
+      "challenge": "Cut repository onboarding and auditing from days to seconds by running a squad of specialists in parallel instead of one model reading the codebase in sequence.",
+      "decisions": [
+        "Clone, parse and index once into a NetworkX knowledge graph that every agent shares",
+        "A planner agent dispatches the specialists, and each one returns structured JSON",
+        "The dashboard streams agent results live over server-sent events",
+        "Every analysis benchmarks Cerebras against a second provider on identical prompts"
+      ],
+      "evidence": [
+        {
+          "label": "Specialists",
+          "value": "6 + planner"
+        },
+        {
+          "label": "Model",
+          "value": "Gemma 4 31B on Cerebras"
+        },
+        {
+          "label": "Build",
+          "value": "Cerebras x Google DeepMind Gemma 4 hackathon"
+        },
+        {
+          "label": "Dashboard",
+          "value": "React + SSE, live agent cards"
+        }
+      ],
       "ownership": "Designed and built the repository-audit flow end to end.",
+      "specimen": {
+        "kind": "audit",
+        "caption": "Repo audit — tree, findings, module links",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "The repository is cloned, parsed and indexed once."
+          },
+          {
+            "n": 2,
+            "text": "Findings arrive per specialist, each grounded in the shared knowledge graph."
+          },
+          {
+            "n": 3,
+            "text": "Module links are read out of the graph the agents query by tool call."
+          },
+          {
+            "n": 4,
+            "text": "Elapsed time for the run — which is the whole claim of the project."
+          }
+        ]
+      },
       "featured": false,
       "order": 12
     },
@@ -480,6 +696,13 @@
       ],
       "kicker": "Developer tooling / GitHub hygiene CLI",
       "year": 2026,
+      "challenge": "Mirror every repository you own locally with no backend, while keeping behind, ahead and dirty state visible while the sync runs.",
+      "decisions": [
+        "Nine crates on hexagonal ports & adapters: service, app and TUI depend only on core traits",
+        "Unidirectional data flow — action, reducer, effect, app event, render",
+        "The GitHub token lives in the OS keyring, never in SQLite, logs or a plaintext file",
+        "SQLite in WAL mode is the local store; the GitHub API is the only outbound dependency"
+      ],
       "evidence": [
         {
           "label": "Tagged releases",
@@ -488,9 +711,43 @@
         {
           "label": "License",
           "value": "MIT"
+        },
+        {
+          "label": "Workspace crates",
+          "value": "9"
+        },
+        {
+          "label": "Default concurrency",
+          "value": "8 clone/fetch workers"
+        },
+        {
+          "label": "Store",
+          "value": "SQLite (WAL), token in OS keyring"
         }
       ],
       "ownership": "Designed and built the CLI and its sync engine end to end.",
+      "specimen": {
+        "kind": "repos",
+        "caption": "Repository dashboard — behind, ahead, dirty",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "Every discovered repository with its ahead/behind counters."
+          },
+          {
+            "n": 2,
+            "text": "A dirty badge for a working tree with uncommitted changes."
+          },
+          {
+            "n": 3,
+            "text": "The bar is the repository's size on disk."
+          },
+          {
+            "n": 4,
+            "text": "Sync status and the worker count for the run."
+          }
+        ]
+      },
       "featured": false,
       "order": 13
     },
@@ -542,6 +799,13 @@
       ],
       "kicker": "Systems / resource monitoring",
       "year": 2026,
+      "challenge": "Sample CPU, memory, swap, load, network and disk on macOS, Linux and Windows, and keep enough bounded history that a spike is still visible after it has passed.",
+      "decisions": [
+        "One native binary per platform, shipped through the npm package's optional dependency",
+        "Bounded per-metric history drawn as sparklines instead of a scrolling log",
+        "Alerts are sustained: threshold, duration, severity, cooldown and a recovery threshold",
+        "Recordings are portable JSONL, so an interrupted session stays loadable"
+      ],
       "evidence": [
         {
           "label": "Tagged releases",
@@ -550,9 +814,39 @@
         {
           "label": "License",
           "value": "MIT"
+        },
+        {
+          "label": "Platforms",
+          "value": "macOS · Linux · Windows"
+        },
+        {
+          "label": "Headless modes",
+          "value": "--once and --watch, plain or JSON"
         }
       ],
       "ownership": "Designed and built the dashboard and its recording layer end to end.",
+      "specimen": {
+        "kind": "monitor",
+        "caption": "Live monitor — history, processes, alerts",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "CPU and memory history, drawn from the bounded per-metric buffers."
+          },
+          {
+            "n": 2,
+            "text": "The process table, sortable by CPU or memory."
+          },
+          {
+            "n": 3,
+            "text": "A sustained alert: the threshold has to hold for its duration before it fires."
+          },
+          {
+            "n": 4,
+            "text": "The same collector's headless line, the one --watch prints."
+          }
+        ]
+      },
       "featured": false,
       "order": 15
     },
@@ -601,6 +895,13 @@
       ],
       "kicker": "Browser extension / link extraction",
       "year": 2026,
+      "challenge": "Put the magnet and .torrent controls into a search result where those links do not exist yet — with no server, no account and no visit to each torrent's own page.",
+      "decisions": [
+        "Resolve each row's links in the background and cache the answers for the list",
+        "Both controls are real links, so the browser's own Copy link address works on the magnet",
+        "Bounded background prefetch: every request comes from your own browser session",
+        "Nothing to run server-side — no server, no account and no telemetry"
+      ],
       "evidence": [
         {
           "label": "Tagged releases",
@@ -609,9 +910,39 @@
         {
           "label": "License",
           "value": "MIT"
+        },
+        {
+          "label": "Browsers",
+          "value": "Brave · Chrome · Edge"
+        },
+        {
+          "label": "Network",
+          "value": "No server, no account"
+        },
+        {
+          "label": "Install",
+          "value": "Unpacked, from a release zip"
         }
       ],
       "ownership": "Designed and built the extension and its extraction flow end to end.",
+      "specimen": {
+        "kind": "magnet",
+        "caption": "Search results — magnet and .torrent in the row",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "A magnet control and a .torrent control sit right after every result title."
+          },
+          {
+            "n": 2,
+            "text": "The highlighted row is one whose links have already resolved."
+          },
+          {
+            "n": 3,
+            "text": "Resolution happens in the background for the rows you are looking at, then gets cached."
+          }
+        ]
+      },
       "featured": false,
       "order": 17
     },

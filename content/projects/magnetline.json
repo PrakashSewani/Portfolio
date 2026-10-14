@@ -2,8 +2,38 @@
   "slug": "magnetline",
   "title": "Magnetline",
   "kicker": "Browser extension / link extraction",
+  "year": 2026,
   "status": "shipped",
   "summary": "Puts the download action into 1337x search results, fetching magnet and torrent links for you.",
+  "challenge": "Put the magnet and .torrent controls into a search result where those links do not exist yet \u2014 with no server, no account and no visit to each torrent's own page.",
+  "decisions": [
+    "Resolve each row's links in the background and cache the answers for the list",
+    "Both controls are real links, so the browser's own Copy link address works on the magnet",
+    "Bounded background prefetch: every request comes from your own browser session",
+    "Nothing to run server-side \u2014 no server, no account and no telemetry"
+  ],
+  "evidence": [
+    {
+      "label": "Tagged releases",
+      "value": "2"
+    },
+    {
+      "label": "License",
+      "value": "MIT"
+    },
+    {
+      "label": "Browsers",
+      "value": "Brave \u00b7 Chrome \u00b7 Edge"
+    },
+    {
+      "label": "Network",
+      "value": "No server, no account"
+    },
+    {
+      "label": "Install",
+      "value": "Unpacked, from a release zip"
+    }
+  ],
   "stack": [
     "TypeScript",
     "Manifest V3",
@@ -16,17 +46,24 @@
       "href": "https://github.com/PrakashSewani/1337x-auto-links"
     }
   ],
-  "year": 2026,
-  "evidence": [
-    {
-      "label": "Tagged releases",
-      "value": "2"
-    },
-    {
-      "label": "License",
-      "value": "MIT"
-    }
-  ],
+  "specimen": {
+    "kind": "magnet",
+    "caption": "Search results \u2014 magnet and .torrent in the row",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "A magnet control and a .torrent control sit right after every result title."
+      },
+      {
+        "n": 2,
+        "text": "The highlighted row is one whose links have already resolved."
+      },
+      {
+        "n": 3,
+        "text": "Resolution happens in the background for the rows you are looking at, then gets cached."
+      }
+    ]
+  },
   "featured": false,
   "order": 17
 }
