@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ArrowUpRight, Command, Menu, X } from 'lucide-react';
 import { WORKSPACES, type WorkspaceId } from '../data/navigation';
 import { profile } from '../data/portfolio';
+import { isProjectsPath, useRoute } from '../lib/router';
 
 interface NavbarProps {
   onOpenCmd: () => void;
@@ -12,6 +13,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onOpenCmd, activeWorkspace, onWorkspaceChange }: NavbarProps) {
+  const route = useRoute();
+  const onProjects = isProjectsPath(route);
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLElement>(null);
@@ -88,6 +91,9 @@ export default function Navbar({ onOpenCmd, activeWorkspace, onWorkspaceChange }
       </nav>
 
       <div className="header-actions">
+        <a id="nav-index" className={onProjects ? 'active' : ''} href="/projects" data-link>
+          Index
+        </a>
         <button id="cmd-trigger" className="command-button" onClick={onOpenCmd} aria-label="Open command palette">
           <Command size={12} /> <span>+ K</span>
         </button>
@@ -124,6 +130,7 @@ export default function Navbar({ onOpenCmd, activeWorkspace, onWorkspaceChange }
                 <span>0{index + 1}</span>{item.label}
               </button>
             ))}
+            <a href="/projects" data-link className={onProjects ? 'active' : ''}><span>05</span>Project index</a>
             <a href={profile.resume} target="_blank" rel="noreferrer">Open résumé <ArrowUpRight /></a>
           </motion.nav>
         )}
