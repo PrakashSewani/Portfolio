@@ -3,7 +3,7 @@
  * unknown path with the app shell, so real path routes work without a hash fallback.
  *
  *   useRoute()             → the current pathname ('/', '/projects', '/projects/class-spy')
- *   navigate(to)           → pushState + re-render + scroll to top
+ *   navigate(to)           → pushState + re-render + jump to the top
  *   useLinkInterception()  → turns <a href="/…" data-link> into a client-side navigation
  *   matchProjectRoute(p)   → the slug for /projects/<slug>, else null
  */
@@ -22,11 +22,15 @@ function emit() {
 
 export function navigate(to: string, options: { replace?: boolean } = {}) {
   const target = to.startsWith('/') ? to : `/${to}`;
-  if (target === window.location.pathname) return;
-  if (options.replace) window.history.replaceState(null, '', target);
-  else window.history.pushState(null, '', target);
-  emit();
-  window.scrollTo({ top: 0, behavior: 'auto' });
+  // A click on the route you are already on is not a no-op: it jumps back to the top of the page.
+  if (target !== window.location.pathname) {
+    if (options.replace) window.history.replaceState(null, '', target);
+    else window.history.pushState(null, '', target);
+    emit();
+  }
+  // `behavior: 'auto'` defers to the computed `scroll-behavior` (the stylesheet sets `smooth`), so
+  // a route change would animate a long scroll while the new route renders. 'instant' means jump.
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 export function useRoute(): string {
