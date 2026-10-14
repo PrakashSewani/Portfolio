@@ -185,9 +185,12 @@ or deploy-config change.
 ## 9. Route & content architecture (one page of context)
 
 - `content/projects/<slug>.json` is the single source of truth; the filename must equal the slug.
+- The home page's selected work (`src/data/portfolio.ts`) reads the same files — no second copy of
+  a project exists anywhere, so the home summary and the case sheet cannot drift.
 - `npm run snapshot` (also a `prebuild` step) bakes them into `public/api/projects.json`, which the
   client falls back to when the API is unavailable — the snapshot carries **full** projects, so a
-  case study still renders with KV down.
+  case study still renders with KV down. The output is deterministic (no timestamp), so a rebuild
+  leaves the committed file unchanged.
 - `node scripts/publish-projects.mjs` validates and writes KV: an `index` key (the ledger, one
   read) plus one `project:<slug>` key. `--dry-run` and `--emit` work without credentials.
 - **The host is a Cloudflare Pages project** (`portfolio`, Git-integrated — merging to `main`

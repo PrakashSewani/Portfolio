@@ -59,6 +59,15 @@ test('the baked snapshot matches content/projects (no drift)', async () => {
   assert.deepEqual(snapshot.projects, JSON.parse(JSON.stringify(projects)), 'run `npm run snapshot` after editing content');
 });
 
+test('the home page has no second copy of the projects', async () => {
+  // The home section used to carry a hand-maintained array that drifted from content/projects on
+  // challenge/ownership/decisions/summary. It now derives from the same content files, so the only
+  // thing to guard is that nobody reintroduces a literal project list in the data module.
+  const source = await readFile(path.join(ROOT, 'src', 'data', 'portfolio.ts'), 'utf8');
+  assert.match(source, /import\.meta\.glob.*content\/projects/, 'the home data must source the content files');
+  assert.ok(!/slug:\s*'/.test(source), 'src/data/portfolio.ts must not carry a second project list');
+});
+
 test('the schema accepts a minimal project and fills nothing in', () => {
   const project = validateProject(valid, 'demo.json');
   assert.equal(project.slug, 'demo');

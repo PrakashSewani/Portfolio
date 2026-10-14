@@ -1,3 +1,20 @@
+import { sortProjects, validateProject, type Project } from '../lib/projects';
+
+/**
+ * The home page's selected work is **not** a second copy of the projects — it is the same
+ * `content/projects/*.json` the case sheets render, inlined at build time by Vite and validated
+ * with the same schema. Before this, `src/data/portfolio.ts` carried a hand-maintained array that
+ * had already drifted from the content files on `challenge`, `ownership`, `decisions` and one
+ * `summary`; the "same content model at different densities" claim held only until the next edit.
+ *
+ * Adding a project means adding a content file — nothing else.
+ */
+const CONTENT = import.meta.glob<unknown>('../../content/projects/*.json', { eager: true, import: 'default' });
+
+export const caseStudies: Project[] = sortProjects(
+  Object.entries(CONTENT).map(([file, raw]) => validateProject(raw, `content/projects/${file.replace(/^.*\//, '')}`)),
+);
+
 export const profile = {
   name: 'Prakash Sewani',
   role: 'Senior Software Engineer',
@@ -15,79 +32,6 @@ export const profile = {
   focus: ['Frontend platforms', 'Backend & APIs', 'Real-time systems'],
   experience: '4+ years in production software',
 };
-
-export const projects = [
-  {
-    index: '01',
-    slug: 'class-spy',
-    title: 'Class-Spy',
-    kicker: 'Developer tooling / VS Code extension',
-    summary:
-      'Turns utility classes into readable CSS at the point of use, helping developers inspect unfamiliar interfaces without breaking their flow.',
-    challenge:
-      'Resolve CSS and Tailwind utilities consistently across HTML, React, Vue, Svelte, Astro, and Angular while keeping hover feedback immediate.',
-    decisions: ['Framework-aware parsing', 'AST-assisted inspection', 'Low-latency editor feedback'],
-    tech: ['TypeScript', 'VS Code API', 'Tailwind CSS', 'AST parsing'],
-    github: 'https://github.com/PrakashSewani/Class-Spy',
-    install: 'https://marketplace.visualstudio.com/items?itemName=PrakashSewani.class-spy',
-    installLabel: 'Install for VS Code',
-    visual: 'inspector',
-    context: 'Developer tooling',
-    ownership: 'Designed and built the extension experience and parsing flow.',
-    evidence: 'Supports six frontend frameworks in one inspection workflow.',
-  },
-  {
-    index: '02',
-    slug: 'episode-roulette',
-    title: 'Episode Roulette',
-    kicker: 'Browser extension / Streaming UX',
-    summary:
-      'A Chrome and Safari WebExtension that injects a Random Episode button into Netflix and Prime Video series pages, discovering every episode across all seasons and picking one with equal probability.',
-    challenge:
-      'Discover every episode across all seasons inside SPAs fully controlled by Netflix and Prime Video, with no external APIs, then start playback as if the user clicked it themselves.',
-    decisions: ['MutationObserver-driven detection', 'Equal-probability randomizer', 'Platform-native UI integration'],
-    tech: ['TypeScript', 'Manifest V3', 'Safari Web Extensions', 'Vite', 'MutationObserver'],
-    github: 'https://github.com/PrakashSewani/episode-roulette',
-    install: 'https://chromewebstore.google.com/detail/bdmfplkinmebmilgknedfgnpggmfhion',
-    installLabel: 'Install for Chrome',
-    visual: 'roulette',
-    context: 'Browser extension',
-    ownership: 'Built the discovery, probability, and native playback integration.',
-    evidence: 'Works across Chrome and Safari on both platforms with no external API dependency.',
-  },
-  {
-    index: '03',
-    slug: 'habitual',
-    title: 'Habitual',
-    kicker: 'Full-stack product / Habit platform',
-    summary:
-      'A cross-device habit system designed around clear routines, visible momentum, and a focused daily workflow.',
-    challenge:
-      'Model recurring behavior and progress in a way that remains simple for users while supporting a modern full-stack application architecture.',
-    decisions: ['Reusable React UI', 'API-first data flow', 'Progress-focused product model'],
-    tech: ['TypeScript', 'React', 'Node.js', 'MongoDB'],
-    github: 'https://github.com/PrakashSewani/Habitual',
-    visual: 'habit',
-    context: 'Full-stack product',
-    ownership: 'Shaped the product model, reusable UI, and API-first data flow.',
-  },
-  {
-    index: '04',
-    slug: 'smart-education-bot',
-    title: 'Smart Education Bot',
-    kicker: 'Applied NLP / Knowledge retrieval',
-    summary:
-      'A PDF question-answering system that combines document extraction, contextual NLP responses, and a web fallback path.',
-    challenge:
-      'Find useful answers from unstructured educational material while preserving a fallback when the local source cannot resolve a query.',
-    decisions: ['Document-first retrieval', 'BERT-based context', 'Graceful web fallback'],
-    tech: ['Python', 'Flask', 'BERT', 'Transformers', 'BeautifulSoup'],
-    github: 'https://github.com/PrakashSewani/SMART-EDUCATION-BOT',
-    visual: 'knowledge',
-    context: 'Applied NLP project',
-    ownership: 'Built the document extraction, question-answering, and fallback flow.',
-  }
-] as const;
 
 export const capabilities = [
   {
