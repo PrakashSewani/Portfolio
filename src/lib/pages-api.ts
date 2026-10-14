@@ -181,7 +181,13 @@ export async function apiResponse(request: Request, env: ApiEnv, route: string):
 
     // /api/projects/<slug>
     if (segments.length === 2 && segments[0] === 'projects') {
-      const slug = decodeURIComponent(segments[1]);
+      let slug: string;
+      try {
+        slug = decodeURIComponent(segments[1]);
+      } catch {
+        // Junk percent-encoding is "no such project", not a server fault.
+        return json({ error: 'not_found', slug: segments[1] }, { status: 404, headers: { 'cache-control': 'no-store' } });
+      }
       if (!env.PROJECTS) return unavailable();
       let project: Project | null;
       try {

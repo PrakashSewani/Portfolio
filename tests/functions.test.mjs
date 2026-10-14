@@ -122,6 +122,20 @@ test('an unknown slug is a 404 JSON, not the app shell', async () => {
   assert.equal((await response.json()).error, 'not_found');
 });
 
+test('a malformed percent-escape in a slug is a 404, not a 500', async () => {
+  const { env } = await fakeEnv();
+  // Any scanner reaches /api/projects/%, and a truncated escape in a shared link does too.
+  for (const segment of ['%', '%ZZ', '%E0%A4%A']) {
+    const response = await apiResponse(
+      request(`https://prakashsewani.com/api/projects/${segment}`),
+      env,
+      `projects/${segment}`,
+    );
+    assert.equal(response.status, 404, `expected 404 for ${segment}`);
+    assert.equal((await response.json()).error, 'not_found');
+  }
+});
+
 test('an unknown /api tail is a 404 JSON', async () => {
   const { env } = await fakeEnv();
   const response = await apiResponse(request('https://prakashsewani.com/api/nonsense'), env, 'nonsense');

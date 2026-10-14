@@ -64,9 +64,20 @@ export function useLinkInterception() {
   }, []);
 }
 
+/**
+ * The slug for `/projects/<slug>`, else null. Decoding is guarded: a malformed percent-escape in
+ * the pathname must not throw a URIError during render (the component would take the page down and
+ * App has no error boundary). The raw segment is returned so the case page renders its honest
+ * "no such project" state instead.
+ */
 export function matchProjectRoute(path: string): string | null {
   const match = path.match(/^\/projects\/([^/]+)$/);
-  return match ? decodeURIComponent(match[1]) : null;
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    return match[1];
+  }
 }
 
 export function isProjectsPath(path: string): boolean {

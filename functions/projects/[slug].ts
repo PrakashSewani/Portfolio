@@ -14,6 +14,14 @@ interface Context {
 
 export const onRequest = (context: Context): Promise<Response> => {
   const slugParam = context.params.slug;
-  const slug = decodeURIComponent(Array.isArray(slugParam) ? slugParam[0] : (slugParam ?? ''));
+  const raw = Array.isArray(slugParam) ? slugParam[0] : (slugParam ?? '');
+  // A malformed escape must fall through to the 404 shell, not throw a URIError before
+  // `shellResponse` runs (the platform would answer with its own 500 page).
+  let slug: string;
+  try {
+    slug = decodeURIComponent(raw);
+  } catch {
+    slug = raw;
+  }
   return shellResponse(context.request, context.env, new URL(context.request.url), slug);
 };
