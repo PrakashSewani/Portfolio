@@ -13,8 +13,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
 import path from 'node:path';
-import { apiResponse, sitemapResponse, shellResponse } from '../src/lib/pages-api.ts';
-import { toLedger } from '../src/lib/projects.ts';
+import { apiResponse, injectMeta, sitemapResponse, shellResponse } from '../src/lib/pages-api.ts';
+import { sortProjects, toLedger, validateLedgerList, validateProject } from '../src/lib/projects.js';
 import { ROOT, loadContent } from '../scripts/load-content.mjs';
 
 const SHELL = [
@@ -55,6 +55,12 @@ async function fakeEnv({ assets = SHELL } = {}) {
 }
 
 const request = (url, init) => new Request(url, init);
+
+const PROJECT_STUBS = {
+  summary: 'A summary.',
+  status: 'shipped',
+  stack: ['TypeScript'],
+};
 
 test('the ledger route returns rows with caching + ETag and no case-study keys', async () => {
   const { env } = await fakeEnv();

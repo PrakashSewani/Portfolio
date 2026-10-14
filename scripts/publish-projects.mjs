@@ -26,7 +26,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { CONTENT_DIR, ROOT, loadContent, option } from './load-content.mjs';
-import { toLedger } from '../src/lib/projects.ts';
+import { toLedger } from '../src/lib/projects.js';
 
 const SECRETS_FILE = process.env.CLOUDFLARE_ENV_FILE || '/root/.hermes/secrets/cloudflare.env';
 

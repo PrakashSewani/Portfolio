@@ -2,14 +2,15 @@
  * Shared content loader for the node-side scripts.
  *
  * One place that reads `content/projects/*.json`, validates every file against the schema in
- * `src/lib/projects.ts` (node strips the types — no build step, no duplication) and enforces
- * that the filename matches the slug. `publish-projects.mjs` and `build-snapshot.mjs` both use it,
- * so the site and the KV index can never disagree about what a valid project is.
+ * `src/lib/projects.js` (plain ESM — no build step, no type-stripping, so it runs on any Node the
+ * build image ships) and enforces that the filename matches the slug. `publish-projects.mjs` and
+ * `build-snapshot.mjs` both use it, so the site and the KV index can never disagree about what a
+ * valid project is.
  */
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validateProject, sortProjects } from '../src/lib/projects.ts';
+import { validateProject, sortProjects } from '../src/lib/projects.js';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CONTENT_DIR = path.join(ROOT, 'content', 'projects');

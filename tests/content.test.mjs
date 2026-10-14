@@ -15,7 +15,7 @@ import {
   toLedger,
   sortProjects,
   ProjectSchemaError,
-} from '../src/lib/projects.ts';
+} from '../src/lib/projects.js';
 import { CONTENT_DIR, ROOT, loadContent } from '../scripts/load-content.mjs';
 
 const SNAPSHOT = path.join(ROOT, 'public', 'api', 'projects.json');

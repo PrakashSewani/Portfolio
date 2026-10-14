@@ -11,7 +11,7 @@
  *
  * The three Pages Functions in `functions/` are thin adapters over these exports.
  */
-import { validateProject, type LedgerRow, type Project } from './projects.ts';
+import { SLUG_RE, validateLedgerList, validateProject, type LedgerRow, type Project } from './projects.js';
 
 export interface KVNamespaceLike {
   get(key: string, type?: 'text'): Promise<string | null>;
