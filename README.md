@@ -93,6 +93,15 @@ slug. Everything else reads it:
   `scripts/publish-projects.mjs`),
 - the baked fallback snapshot and the sitemap.
 
+**The home page shows only the projects marked `"featured": true`; `/projects` lists all of them.**
+Flag a project only when it carries the case-study keys (`challenge`, `decisions`, `specimen`) — the
+home page renders a flagged project as a full case block, so a thin file there renders an empty
+figure plate. If nothing is flagged, the home page falls back to the six newest by `order`.
+
+Every file is written in the schema's own key order and format
+(`node scripts/normalize-content.mjs`, `--check` reports drift) — a content file and its entry in the
+baked snapshot are byte-identical, and `tests/content.test.mjs` fails if one drifts off.
+
 Adding a project is one file plus `node scripts/publish-projects.mjs`.
 
 ## Icons

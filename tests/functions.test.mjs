@@ -248,7 +248,7 @@ test('/sitemap.xml lists the home page, the index and every project', async () =
   const xml = await response.text();
   assert.match(xml, /<loc>https:\/\/prakashsewani\.com\/<\/loc>/);
   assert.match(xml, /<loc>https:\/\/prakashsewani\.com\/projects<\/loc>/);
-  for (const slug of ['class-spy', 'episode-roulette', 'habitual', 'smart-education-bot']) {
+  for (const slug of CONTENT_SLUGS) {
     assert.ok(xml.includes(`<loc>https://prakashsewani.com/projects/${slug}</loc>`), `sitemap is missing ${slug}`);
   }
 });

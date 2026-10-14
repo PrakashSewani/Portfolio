@@ -5,7 +5,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import {
   validateProject,
@@ -30,8 +30,9 @@ const valid = {
 };
 
 test('content/projects/*.json all validate', async () => {
+  const files = (await readdir(CONTENT_DIR)).filter((file) => file.endsWith('.json'));
   const projects = await loadContent();
-  assert.ok(projects.length >= 4, 'expected at least the four shipped project files');
+  assert.equal(projects.length, files.length, 'every content file must load');
   for (const project of projects) {
     assert.match(project.slug, /^[a-z0-9-]+$/);
     assert.ok(project.summary.length > 0);
@@ -42,9 +43,21 @@ test('content/projects/*.json all validate', async () => {
 
 test('every project file is named after its slug', async () => {
   const projects = await loadContent();
-  const { readdir } = await import('node:fs/promises');
   const files = (await readdir(CONTENT_DIR)).filter((file) => file.endsWith('.json')).sort();
   assert.deepEqual(files.map((file) => file.replace(/\.json$/, '')), projects.map((project) => project.slug).sort());
+});
+
+test('every content file is written in the schema’s canonical form', async () => {
+  // One format for the whole set: the schema's key order, and the bytes
+  // `scripts/build-snapshot.mjs` would emit — so a content file and its snapshot entry are
+  // byte-identical. `node scripts/normalize-content.mjs` rewrites them that way.
+  const files = (await readdir(CONTENT_DIR)).filter((file) => file.endsWith('.json')).sort();
+  for (const file of files) {
+    const source = `content/projects/${file}`;
+    const text = await readFile(path.join(CONTENT_DIR, file), 'utf8');
+    const canonical = `${JSON.stringify(validateProject(JSON.parse(text), source), null, 2)}\n`;
+    assert.equal(text, canonical, `${source} is off-contract — run \`node scripts/normalize-content.mjs\``);
+  }
 });
 
 test('the baked snapshot matches content/projects (no drift)', async () => {
