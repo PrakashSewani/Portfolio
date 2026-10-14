@@ -130,9 +130,12 @@ export default function ProjectCase({ slug }: { slug: string }) {
               </div>
 
               <aside className="fig-stack">
+                {/* FIG. numbering follows `order`, so a case's figure number matches its ledger
+                    index — the plate is FIG. 05 for the project that sits at position 5. */}
                 <SpecimenPlate
                   kind={specimen?.kind ?? 'none'}
                   caption={specimen?.caption ?? project.title}
+                  index={project.order ?? 1}
                   callouts={specimen?.callouts}
                   footnote={project.stack.slice(0, 4)}
                 />

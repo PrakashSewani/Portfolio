@@ -82,14 +82,15 @@ p { max-width: var(--measure); }
 .cmd-footer, .cmd-result-hint, .ledger-index, .ledger-context, .ledger-year, .ledger-stack span,
 .project-meta p, .plate-footnote, .breadcrumb, .ledger-count, .project-links a,
 .hero-social-links a, .section-link, .learning-strip a span, .hero-focus-list span,
-.status-pill, .social-links a, .page-meta {
+.status-pill, .social-links a, .page-meta,
+.node, .fig-card small {
   color: var(--muted); font: 500 11px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .06em;
 }
 .roulette-series small, .roulette-series span, .roulette-discover > small, .mockup-status,
 .offscreen-strip span {
   color: var(--night-muted); font: 500 11px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .08em;
 }
-.project-context, .project-tech-list span, .capability-grid article > div:last-child span {
+.project-context, .project-tech-list span, .capability-grid article > div:last-child span, .chip {
   padding: 4px 8px; border: var(--line); border-radius: var(--radius); color: var(--ink);
   font: 500 10px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .06em;
 }
@@ -251,6 +252,35 @@ p { max-width: var(--measure); }
 .roulette-discover-row { display: flex; justify-content: space-between; gap: var(--s-2); padding: 8px 12px; border: 1px solid var(--night-line); border-radius: var(--radius); background: rgba(255, 255, 255, .03); font: 400 11px var(--mono); }
 .roulette-discover-row:nth-child(2) { border-color: var(--accent); }
 .roulette-discover-row b { color: var(--night-text); }
+
+/* ── specimen figures: window, terminal and dashboard frames ─────────────── */
+/* One box vocabulary: `.fig-row` is the box, and `.fig-card` / `.node` / `.tree` restack it in
+   place. A dark figure flips its own token scope, so one rule replaces the dark overrides — and
+   the in-figure fact strip is the same `.plate-footnote` strip the plate closes with. Frame height
+   is content-driven: only the two legacy figures below need a fixed one, for their absolute children. */
+.win-frame, .night-frame { display: flex; flex-direction: column; font: 400 11px/1.5 var(--mono); overflow-wrap: anywhere; }
+.night-frame { --canvas: rgba(255, 255, 255, .03); --soft: rgba(255, 255, 255, .1); --ink: var(--night-text); --muted: var(--night-muted); --hairline: var(--night-line); background: var(--night); color: var(--night-text); }
+.lights { display: flex; gap: 6px; }
+.lights i { width: 10px; height: 10px; border: var(--line); border-radius: 50%; }
+.fig-body { flex: 1; display: grid; gap: 6px; align-content: start; padding: var(--s-3); }
+.fig-grid { flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; }
+.fig-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; padding: 8px 10px; border: var(--line); border-radius: var(--radius); background: var(--canvas); color: var(--muted); }
+.fig-row b { color: var(--ink); }
+.fig-row.on, .fig-row.warn { border-color: var(--accent); }
+.fig-card, .node, .tree { display: grid; gap: 4px; align-content: start; }
+.tree { white-space: pre; }
+.chip.ok { border-color: var(--accent); }
+.node.on, .node.core { border-color: var(--accent); }
+.arrow { color: var(--muted); text-align: center; }
+.bar { flex: 1 1 100%; height: 6px; border-radius: 3px; background: var(--soft); }
+.bar i { display: block; height: 100%; background: var(--ink); }
+.spark { display: flex; align-items: flex-end; gap: 2px; height: 30px; }
+.spark i { flex: 1; border-radius: 1px; background: var(--muted); }
+.graph path { fill: none; stroke: var(--hairline); }
+.graph circle { fill: var(--accent); }
+.redact { display: flex; flex: 1; gap: 3px; }
+.redact i { flex: 1; height: 12px; border-radius: 2px; background: var(--night-text); }
+.code-row.tight { padding: 6px var(--s-3) 0; }
 
 /* ── specimen plate (DESIGN.md §6) ────────────────────────────────────────── */
 .plate { display: flex; flex-direction: column; border: var(--line); border-radius: var(--radius); background: var(--plate); overflow: hidden; }
