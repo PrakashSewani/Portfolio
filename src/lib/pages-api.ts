@@ -89,15 +89,18 @@ async function cachedBody(
 ): Promise<Response> {
   const etag = `"${await digest(body)}"`;
   const headers = new Headers({ 'content-type': contentType, 'cache-control': CACHE_CONTROL, etag, ...extraHeaders });
-  if (request.headers.get('if-none-match') === etag) return new Response(null, { status: 304, headers });
+  if (matchesIfNoneMatch(request, etag)) return new Response(null, { status: 304, headers });
   return new Response(request.method === 'HEAD' ? null : body, { status: 200, headers });
 }
 
-function isProjectRow(value: unknown): value is LedgerRow {
-  return typeof value === 'object' && value !== null && typeof (value as LedgerRow).slug === 'string';
-}
-
-/** Read + shape the KV index. Null when KV is unbound or nothing has been published yet. */
+/**
+ * Read + shape the KV index. Null when KV is unbound or nothing has been published yet.
+ *
+ * The rows go through the ledger validator (`validateLedgerList`): the same schema the publish
+ * script writes with. A row carrying a case-study key, a missing field or a hostile slug throws —
+ * the caller turns that into a 500 `invalid_index` rather than shipping it to every client, and the
+ * `count` reflects the validated rows, not whatever the payload claimed.
+ */
 async function readIndex(env: ApiEnv): Promise<IndexPayload | null> {
   const raw = await env.PROJECTS?.get('index', 'text');
   if (!raw) return null;
@@ -174,7 +177,11 @@ export async function apiResponse(request: Request, env: ApiEnv, route: string):
         );
       }
       const origin = new URL(request.url).origin;
-      const asset = await env.ASSETS.fetch(new Request(new URL('/api/projects.json', origin), { headers: request.headers }));
+      const assetUrl = new URL('/api/projects.json', origin);
+      // Ask for the asset with a *bare* request: forwarding the client's conditional/range headers
+      // would let the asset server answer 304, which is not a miss.
+      let asset = await env.ASSETS.fetch(new Request(assetUrl));
+      if (asset.status === 304) asset = await env.ASSETS.fetch(new Request(assetUrl, { headers: { 'cache-control': 'no-cache' } }));
       if (!asset.ok) return json({ error: 'snapshot_missing' }, { status: 404, headers: { 'cache-control': 'no-store' } });
       return cachedBody(request, await asset.text(), JSON_TYPE);
     }
@@ -285,7 +292,7 @@ export async function shellResponse(
   }
 
   const origin = typeof url === 'string' ? new URL(url).origin : url.origin;
-  const asset = await env.ASSETS.fetch(new Request(new URL('/index.html', origin), { headers: request.headers }));
+  const asset = await env.ASSETS.fetch(new Request(new URL('/index.html', origin)));
   const html = await asset.text();
 
   let project: Project | null = null;

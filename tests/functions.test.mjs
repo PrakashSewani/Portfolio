@@ -46,7 +46,13 @@ async function fakeEnv({ assets = SHELL } = {}) {
       ASSETS: {
         async fetch(input) {
           const url = typeof input === 'string' ? input : input.url;
+          const headers = typeof input === 'string' ? new Headers() : input.headers;
           const body = url.endsWith('/api/projects.json') ? snapshot : assets;
+          // The real Pages asset server honours conditional requests: this stub does too, so a
+          // Function that forwarded the client's `If-None-Match` would get a 304 back.
+          if (headers.get('if-none-match')) {
+            return new Response(null, { status: 304, headers: { 'content-type': 'application/json' } });
+          }
           return new Response(body, { status: 200, headers: { 'content-type': 'application/json' } });
         },
       },
@@ -104,6 +110,20 @@ test('the ledger honours If-None-Match with a 304', async () => {
   assert.equal(second.status, 304);
 });
 
+test('If-None-Match also honours the weak form, a list and *', async () => {
+  const { env } = await fakeEnv();
+  const etag = (await apiResponse(request('https://prakashsewani.com/api/projects'), env, 'projects')).headers.get('etag');
+  // These are the forms a CDN or revalidating proxy sends — exact string equality denied them all.
+  for (const header of [`W/${etag}`, `"deadbeef", ${etag}`, '*']) {
+    const response = await apiResponse(
+      request('https://prakashsewani.com/api/projects', { headers: { 'if-none-match': header } }),
+      env,
+      'projects',
+    );
+    assert.equal(response.status, 304, `If-None-Match: ${header} should be a 304`);
+  }
+});
+
 test('one project returns the full case study', async () => {
   const { env } = await fakeEnv();
   const response = await apiResponse(request('https://prakashsewani.com/api/projects/class-spy'), env, 'projects/class-spy');
@@ -159,6 +179,19 @@ test('the snapshot URL still serves the baked JSON if the Function is asked for 
     'smart-education-bot',
   ]);
   assert.ok(payload.projects[0].challenge, 'the snapshot must hold full projects, not just ledger rows');
+});
+
+test('the snapshot Function does not forward the client conditional headers to the asset server', async () => {
+  // The asset server answers 304 to a forwarded If-None-Match; `!asset.ok` would then flatten a
+  // present, cache-fresh file into a 404 for exactly the clients that already hold it.
+  const { env } = await fakeEnv();
+  const response = await apiResponse(
+    request('https://prakashsewani.com/api/projects.json', { headers: { 'if-none-match': '"whatever"' } }),
+    env,
+    'projects.json',
+  );
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).count, 4);
 });
 
 test('a misconfigured KV binding degrades to a 503 the client can fall back from', async () => {
