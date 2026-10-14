@@ -12,6 +12,9 @@ import type { ProjectCallout, SpecimenKind } from '../lib/projects';
  * The figures reuse the stylesheet's existing figure classes (`inspector-mockup`, `code-row`,
  * `habit-mockup`, `knowledge-mockup`, `roulette-mockup`, …) so there is one token map for the
  * plate and the drawing inside it.
+ *
+ * Callout numbers come from the data (`callout.n` → `data-n` → `content: attr(data-n)`), not from
+ * DOM order, so a validated `n` cannot be silently ignored.
  */
 
 interface SpecimenPlateProps {
@@ -135,7 +138,9 @@ export default function SpecimenPlate({ kind, caption, index = 1, callouts, foot
       </div>
       {callouts && callouts.length > 0 && (
         <ol className="plate-callouts">
-          {callouts.map((callout) => <li key={callout.n} value={callout.n}>{callout.text}</li>)}
+          {callouts.map((callout) => (
+            <li key={callout.n} data-n={callout.n}>{callout.text}</li>
+          ))}
         </ol>
       )}
       {footnote && footnote.length > 0 && (

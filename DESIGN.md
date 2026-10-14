@@ -146,6 +146,10 @@ All six legacy figure classes (`inspector-mockup`, `code-row`, `inspection-card`
 `knowledge-mockup`, `roulette-mockup`) survive the rewrite and are restyled in the spec-sheet
 idiom, so the drawn figures and the plate share one token map.
 
+A callout's number is its `n` from the content file, rendered as `data-n` and used by the marker
+(`content: attr(data-n)`) — the number is data, not DOM order, so a validated `n` can never be
+silently ignored.
+
 **Do / don't**
 
 | Do | Don't |

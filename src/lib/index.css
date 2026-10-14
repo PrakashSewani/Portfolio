@@ -256,9 +256,10 @@ p { max-width: var(--measure); }
 .plate-figure { position: relative; min-width: 0; }
 .plate-figure .mockup { border: 0; border-radius: 0; min-height: 0; }
 .plate-figure .inspector-mockup, .plate-figure .roulette-mockup { min-height: 340px; }
-.plate-callouts { display: grid; gap: 8px; padding: var(--s-3); border-top: var(--line); background: var(--accent-soft); counter-reset: callout; }
+.plate-callouts { display: grid; gap: 8px; padding: var(--s-3); border-top: var(--line); background: var(--accent-soft); }
 .plate-callouts li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: baseline; font-size: var(--t-small); line-height: 1.5; }
-.plate-callouts li::before { counter-increment: callout; content: counter(callout); display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--plate); font: 500 11px var(--mono); }
+/* The marker is the data's `n`, not DOM order — `data-n` comes from the validated schema. */
+.plate-callouts li::before { content: attr(data-n); display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--plate); font: 500 11px var(--mono); }
 .plate-footnote { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); padding: var(--s-3); border-top: var(--line); }
 
 /* ── rail ─────────────────────────────────────────────────────────────────── */
