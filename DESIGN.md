@@ -71,13 +71,18 @@ Fixed scale (no clamp on body copy; the hero display size is the single allowed 
 
 | Token | Size | Use |
 | --- | --- | --- |
-| `--t-label` | 12px | mono metadata labels |
-| `--t-small` | 14px | fine print, table cells |
+| `--t-label` | 12px | section index / route kicker |
+| `--t-small` | 14px | fine print, table cells, rail values |
 | `--t-body` | 16px | body copy |
 | `--t-lead` | 20px | lead paragraphs, summaries |
 | `--t-h3` | 26px | card and case titles |
 | `--t-h2` | 36px | section headings |
 | `--t-h1` | 52px | page title (hero h1 clamps between 34px and 52px) |
+
+Mono metadata labels (`.section-index`, `.rail-row dt`, `.plate-footnote`, the ledger's metadata
+columns, …) run at **11px** through two shared rules — one for light surfaces and one for dark
+plates — so a label can never be restyled in isolation. `--t-label` (12px) is reserved for the
+section index and the route kicker.
 
 Measure: body copy is capped at 72ch (`--measure`). Spacing is an 8px scale
 (`--s-1` 4px, `--s-2` 8px, `--s-3` 16px, `--s-4` 24px, `--s-5` 32px, `--s-6` 48px, `--s-7` 64px,
@@ -117,6 +122,10 @@ from the CSS silently.
 why `.impact-intro`, `.about-copy`, `.career-education`, `.answer-block` and `.project-context`
 carry ink text rather than muted.
 
+**`--muted` on any dark surface is 3.50:1 and therefore not allowed either.** Labels on `--night`
+or `--ink` (the offscreen strip, the dark specimen figures, `.mockup-status`) use
+`--night-muted` at 6.83:1 — that is the second shared metadata rule.
+
 Accent never carries body copy: it is a link colour (always underlined), a focus ring, and a
 marker fill. Where accent is a *background* (the numbered callout markers, the solid CTA hover),
 the text on it is `--plate` at 5.18:1.
@@ -147,9 +156,36 @@ idiom, so the drawn figures and the plate share one token map.
 | metadata in `--mono` at `--t-label` | all-caps paragraph text |
 | three surface steps for depth | a border on every box |
 
-## 7. Out of scope for this pass
+## 7. Budget & the reset
+
+The emitted stylesheet must stay **≤ 40 KB** as a single asset (`npm run build` prints it; the
+baseline brutalist stylesheet was 37.4 KB). Meeting that budget is why:
+
+- **`@import "tailwindcss"` is gone.** Tailwind v4 was wired into `vite.config.ts` but unused, and
+  its preflight reset alone cost 8.4 KB of the emitted CSS. The reset this design actually depends
+  on (box-sizing, zeroed margins/padding, `border: 0 solid`, inherit-font buttons, block media,
+  unstyled lists, `[hidden]`) is now written out explicitly at the top of `src/lib/index.css`, so
+  nothing load-bearing is hidden inside a dependency. The Vite plugin stays wired for a real
+  Tailwind adoption later; that migration is still a separate work item.
+- Metadata label styling is grouped into two shared rules instead of being repeated per component.
+
+## 8. Out of scope for this pass
 
 Content rewrites, icon/OG regeneration (the favicons still bake acid-green-on-black and will look
 off next to this palette — separate ticket), a full dark page scheme, self-hosted fonts, filter UI
 beyond stack + status, an offline search index, Tailwind utility migration, analytics, and any DNS
 or deploy-config change.
+
+## 9. Route & content architecture (one page of context)
+
+- `content/projects/<slug>.json` is the single source of truth; the filename must equal the slug.
+- `npm run snapshot` (also a `prebuild` step) bakes them into `public/api/projects.json`, which the
+  client falls back to when the API is unavailable — the snapshot carries **full** projects, so a
+  case study still renders with KV down.
+- `node scripts/publish-projects.mjs` validates and writes KV: an `index` key (the ledger, one
+  read) plus one `project:<slug>` key. `--dry-run` and `--emit` work without credentials.
+- `src/worker.ts` serves `/api/projects`, `/api/projects/<slug>`, a KV-generated `/sitemap.xml`,
+  and injects per-project title/OG/canonical into the app shell for `/projects/<slug>`.
+- `wrangler.jsonc` must list every path the Worker owns in `assets.run_worker_first`, and must
+  declare `assets.binding: "ASSETS"` — without the binding `env.ASSETS` is `undefined` at runtime
+  and the shell routes fail (verified against `wrangler dev`, not assumed).
