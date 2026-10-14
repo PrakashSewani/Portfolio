@@ -256,24 +256,52 @@ export async function sitemapResponse(request: Request, env: ApiEnv): Promise<Re
 }
 
 // ── /projects/<slug> — real title/OG for crawlers, no SSR framework ──────────
+
+/** Head tags the per-project shell replaces, rather than appending a duplicate of. */
+const REPLACED_META: ReadonlyArray<readonly ['name' | 'property', string]> = [
+  ['name', 'description'],
+  ['property', 'og:type'],
+  ['property', 'og:title'],
+  ['property', 'og:description'],
+  ['property', 'og:url'],
+  ['name', 'twitter:url'],
+  ['name', 'twitter:title'],
+  ['name', 'twitter:description'],
+];
+
+/** Drop every `<meta>` that carries `attr="value"`, whatever the attribute order. */
+function stripMeta(html: string, attr: 'name' | 'property', value: string): string {
+  return html.replace(new RegExp(`\\s*<meta\\b[^>]*\\b${attr}=["']${value}["'][^>]*>`, 'gi'), '');
+}
+
+/**
+ * Replace the shell's site-wide title/description/OG/Twitter/canonical with the project's own.
+ *
+ * Everything injected here is first *removed* from the shell — appending would leave two of each
+ * tag and consumers pick arbitrarily (the site-wide `og:url` could win over the project's), which
+ * defeats the whole point of the Function. Only the canonical used to be de-duped.
+ */
 export function injectMeta(shell: string, project: Project): string {
   const title = `${project.title} — ${SITE_NAME}`;
   const canonical = `${SITE}/projects/${project.slug}`;
+
+  let html = shell.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`);
+  for (const [attr, value] of REPLACED_META) html = stripMeta(html, attr, value);
+  html = html.replace(/\s*<link\b[^>]*\brel=["']canonical["'][^>]*>/gi, '');
+
   const meta = [
     `<meta name="description" content="${escapeHtml(project.summary)}" />`,
     '<meta property="og:type" content="article" />',
     `<meta property="og:title" content="${escapeHtml(title)}" />`,
     `<meta property="og:description" content="${escapeHtml(project.summary)}" />`,
-    `<meta property="og:url" content="${canonical}" />`,
+    `<meta property="og:url" content="${escapeHtml(canonical)}" />`,
+    `<meta name="twitter:url" content="${escapeHtml(canonical)}" />`,
     `<meta name="twitter:title" content="${escapeHtml(title)}" />`,
     `<meta name="twitter:description" content="${escapeHtml(project.summary)}" />`,
-    `<link rel="canonical" href="${canonical}" />`,
+    `<link rel="canonical" href="${escapeHtml(canonical)}" />`,
   ].join('\n    ');
 
-  return shell
-    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`)
-    .replace('<link rel="canonical" href="https://prakashsewani.com/" />', '')
-    .replace('<!--route-meta-->', meta);
+  return html.replace('<!--route-meta-->', meta);
 }
 
 export async function shellResponse(

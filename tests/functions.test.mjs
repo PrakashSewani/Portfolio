@@ -289,9 +289,36 @@ test('/projects/<slug> injects real title + OG tags into the shell', async () =>
   const html = await response.text();
   assert.match(html, /<title>Class-Spy — Prakash Sewani<\/title>/);
   assert.match(html, /<meta property="og:url" content="https:\/\/prakashsewani\.com\/projects\/class-spy" \/>/);
-  assert.match(html, /<link rel="canonical" href="https:\/\/prakashsewani\.com\/projects\/class-spy" \/>/);
   assert.ok(!html.includes('<!--route-meta-->'), 'the route-meta placeholder should have been consumed');
-  assert.ok(!html.includes('<link rel="canonical" href="https://prakashsewani.com/" />'), 'the site-wide canonical should be replaced');
+  // Assert the positive: exactly one canonical, and it is the project's. Asserting the *absence* of
+  // the site-wide canonical string passes even when a reformatted shell leaves two canonicals.
+  assert.equal((html.match(/rel="canonical"/g) ?? []).length, 1, 'exactly one canonical');
+  assert.match(html, /<link rel="canonical" href="https:\/\/prakashsewani\.com\/projects\/class-spy" \/>/);
+});
+
+test('injectMeta replaces the site-wide head tags instead of duplicating them', async () => {
+  // The real index.html, not a stub: it ships og:url / og:description / twitter:url / canonical.
+  const shell = await readFile(path.join(ROOT, 'index.html'), 'utf8');
+  const project = JSON.parse(await readFile(path.join(ROOT, 'content', 'projects', 'class-spy.json'), 'utf8'));
+  const html = injectMeta(shell, validateProject(project, 'class-spy.json'));
+
+  for (const pattern of [
+    /rel="canonical"/g,
+    /property="og:type"/g,
+    /property="og:title"/g,
+    /property="og:description"/g,
+    /property="og:url"/g,
+    /name="description"/g,
+    /name="twitter:url"/g,
+    /name="twitter:title"/g,
+    /name="twitter:description"/g,
+  ]) {
+    assert.equal((html.match(pattern) ?? []).length, 1, `${pattern} should appear exactly once`);
+  }
+  assert.match(html, /<meta property="og:url" content="https:\/\/prakashsewani\.com\/projects\/class-spy" \/>/);
+  assert.match(html, /<meta name="twitter:url" content="https:\/\/prakashsewani\.com\/projects\/class-spy" \/>/);
+  const canonical = html.match(/<link rel="canonical" href="([^"]+)"/);
+  assert.equal(canonical?.[1], 'https://prakashsewani.com/projects/class-spy');
 });
 
 test('/projects/<unknown> serves the shell with an honest 404', async () => {
