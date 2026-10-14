@@ -32,11 +32,11 @@ export default function Projects() {
     let alive = true;
     loadProjects()
       .then((result) => {
-        if (alive) setLedger({ status: 'ready', rows: result.rows, source: result.source, error: '' });
+        if (alive) setLedger({ status: 'ready', rows: result.rows, source: result.source, reason: result.reason ?? '', error: '' });
       })
       .catch((err: unknown) => {
         if (alive) {
-          setLedger({ status: 'error', rows: [], source: '', error: err instanceof Error ? err.message : String(err) });
+          setLedger({ status: 'error', rows: [], source: '', reason: '', error: err instanceof Error ? err.message : String(err) });
         }
       });
     return () => {
@@ -112,7 +112,7 @@ export default function Projects() {
 
         <p className="ledger-count" aria-live="polite">
           {ledger.status === 'ready' ? `Showing ${visible.length} of ${ledger.rows.length}` : 'Loading index'}
-          {ledger.source === 'snapshot' ? ' · snapshot' : ''}
+          {ledger.source === 'snapshot' ? ` · snapshot${ledger.reason ? ` (live API unavailable: ${ledger.reason})` : ''}` : ''}
         </p>
       </div>
 
