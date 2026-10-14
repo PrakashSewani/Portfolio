@@ -51,9 +51,33 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
+/** XML text escaping — same shape as `escapeHtml`, for the sitemap. */
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 async function digest(text: string): Promise<string> {
   const bytes = new Uint8Array(await crypto.subtle.digest('SHA-1', new TextEncoder().encode(text)));
   return [...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * RFC 9110 `If-None-Match` for a GET: weak comparison, a comma-separated list, and `*`. A CDN or a
+ * revalidating proxy sends the weak form and lists after a revalidate, so exact string equality
+ * would deny those clients the 304 this route is supposed to give them.
+ */
+function matchesIfNoneMatch(request: Request, etag: string): boolean {
+  const header = request.headers.get('if-none-match');
+  if (!header) return false;
+  const weak = (tag: string) => tag.trim().replace(/^W\//, '');
+  const candidates = header.split(',').map(weak);
+  if (candidates.includes('*')) return true;
+  return candidates.includes(weak(etag));
 }
 
 /** 200 with an ETag + the shared cache policy, or 304 when the client already has it. */
@@ -191,7 +215,10 @@ export async function sitemapResponse(request: Request, env: ApiEnv): Promise<Re
   const entries = [
     { loc: `${SITE}/`, priority: '1.0' },
     { loc: `${SITE}/projects`, priority: '0.9' },
-    ...(index?.projects ?? []).map((project) => ({ loc: `${SITE}/projects/${project.slug}`, priority: '0.8' })),
+    // Only SLUG_RE-valid slugs become XML — a hostile KV row must not inject markup into the sitemap.
+    ...(index?.projects ?? [])
+      .filter((project) => SLUG_RE.test(project.slug))
+      .map((project) => ({ loc: `${SITE}/projects/${project.slug}`, priority: '0.8' })),
   ];
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -199,8 +226,8 @@ export async function sitemapResponse(request: Request, env: ApiEnv): Promise<Re
     ...entries.map(({ loc, priority }) =>
       [
         '  <url>',
-        `    <loc>${loc}</loc>`,
-        ...(lastmod ? [`    <lastmod>${lastmod}</lastmod>`] : []),
+        `    <loc>${escapeXml(loc)}</loc>`,
+        ...(lastmod ? [`    <lastmod>${escapeXml(lastmod)}</lastmod>`] : []),
         '    <changefreq>monthly</changefreq>',
         `    <priority>${priority}</priority>`,
         '  </url>',

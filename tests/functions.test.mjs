@@ -211,6 +211,16 @@ test('/sitemap.xml lists the home page, the index and every project', async () =
   }
 });
 
+test('the sitemap never emits a slug that is not SLUG_RE and escapes its XML', async () => {
+  const { env, store } = await fakeEnv();
+  const index = JSON.parse(store.get('index'));
+  index.projects.push({ ...index.projects[0], slug: '</loc><script>alert(1)</script><loc>' });
+  store.set('index', JSON.stringify(index));
+  const xml = await (await sitemapResponse(request('https://prakashsewani.com/sitemap.xml'), env)).text();
+  assert.ok(!xml.includes('<script>'), 'hostile KV markup must not reach the sitemap');
+  assert.ok(!xml.includes('</loc><script>alert(1)</script><loc></loc>'));
+});
+
 test('the sitemap still renders the base URLs with KV unavailable', async () => {
   const { env } = await fakeEnv();
   delete env.PROJECTS;
