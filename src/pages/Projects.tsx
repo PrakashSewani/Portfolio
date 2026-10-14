@@ -6,6 +6,10 @@ import { loadProjects, type LedgerRow, type ProjectStatus } from '../lib/project
  * `/projects` — the ledger (DESIGN.md §6 grammar, applied as a spec-sheet table).
  * Columns: index, title, context, year, stack, status. Filterable by stack + status; the
  * Cmd+K palette gets the same rows from App, so search and the table never disagree.
+ *
+ * Each cell carries its column name in a `.sr-only` span: the grid layout conveys the columns
+ * visually, but the DOM is a run of unlabelled values, so a screen reader would read
+ * "01 Class-Spy Developer tooling 2025 Shipped" with nothing tying a value to its column.
  */
 
 const STATUS_LABEL: Record<ProjectStatus, string> = {
@@ -20,11 +24,18 @@ interface LedgerState {
   status: 'loading' | 'ready' | 'error';
   rows: LedgerRow[];
   source: 'live' | 'snapshot' | '';
+  /** Why the snapshot answered instead of the live API (unreachable / non-2xx). */
+  reason: string;
   error: string;
 }
 
+/** A visually-hidden column label, so every cell announces what it is. */
+function CellLabel({ children }: { children: string }) {
+  return <span className="sr-only">{children}: </span>;
+}
+
 export default function Projects() {
-  const [ledger, setLedger] = useState<LedgerState>({ status: 'loading', rows: [], source: '', error: '' });
+  const [ledger, setLedger] = useState<LedgerState>({ status: 'loading', rows: [], source: '', reason: '', error: '' });
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | typeof ALL>(ALL);
   const [stackFilter, setStackFilter] = useState<string | typeof ALL>(ALL);
 
@@ -129,14 +140,14 @@ export default function Projects() {
         <div className="ledger">
           {visible.map((row, index) => (
             <a className="ledger-row" key={row.slug} href={`/projects/${row.slug}`} data-link>
-              <span className="ledger-index">{String(index + 1).padStart(2, '0')}</span>
-              <span className="ledger-title">{row.title}</span>
-              <span className="ledger-context">{row.kicker ?? '—'}</span>
-              <span className="ledger-year">{row.year ?? '—'}</span>
-              <span className="ledger-stack">
+              <span className="ledger-index"><CellLabel>Row</CellLabel>{String(index + 1).padStart(2, '0')}</span>
+              <span className="ledger-title"><CellLabel>Project</CellLabel>{row.title}</span>
+              <span className="ledger-context"><CellLabel>Context</CellLabel>{row.kicker ?? '—'}</span>
+              <span className="ledger-year"><CellLabel>Year</CellLabel>{row.year ?? '—'}</span>
+              <span className="ledger-stack"><CellLabel>Stack</CellLabel>
                 {row.stack.slice(0, 3).map((tech) => <span key={tech}>{tech}</span>)}
               </span>
-              <span className={`status-pill status-${row.status}`}>{STATUS_LABEL[row.status]}</span>
+              <span className={`status-pill status-${row.status}`}><CellLabel>Status</CellLabel>{STATUS_LABEL[row.status]}</span>
             </a>
           ))}
           {visible.length === 0 && (
