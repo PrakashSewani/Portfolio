@@ -1,21 +1,20 @@
 {
   "slug": "jury-forge",
   "title": "Jury Forge",
-  "kicker": "Developer tooling / AI review pipeline",
+  "summary": "Your own AI code-review team for GitHub — self-hosted, on your own Cloudflare account.",
   "status": "in-progress",
-  "summary": "Your own AI code-review team for GitHub \u2014 self-hosted, on your own Cloudflare account.",
   "stack": [
     "TypeScript",
     "Astro",
     "Cloudflare Workers"
   ],
-  "ownership": "Designed and built the review pipeline and its dashboard end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/jury-forge"
     }
   ],
+  "kicker": "Developer tooling / AI review pipeline",
   "year": 2026,
   "evidence": [
     {
@@ -23,6 +22,7 @@
       "value": "MIT"
     }
   ],
-  "featured": true,
+  "ownership": "Designed and built the review pipeline and its dashboard end to end.",
+  "featured": false,
   "order": 6
 }

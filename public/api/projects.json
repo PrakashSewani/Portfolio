@@ -240,7 +240,7 @@
           }
         ]
       },
-      "featured": false,
+      "featured": true,
       "order": 4
     },
     {
@@ -280,7 +280,7 @@
         }
       ],
       "ownership": "Designed and built the macOS workspace utility end to end.",
-      "featured": true,
+      "featured": false,
       "order": 5
     },
     {
@@ -308,7 +308,7 @@
         }
       ],
       "ownership": "Designed and built the review pipeline and its dashboard end to end.",
-      "featured": true,
+      "featured": false,
       "order": 6
     },
     {
@@ -331,7 +331,7 @@
       "kicker": "Infrastructure / self-hosted AI gateway",
       "year": 2026,
       "ownership": "Designed and built the gateway, routing and tenant model end to end.",
-      "featured": true,
+      "featured": false,
       "order": 7
     },
     {
@@ -391,10 +391,6 @@
         {
           "label": "GitHub",
           "href": "https://github.com/PrakashSewani/true-contact"
-        },
-        {
-          "label": "View live",
-          "href": "https://truecontact.prakashsewani.com/"
         }
       ],
       "kicker": "Product engineering / data reconciliation",
@@ -407,10 +403,6 @@
         {
           "label": "License",
           "value": "MIT"
-        },
-        {
-          "label": "Live",
-          "value": "truecontact.prakashsewani.com"
         }
       ],
       "ownership": "Designed and built the reconciliation flow and its UI end to end.",
@@ -464,7 +456,7 @@
     },
     {
       "slug": "git-vacuum",
-      "title": "git-vacuum",
+      "title": "Git-Vacuum",
       "summary": "A keyboard-first terminal UI for backing up, browsing and synchronising every GitHub repository you own.",
       "status": "shipped",
       "stack": [
@@ -644,7 +636,7 @@
     },
     {
       "slug": "algorithm-desk",
-      "title": "algorithm-desk",
+      "title": "Algorithm Desk",
       "summary": "A self-hosted, multilingual practice workspace for writing and running single-file C#, Python and Java problems.",
       "status": "in-progress",
       "stack": [
@@ -673,7 +665,7 @@
     },
     {
       "slug": "prompt-lance",
-      "title": "prompt-lance",
+      "title": "Prompt Lance",
       "summary": "A Discord bot that turns messy, vibe-coded prompts into clean, structured ones for AI coding assistants.",
       "status": "in-progress",
       "stack": [

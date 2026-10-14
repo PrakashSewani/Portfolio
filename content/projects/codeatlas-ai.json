@@ -1,23 +1,23 @@
 {
   "slug": "codeatlas-ai",
   "title": "CodeAtlas AI",
-  "kicker": "Hackathon build / code intelligence",
+  "summary": "Repository onboarding and technical auditing in seconds instead of days — a Cerebras x Google Gemma hackathon build.",
   "status": "shipped",
-  "summary": "Repository onboarding and technical auditing in seconds instead of days \u2014 a Cerebras x Google Gemma hackathon build.",
   "stack": [
     "TypeScript",
     "Python",
     "Cerebras",
     "PowerShell"
   ],
-  "ownership": "Designed and built the repository-audit flow end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/code-atlas"
     }
   ],
+  "kicker": "Hackathon build / code intelligence",
   "year": 2026,
+  "ownership": "Designed and built the repository-audit flow end to end.",
   "featured": false,
   "order": 12
 }

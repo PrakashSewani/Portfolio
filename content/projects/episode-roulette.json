@@ -1,10 +1,27 @@
 {
   "slug": "episode-roulette",
   "title": "Episode Roulette",
+  "summary": "A Chrome and Safari WebExtension that injects a Random Episode button into Netflix and Prime Video series pages, discovering every episode across all seasons and picking one with equal probability.",
+  "status": "shipped",
+  "stack": [
+    "TypeScript",
+    "Manifest V3",
+    "Safari Web Extensions",
+    "Vite",
+    "MutationObserver"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/episode-roulette"
+    },
+    {
+      "label": "Install for Chrome",
+      "href": "https://chromewebstore.google.com/detail/bdmfplkinmebmilgknedfgnpggmfhion"
+    }
+  ],
   "kicker": "Browser extension / Streaming UX",
   "year": 2026,
-  "status": "shipped",
-  "summary": "A Chrome and Safari WebExtension that injects a Random Episode button into Netflix and Prime Video series pages, discovering every episode across all seasons and picking one with equal probability.",
   "challenge": "Discover every episode across all seasons inside SPAs fully controlled by Netflix and Prime Video, with no external APIs, then start playback as if the user had clicked it themselves.",
   "decisions": [
     "MutationObserver-driven detection instead of brittle selectors-on-load",
@@ -25,27 +42,10 @@
       "value": "Chrome Web Store"
     }
   ],
-  "stack": [
-    "TypeScript",
-    "Manifest V3",
-    "Safari Web Extensions",
-    "Vite",
-    "MutationObserver"
-  ],
   "ownership": "Built discovery, the probability model, and the native playback integration.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/episode-roulette"
-    },
-    {
-      "label": "Install for Chrome",
-      "href": "https://chromewebstore.google.com/detail/bdmfplkinmebmilgknedfgnpggmfhion"
-    }
-  ],
   "specimen": {
     "kind": "roulette",
-    "caption": "Injected player \u2014 random episode",
+    "caption": "Injected player — random episode",
     "callouts": [
       {
         "n": 1,

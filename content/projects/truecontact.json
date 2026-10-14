@@ -1,25 +1,20 @@
 {
   "slug": "truecontact",
   "title": "TrueContact",
-  "kicker": "Product engineering / data reconciliation",
+  "summary": "A personal source of truth for contacts — reconciling the phones, exports and cloud address books that disagree with each other.",
   "status": "archived",
-  "summary": "A personal source of truth for contacts \u2014 reconciling the phones, exports and cloud address books that disagree with each other.",
   "stack": [
     "TypeScript",
     "Astro",
     "Local-first"
   ],
-  "ownership": "Designed and built the reconciliation flow and its UI end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/true-contact"
-    },
-    {
-      "label": "View live",
-      "href": "https://truecontact.prakashsewani.com/"
     }
   ],
+  "kicker": "Product engineering / data reconciliation",
   "year": 2026,
   "evidence": [
     {
@@ -29,12 +24,9 @@
     {
       "label": "License",
       "value": "MIT"
-    },
-    {
-      "label": "Live",
-      "value": "truecontact.prakashsewani.com"
     }
   ],
+  "ownership": "Designed and built the reconciliation flow and its UI end to end.",
   "featured": false,
   "order": 10
 }

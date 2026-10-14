@@ -1,21 +1,20 @@
 {
   "slug": "magnetline",
   "title": "Magnetline",
-  "kicker": "Browser extension / link extraction",
-  "status": "shipped",
   "summary": "Puts the download action into 1337x search results, fetching magnet and torrent links for you.",
+  "status": "shipped",
   "stack": [
     "TypeScript",
     "Manifest V3",
     "Chromium"
   ],
-  "ownership": "Designed and built the extension and its extraction flow end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/1337x-auto-links"
     }
   ],
+  "kicker": "Browser extension / link extraction",
   "year": 2026,
   "evidence": [
     {
@@ -27,6 +26,7 @@
       "value": "MIT"
     }
   ],
+  "ownership": "Designed and built the extension and its extraction flow end to end.",
   "featured": false,
   "order": 17
 }

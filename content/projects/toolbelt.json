@@ -1,21 +1,21 @@
 {
   "slug": "toolbelt",
   "title": "Toolbelt",
-  "kicker": "Developer tooling / environment portability",
-  "status": "in-progress",
   "summary": "A terminal UI for syncing LLM coding agents and their configs across machines, so a new box starts at parity.",
+  "status": "in-progress",
   "stack": [
     "Rust",
     "TUI"
   ],
-  "ownership": "Designed and built the sync tool and its config model end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/dev-rig"
     }
   ],
+  "kicker": "Developer tooling / environment portability",
   "year": 2026,
+  "ownership": "Designed and built the sync tool and its config model end to end.",
   "featured": false,
   "order": 8
 }

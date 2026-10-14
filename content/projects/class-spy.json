@@ -1,15 +1,31 @@
 {
   "slug": "class-spy",
   "title": "Class-Spy",
+  "summary": "Turns utility classes into readable CSS at the point of use, so developers can inspect an unfamiliar interface without breaking their flow.",
+  "status": "shipped",
+  "stack": [
+    "TypeScript",
+    "VS Code API",
+    "Tailwind CSS",
+    "AST parsing"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/Class-Spy"
+    },
+    {
+      "label": "Install for VS Code",
+      "href": "https://marketplace.visualstudio.com/items?itemName=PrakashSewani.class-spy"
+    }
+  ],
   "kicker": "Developer tooling / VS Code extension",
   "year": 2026,
-  "status": "shipped",
-  "summary": "Turns utility classes into readable CSS at the point of use, so developers can inspect an unfamiliar interface without breaking their flow.",
   "challenge": "Resolve CSS and Tailwind utilities consistently across HTML, React, Vue, Svelte, Astro and Angular while keeping hover feedback immediate.",
   "decisions": [
     "Framework-aware parsing instead of one generic regex pass",
     "AST-assisted inspection so a resolved class maps back to its source",
-    "Low-latency editor feedback \u2014 the hover card is the product"
+    "Low-latency editor feedback — the hover card is the product"
   ],
   "evidence": [
     {
@@ -21,26 +37,10 @@
       "value": "VS Code Marketplace"
     }
   ],
-  "stack": [
-    "TypeScript",
-    "VS Code API",
-    "Tailwind CSS",
-    "AST parsing"
-  ],
   "ownership": "Designed and built the extension experience and parsing flow end to end.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/Class-Spy"
-    },
-    {
-      "label": "Install for VS Code",
-      "href": "https://marketplace.visualstudio.com/items?itemName=PrakashSewani.class-spy"
-    }
-  ],
   "specimen": {
     "kind": "inspector",
-    "caption": "Hover inspector \u2014 resolved utilities",
+    "caption": "Hover inspector — resolved utilities",
     "callouts": [
       {
         "n": 1,

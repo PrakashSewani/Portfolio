@@ -1,21 +1,20 @@
 {
   "slug": "git-vacuum",
-  "title": "git-vacuum",
-  "kicker": "Developer tooling / GitHub hygiene CLI",
-  "status": "shipped",
+  "title": "Git-Vacuum",
   "summary": "A keyboard-first terminal UI for backing up, browsing and synchronising every GitHub repository you own.",
+  "status": "shipped",
   "stack": [
     "Rust",
     "GitHub API",
     "TUI"
   ],
-  "ownership": "Designed and built the CLI and its sync engine end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/git-vacuum"
     }
   ],
+  "kicker": "Developer tooling / GitHub hygiene CLI",
   "year": 2026,
   "evidence": [
     {
@@ -27,6 +26,7 @@
       "value": "MIT"
     }
   ],
+  "ownership": "Designed and built the CLI and its sync engine end to end.",
   "featured": false,
   "order": 13
 }

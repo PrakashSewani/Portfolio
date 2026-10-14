@@ -1,20 +1,19 @@
 {
   "slug": "noobie",
   "title": "Noobie",
-  "kicker": "Browser extension / web safety",
-  "status": "shipped",
   "summary": "Warns you when a site you are visiting sits on a freshly registered domain, the common signature of a phishing page.",
+  "status": "shipped",
   "stack": [
     "Cloudflare Workers",
     "RDAP"
   ],
-  "ownership": "Designed and built the extension and its worker end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/noobie-website"
     }
   ],
+  "kicker": "Browser extension / web safety",
   "year": 2026,
   "evidence": [
     {
@@ -22,6 +21,7 @@
       "value": "MIT"
     }
   ],
+  "ownership": "Designed and built the extension and its worker end to end.",
   "featured": false,
   "order": 21
 }
