@@ -1,7 +1,7 @@
 {
   "slug": "truecontact",
   "title": "TrueContact",
-  "summary": "A personal source of truth for contacts — reconciling the phones, exports and cloud address books that disagree with each other.",
+  "summary": "A personal source of truth for contacts — reconciling the phones, exports and cloud address books that disagree with each other. Archived: it shipped, but the product did not meet the bar I set for it.",
   "status": "archived",
   "stack": [
     "TypeScript",
