@@ -17,7 +17,7 @@
  * /root/.hermes/secrets/cloudflare.env when it exists:
  *   CLOUDFLARE_API_TOKEN          a token scoped to "Workers KV Storage: Edit"
  *   CLOUDFLARE_ACCOUNT_ID
- *   CLOUDFLARE_KV_NAMESPACE_ID    or the id in wrangler.jsonc's PROJECTS binding
+ *   CLOUDFLARE_KV_NAMESPACE_ID    or the id in wrangler.toml's PROJECTS binding
  *
  * Exit codes: 0 ok · 1 content invalid · 2 usage/config error · 3 credentials missing · 4 API error
  *
@@ -28,9 +28,12 @@ import path from 'node:path';
 import { CONTENT_DIR, ROOT, loadContent, option } from './load-content.mjs';
 import { toLedger } from '../src/lib/projects.ts';
 
-const SECRETS_FILE = '/root/.hermes/secrets/cloudflare.env';
+const SECRETS_FILE = process.env.CLOUDFLARE_ENV_FILE || '/root/.hermes/secrets/cloudflare.env';
 
-/** KEY=VALUE lines from a secrets file; real environment variables win. */
+/**
+ * KEY=VALUE lines from a secrets file; real environment variables win. The path is overridable
+ * via CLOUDFLARE_ENV_FILE so tests (and anyone without that file) stay off the network.
+ */
 async function readSecrets(file = SECRETS_FILE) {
   try {
     const text = await readFile(file, 'utf8');
@@ -46,14 +49,13 @@ async function readSecrets(file = SECRETS_FILE) {
   }
 }
 
-/** The KV namespace id, from the environment or the wrangler config. */
+/** The KV namespace id, from the environment or the Pages config. */
 async function namespaceId(secrets) {
   const fromEnv = process.env.CLOUDFLARE_KV_NAMESPACE_ID || secrets.CLOUDFLARE_KV_NAMESPACE_ID;
   if (fromEnv) return fromEnv;
   try {
-    const config = await readFile(path.join(ROOT, 'wrangler.jsonc'), 'utf8');
-    const match = config.match(/"binding"\s*:\s*"PROJECTS"\s*,\s*"id"\s*:\s*"([^"]+)"/);
-    const id = match?.[1];
+    const config = await readFile(path.join(ROOT, 'wrangler.toml'), 'utf8');
+    const id = config.match(/binding\s*=\s*"PROJECTS"[\s\S]*?id\s*=\s*"([^"]+)"/)?.[1];
     if (id && !id.startsWith('REPLACE_WITH')) return id;
   } catch {
     /* fall through */
@@ -117,14 +119,14 @@ async function main() {
   const missing = [
     !token && 'CLOUDFLARE_API_TOKEN',
     !account && 'CLOUDFLARE_ACCOUNT_ID',
-    !namespace && 'CLOUDFLARE_KV_NAMESPACE_ID (or a real PROJECTS id in wrangler.jsonc)',
+    !namespace && 'CLOUDFLARE_KV_NAMESPACE_ID (or a real PROJECTS id in wrangler.toml)',
   ].filter(Boolean);
   if (missing.length) {
     console.error(`✗ missing credential(s): ${missing.join(', ')}`);
     console.error(`  expected in the environment or in ${SECRETS_FILE} (never in the repo):`);
     console.error('    CLOUDFLARE_API_TOKEN=…   # token scoped to "Workers KV Storage: Edit"');
     console.error('    CLOUDFLARE_ACCOUNT_ID=…');
-    console.error('    CLOUDFLARE_KV_NAMESPACE_ID=…');
+    console.error('    CLOUDFLARE_KV_NAMESPACE_ID=…  (or the id in wrangler.toml)');
     process.exit(3);
   }
 

@@ -1,0 +1,14 @@
+# Cloudflare Pages project config for prakashsewani.com.
+#
+# The site is a **Pages** project named `portfolio` (Git-integrated: merging to `main` deploys it),
+# not a Worker — verified from the platform's own check-run, not from the dashboard. So the API
+# lives in `functions/` (Pages Functions run for any path with no matching static asset) and there
+# is no `run_worker_first` equivalent to configure: the Worker-layout trap does not exist here.
+name = "portfolio"
+compatibility_date = "2026-04-12"
+pages_build_output_dir = "dist"
+
+# Written by scripts/publish-projects.mjs (index + one key per project).
+[[kv_namespaces]]
+binding = "PROJECTS"
+id = "b41ce54cb4664ee4a2f2c1c929fa1443"

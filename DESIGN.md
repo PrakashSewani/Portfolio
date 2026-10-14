@@ -184,8 +184,14 @@ or deploy-config change.
   case study still renders with KV down.
 - `node scripts/publish-projects.mjs` validates and writes KV: an `index` key (the ledger, one
   read) plus one `project:<slug>` key. `--dry-run` and `--emit` work without credentials.
-- `src/worker.ts` serves `/api/projects`, `/api/projects/<slug>`, a KV-generated `/sitemap.xml`,
-  and injects per-project title/OG/canonical into the app shell for `/projects/<slug>`.
-- `wrangler.jsonc` must list every path the Worker owns in `assets.run_worker_first`, and must
-  declare `assets.binding: "ASSETS"` — without the binding `env.ASSETS` is `undefined` at runtime
-  and the shell routes fail (verified against `wrangler dev`, not assumed).
+- **The host is a Cloudflare Pages project** (`portfolio`, Git-integrated — merging to `main`
+  deploys it), so the server side is Pages Functions, not a Worker:
+  - `functions/api/[[route]].ts` → the ledger and one project (`src/lib/pages-api.ts` holds the
+    logic, so it is unit-testable without a runtime)
+  - `functions/sitemap.xml.ts` → the KV-generated sitemap
+  - `functions/projects/[slug].ts` → serves the app shell with real title/OG/canonical
+  - `wrangler.toml` (`pages_build_output_dir = "dist"`, the `PROJECTS` KV binding) — **not** a
+    Worker-style `wrangler.jsonc` with `assets`/`run_worker_first`; in the Pages layout a Function
+    runs for any path with no matching static asset, so that trap does not exist here.
+  - `_routes.json` keeps `/api/projects.json` out of the Function: the snapshot must be served as a
+    static asset, or the client's fallback fetch would receive a 404 instead of the baked JSON.

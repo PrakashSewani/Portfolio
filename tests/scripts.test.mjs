@@ -16,12 +16,14 @@ import { ROOT } from '../scripts/load-content.mjs';
 const run = promisify(execFile);
 const PUBLISH = path.join(ROOT, 'scripts', 'publish-projects.mjs');
 
-/** A child env with no Cloudflare credentials, so the credential path is deterministic. */
+/** An env with no Cloudflare credentials and no secrets file, so the credential path is deterministic. */
 function credentialFreeEnv() {
   const env = { ...process.env };
   delete env.CLOUDFLARE_API_TOKEN;
   delete env.CLOUDFLARE_ACCOUNT_ID;
   delete env.CLOUDFLARE_KV_NAMESPACE_ID;
+  // Never let a test reach the real token file — this suite must not write to production KV.
+  env.CLOUDFLARE_ENV_FILE = path.join(tmpdir(), 'portfolio-no-such-secrets.env');
   return env;
 }
 
@@ -87,6 +89,12 @@ test('publish refuses to touch the network without credentials', async () => {
   assert.equal(code, 3);
   assert.match(stderr, /missing credential\(s\)/);
   assert.match(stderr, /CLOUDFLARE_API_TOKEN/);
+});
+
+test('publish --dry-run never needs credentials either', async () => {
+  const { code, stdout } = await runScript(PUBLISH, ['--dry-run'], credentialFreeEnv());
+  assert.equal(code, 0);
+  assert.match(stdout, /--dry-run: nothing written/);
 });
 
 test('build-snapshot writes a complete, re-readable snapshot', async () => {
