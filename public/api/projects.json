@@ -1,0 +1,244 @@
+{
+  "generatedAt": "2026-10-14T16:02:40.480Z",
+  "count": 4,
+  "projects": [
+    {
+      "slug": "class-spy",
+      "title": "Class-Spy",
+      "summary": "Turns utility classes into readable CSS at the point of use, so developers can inspect an unfamiliar interface without breaking their flow.",
+      "status": "shipped",
+      "stack": [
+        "TypeScript",
+        "VS Code API",
+        "Tailwind CSS",
+        "AST parsing"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/Class-Spy"
+        },
+        {
+          "label": "Install for VS Code",
+          "href": "https://marketplace.visualstudio.com/items?itemName=PrakashSewani.class-spy"
+        }
+      ],
+      "kicker": "Developer tooling / VS Code extension",
+      "challenge": "Resolve CSS and Tailwind utilities consistently across HTML, React, Vue, Svelte, Astro and Angular while keeping hover feedback immediate.",
+      "decisions": [
+        "Framework-aware parsing instead of one generic regex pass",
+        "AST-assisted inspection so a resolved class maps back to its source",
+        "Low-latency editor feedback — the hover card is the product"
+      ],
+      "evidence": [
+        {
+          "label": "Frontend frameworks resolved",
+          "value": "6"
+        },
+        {
+          "label": "Distribution",
+          "value": "VS Code Marketplace"
+        }
+      ],
+      "ownership": "Designed and built the extension experience and parsing flow end to end.",
+      "specimen": {
+        "kind": "inspector",
+        "caption": "Hover inspector — resolved utilities",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "The class attribute under the cursor, framework-aware."
+          },
+          {
+            "n": 2,
+            "text": "Each utility resolved to the declaration it produces."
+          },
+          {
+            "n": 3,
+            "text": "Status strip: frameworks covered, language, inspection state."
+          }
+        ]
+      },
+      "featured": true,
+      "order": 1
+    },
+    {
+      "slug": "episode-roulette",
+      "title": "Episode Roulette",
+      "summary": "A Chrome and Safari WebExtension that injects a Random Episode button into Netflix and Prime Video series pages, discovering every episode across all seasons and picking one with equal probability.",
+      "status": "shipped",
+      "stack": [
+        "TypeScript",
+        "Manifest V3",
+        "Safari Web Extensions",
+        "Vite",
+        "MutationObserver"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/episode-roulette"
+        },
+        {
+          "label": "Install for Chrome",
+          "href": "https://chromewebstore.google.com/detail/bdmfplkinmebmilgknedfgnpggmfhion"
+        }
+      ],
+      "kicker": "Browser extension / Streaming UX",
+      "challenge": "Discover every episode across all seasons inside SPAs fully controlled by Netflix and Prime Video, with no external APIs, then start playback as if the user had clicked it themselves.",
+      "decisions": [
+        "MutationObserver-driven detection instead of brittle selectors-on-load",
+        "Equal-probability randomizer across the discovered episode set",
+        "Platform-native UI so the button looks like it shipped with the player"
+      ],
+      "evidence": [
+        {
+          "label": "Browsers",
+          "value": "Chrome + Safari"
+        },
+        {
+          "label": "External APIs used",
+          "value": "0"
+        },
+        {
+          "label": "Distribution",
+          "value": "Chrome Web Store"
+        }
+      ],
+      "ownership": "Built discovery, the probability model, and the native playback integration.",
+      "specimen": {
+        "kind": "roulette",
+        "caption": "Injected player — random episode",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "The button is injected into the series page, not a separate app."
+          },
+          {
+            "n": 2,
+            "text": "Season-by-season episode discovery, counted per season."
+          },
+          {
+            "n": 3,
+            "text": "One episode picked at equal probability from the full set."
+          }
+        ]
+      },
+      "featured": true,
+      "order": 2
+    },
+    {
+      "slug": "habitual",
+      "title": "Habitual",
+      "summary": "A cross-device habit system designed around clear routines, visible momentum, and a focused daily workflow.",
+      "status": "in-progress",
+      "stack": [
+        "TypeScript",
+        "React",
+        "Node.js",
+        "MongoDB"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/Habitual"
+        }
+      ],
+      "kicker": "Full-stack product / Habit platform",
+      "challenge": "Model recurring behaviour and progress so it stays simple for the person using it, while supporting a modern full-stack application architecture underneath.",
+      "decisions": [
+        "Reusable React UI rather than per-screen components",
+        "API-first data flow so clients share one contract",
+        "Progress-focused product model — momentum is the metric, not streaks"
+      ],
+      "evidence": [
+        {
+          "label": "Clients",
+          "value": "Cross-device web"
+        },
+        {
+          "label": "Data flow",
+          "value": "API-first"
+        }
+      ],
+      "ownership": "Shaped the product model, the reusable UI, and the API-first data flow.",
+      "specimen": {
+        "kind": "habit",
+        "caption": "Daily workflow — momentum at a glance",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "Momentum as the headline number, not a gamified streak."
+          },
+          {
+            "n": 2,
+            "text": "The week at a glance: completed days are the only filled state."
+          },
+          {
+            "n": 3,
+            "text": "Each habit carries its own run length, so the list stays scannable."
+          }
+        ]
+      },
+      "featured": false,
+      "order": 3
+    },
+    {
+      "slug": "smart-education-bot",
+      "title": "Smart Education Bot",
+      "summary": "A PDF question-answering system that combines document extraction, contextual NLP responses, and a web fallback path.",
+      "status": "archived",
+      "stack": [
+        "Python",
+        "Flask",
+        "BERT",
+        "Transformers",
+        "BeautifulSoup"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/SMART-EDUCATION-BOT"
+        }
+      ],
+      "kicker": "Applied NLP / Knowledge retrieval",
+      "challenge": "Find useful answers in unstructured educational material while keeping a fallback for the queries the local source cannot resolve.",
+      "decisions": [
+        "Document-first retrieval before reaching for the web",
+        "BERT-based context so answers are grounded in the source text",
+        "Graceful web fallback when the document has no answer"
+      ],
+      "evidence": [
+        {
+          "label": "Retrieval",
+          "value": "Document-first"
+        },
+        {
+          "label": "Fallback",
+          "value": "Web search"
+        }
+      ],
+      "ownership": "Built document extraction, the question-answering path, and the fallback flow.",
+      "specimen": {
+        "kind": "knowledge",
+        "caption": "Document answer with a confidence read-out",
+        "callouts": [
+          {
+            "n": 1,
+            "text": "The source document is named — the answer is traceable to it."
+          },
+          {
+            "n": 2,
+            "text": "The answer is extracted context, not a chat reply."
+          },
+          {
+            "n": 3,
+            "text": "Confidence is shown, so a weak answer is visibly weak."
+          }
+        ]
+      },
+      "featured": false,
+      "order": 4
+    }
+  ]
+}

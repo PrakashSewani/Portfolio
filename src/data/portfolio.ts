@@ -19,6 +19,7 @@ export const profile = {
 export const projects = [
   {
     index: '01',
+    slug: 'class-spy',
     title: 'Class-Spy',
     kicker: 'Developer tooling / VS Code extension',
     summary:
@@ -37,6 +38,7 @@ export const projects = [
   },
   {
     index: '02',
+    slug: 'episode-roulette',
     title: 'Episode Roulette',
     kicker: 'Browser extension / Streaming UX',
     summary:
@@ -55,6 +57,7 @@ export const projects = [
   },
   {
     index: '03',
+    slug: 'habitual',
     title: 'Habitual',
     kicker: 'Full-stack product / Habit platform',
     summary:
@@ -70,6 +73,7 @@ export const projects = [
   },
   {
     index: '04',
+    slug: 'smart-education-bot',
     title: 'Smart Education Bot',
     kicker: 'Applied NLP / Knowledge retrieval',
     summary:

@@ -1,0 +1,33 @@
+{
+  "slug": "habitual",
+  "title": "Habitual",
+  "kicker": "Full-stack product / Habit platform",
+  "status": "in-progress",
+  "summary": "A cross-device habit system designed around clear routines, visible momentum, and a focused daily workflow.",
+  "challenge": "Model recurring behaviour and progress so it stays simple for the person using it, while supporting a modern full-stack application architecture underneath.",
+  "decisions": [
+    "Reusable React UI rather than per-screen components",
+    "API-first data flow so clients share one contract",
+    "Progress-focused product model — momentum is the metric, not streaks"
+  ],
+  "evidence": [
+    { "label": "Clients", "value": "Cross-device web" },
+    { "label": "Data flow", "value": "API-first" }
+  ],
+  "stack": ["TypeScript", "React", "Node.js", "MongoDB"],
+  "ownership": "Shaped the product model, the reusable UI, and the API-first data flow.",
+  "links": [
+    { "label": "GitHub", "href": "https://github.com/PrakashSewani/Habitual" }
+  ],
+  "specimen": {
+    "kind": "habit",
+    "caption": "Daily workflow — momentum at a glance",
+    "callouts": [
+      { "n": 1, "text": "Momentum as the headline number, not a gamified streak." },
+      { "n": 2, "text": "The week at a glance: completed days are the only filled state." },
+      { "n": 3, "text": "Each habit carries its own run length, so the list stays scannable." }
+    ]
+  },
+  "featured": false,
+  "order": 3
+}

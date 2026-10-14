@@ -4,6 +4,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { WORKSPACES, type WorkspaceId } from '../data/navigation';
 import { profile } from '../data/portfolio';
+import type { LedgerRow } from '../lib/projects';
+import { navigate } from '../lib/router';
 
 interface Command {
   id: string;
@@ -18,6 +20,8 @@ interface CommandPaletteProps {
   onClose: () => void;
   activeWorkspace: WorkspaceId;
   onWorkspaceChange?: (id: WorkspaceId) => void;
+  /** The project ledger, so `/projects` and each case sheet are reachable from Cmd+K. */
+  ledger?: LedgerRow[];
 }
 
 const toast = (message: string) => {
@@ -30,7 +34,7 @@ const toast = (message: string) => {
   window.setTimeout(() => el.remove(), 2500);
 };
 
-export default function CommandPalette({ isOpen, onClose, onWorkspaceChange }: CommandPaletteProps) {
+export default function CommandPalette({ isOpen, onClose, onWorkspaceChange, ledger }: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,12 +58,21 @@ export default function CommandPalette({ isOpen, onClose, onWorkspaceChange }: C
 
     return [
       ...nav,
+      { id: 'work-index', label: 'work_index', hint: 'route', action: () => { navigate('/projects'); onClose(); }, section: 'routes' },
+      { id: 'home-page', label: 'home_page', hint: 'route', action: () => { navigate('/'); onClose(); }, section: 'routes' },
+      ...(ledger ?? []).map((row) => ({
+        id: `project-${row.slug}`,
+        label: `project/${row.slug}`,
+        hint: row.status,
+        action: () => { navigate(`/projects/${row.slug}`); onClose(); },
+        section: 'projects',
+      })),
       { id: 'resume', label: 'view_resume', hint: 'external', action: () => { window.open(profile.resume, '_blank'); onClose(); }, section: 'links' },
       { id: 'linkedin', label: 'open_linkedin', hint: 'external', action: () => { window.open(profile.linkedin, '_blank'); onClose(); }, section: 'links' },
       { id: 'github', label: 'open_github', hint: 'external', action: () => { window.open(profile.github, '_blank'); onClose(); }, section: 'links' },
       { id: 'email', label: 'copy_email', hint: 'clipboard', action: async () => { try { await navigator.clipboard.writeText(profile.email); toast(`copied: ${profile.email}`); } catch { toast('copy failed'); } onClose(); }, section: 'actions' },
     ];
-  }, [onClose, onWorkspaceChange]);
+  }, [ledger, onClose, onWorkspaceChange]);
 
   const filtered = commands.filter((cmd) => cmd.label.toLowerCase().includes(query.toLowerCase()));
 
