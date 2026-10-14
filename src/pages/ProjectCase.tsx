@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, Github } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import SpecimenPlate from '../components/SpecimenPlate';
 import Rail from '../components/Rail';
-import { loadProject, type Project, type ProjectStatus } from '../lib/projects';
+import { loadProject, ProjectNotFoundError, type Project, type ProjectStatus } from '../lib/projects';
 
 /**
  * `/projects/<slug>` — one case study: specimen plate + rail, challenge → decisions →
- * evidence. Content comes from the Worker (`/api/projects/<slug>`), falling back to the
+ * evidence. Content comes from the Pages Function (`/api/projects/<slug>`), falling back to the
  * build-time snapshot, so the page renders even with the API down.
  */
 
@@ -34,8 +34,12 @@ export default function ProjectCase({ slug }: { slug: string }) {
       })
       .catch((err: unknown) => {
         if (!alive) return;
-        const message = err instanceof Error ? err.message : String(err);
-        setState(message.includes('no project with that slug') ? { status: 'missing', slug } : { status: 'error', message });
+        // Branch on the error *type*, not on a substring of its message.
+        if (err instanceof ProjectNotFoundError) {
+          setState({ status: 'missing', slug });
+          return;
+        }
+        setState({ status: 'error', message: err instanceof Error ? err.message : String(err) });
       });
     return () => {
       alive = false;
@@ -74,7 +78,6 @@ export default function ProjectCase({ slug }: { slug: string }) {
       {state.status === 'ready' && (() => {
         const { project, source } = state;
         const specimen = project.specimen;
-        const primary = project.links[0];
 
         return (
           <>
@@ -154,11 +157,6 @@ export default function ProjectCase({ slug }: { slug: string }) {
                   <a href="/projects" data-link>← All projects</a>
                   {source === 'snapshot' && <span> · live API unavailable, showing the snapshot</span>}
                 </p>
-                {primary && (
-                  <p className="sr-only">
-                    Primary link: {primary.label} ({primary.href}) <Github size={12} aria-hidden="true" />
-                  </p>
-                )}
               </aside>
             </div>
           </>
