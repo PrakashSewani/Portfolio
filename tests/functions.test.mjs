@@ -83,7 +83,13 @@ test('the ledger route returns rows with caching + ETag and no case-study keys',
 
   const payload = await response.json();
   assert.equal(payload.count, CONTENT_COUNT);
-  assert.deepEqual(payload.projects.map((row) => row.slug).sort(), CONTENT_SLUGS);
+  // Where the *set* only has to match, order does not — but this payload feeds the numbered
+  // ledger table, so the order is behaviour: compare unsorted against the content order.
+  assert.deepEqual(
+    payload.projects.map((row) => row.slug),
+    CONTENT.map((project) => project.slug),
+    'the ledger must come out in the content order the table renders',
+  );
   for (const row of payload.projects) {
     for (const key of ['challenge', 'decisions', 'evidence', 'specimen', 'links']) {
       assert.equal(row[key], undefined, `ledger row leaked ${key}`);
@@ -272,7 +278,7 @@ test('/sitemap.xml lists the home page, the index and every project', async () =
   const xml = await response.text();
   assert.match(xml, /<loc>https:\/\/prakashsewani\.com\/<\/loc>/);
   assert.match(xml, /<loc>https:\/\/prakashsewani\.com\/projects<\/loc>/);
-  for (const slug of ['class-spy', 'episode-roulette', 'habitual', 'smart-education-bot']) {
+  for (const slug of CONTENT_SLUGS) {
     assert.ok(xml.includes(`<loc>https://prakashsewani.com/projects/${slug}</loc>`), `sitemap is missing ${slug}`);
   }
 });

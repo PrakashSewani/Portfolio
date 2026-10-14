@@ -1,20 +1,19 @@
 {
   "slug": "works-after-reinstall",
   "title": "Works After Reinstall",
-  "kicker": "Developer tooling / machine setup",
+  "summary": "Reinstalling Windows is easy. Recreating your environment isn't — so this automates the second part.",
   "status": "shipped",
-  "summary": "Reinstalling Windows is easy. Recreating your environment isn't \u2014 so this automates the second part.",
   "stack": [
     "Rust",
     "Windows"
   ],
-  "ownership": "Designed and built the setup automation end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/works-after-reinstall"
     }
   ],
+  "kicker": "Developer tooling / machine setup",
   "year": 2026,
   "evidence": [
     {
@@ -22,6 +21,7 @@
       "value": "MIT"
     }
   ],
+  "ownership": "Designed and built the setup automation end to end.",
   "featured": false,
   "order": 18
 }

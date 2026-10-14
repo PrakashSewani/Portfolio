@@ -1,11 +1,26 @@
 {
   "slug": "dormant",
   "title": "Dormant",
+  "summary": "Manages the lifecycle of local project workspaces: clean, archive and restore a project without losing the repository behind it.",
+  "status": "shipped",
+  "stack": [
+    "Swift",
+    "SwiftUI",
+    "Homebrew"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/dormant-macos"
+    },
+    {
+      "label": "View live",
+      "href": "https://dormant.prakashsewani.com/"
+    }
+  ],
   "kicker": "macOS utility / developer workflow",
   "year": 2026,
-  "status": "shipped",
-  "summary": "Manages the lifecycle of local project workspaces: clean, archive and restore a project without losing the repository behind it.",
-  "challenge": "Free up a project's disk space without ever risking the repository behind it \u2014 every byte removed has to be confidently regenerable, and every restore has to be verifiable.",
+  "challenge": "Free up a project's disk space without ever risking the repository behind it — every byte removed has to be confidently regenerable, and every restore has to be verifiable.",
   "decisions": [
     "Classify before deleting: nothing goes unless it is confidently regenerable",
     "Archive into ~/.dormant/store/ and verify the archive before the working copy is removed",
@@ -34,25 +49,10 @@
       "value": "Local-only, no telemetry"
     }
   ],
-  "stack": [
-    "Swift",
-    "SwiftUI",
-    "Homebrew"
-  ],
   "ownership": "Designed and built the macOS workspace utility end to end.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/dormant-macos"
-    },
-    {
-      "label": "View live",
-      "href": "https://dormant.prakashsewani.com/"
-    }
-  ],
   "specimen": {
     "kind": "workspace",
-    "caption": "Workspace rail \u2014 clean, archive, restore",
+    "caption": "Workspace rail — clean, archive, restore",
     "callouts": [
       {
         "n": 1,
@@ -68,6 +68,6 @@
       }
     ]
   },
-  "featured": true,
+  "featured": false,
   "order": 5
 }

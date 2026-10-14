@@ -1,14 +1,25 @@
 {
   "slug": "git-vacuum",
-  "title": "git-vacuum",
+  "title": "Git-Vacuum",
+  "summary": "A keyboard-first terminal UI for backing up, browsing and synchronising every GitHub repository you own.",
+  "status": "shipped",
+  "stack": [
+    "Rust",
+    "GitHub API",
+    "TUI"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/git-vacuum"
+    }
+  ],
   "kicker": "Developer tooling / GitHub hygiene CLI",
   "year": 2026,
-  "status": "shipped",
-  "summary": "A keyboard-first terminal UI for backing up, browsing and synchronising every GitHub repository you own.",
   "challenge": "Mirror every repository you own locally with no backend, while keeping behind, ahead and dirty state visible while the sync runs.",
   "decisions": [
     "Nine crates on hexagonal ports & adapters: service, app and TUI depend only on core traits",
-    "Unidirectional data flow \u2014 action, reducer, effect, app event, render",
+    "Unidirectional data flow — action, reducer, effect, app event, render",
     "The GitHub token lives in the OS keyring, never in SQLite, logs or a plaintext file",
     "SQLite in WAL mode is the local store; the GitHub API is the only outbound dependency"
   ],
@@ -34,21 +45,10 @@
       "value": "SQLite (WAL), token in OS keyring"
     }
   ],
-  "stack": [
-    "Rust",
-    "GitHub API",
-    "TUI"
-  ],
   "ownership": "Designed and built the CLI and its sync engine end to end.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/git-vacuum"
-    }
-  ],
   "specimen": {
     "kind": "repos",
-    "caption": "Repository dashboard \u2014 behind, ahead, dirty",
+    "caption": "Repository dashboard — behind, ahead, dirty",
     "callouts": [
       {
         "n": 1,

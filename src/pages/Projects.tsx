@@ -9,7 +9,7 @@ import { loadProjects, type LedgerRow, type ProjectStatus } from '../lib/project
  *
  * Each cell carries its column name in a `.sr-only` span: the grid layout conveys the columns
  * visually, but the DOM is a run of unlabelled values, so a screen reader would read
- * "01 Class-Spy Developer tooling 2025 Shipped" with nothing tying a value to its column.
+ * "01 Class-Spy Developer tooling 2026 Shipped" with nothing tying a value to its column.
  */
 
 const STATUS_LABEL: Record<ProjectStatus, string> = {

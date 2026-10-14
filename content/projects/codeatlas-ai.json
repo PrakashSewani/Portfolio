@@ -1,10 +1,22 @@
 {
   "slug": "codeatlas-ai",
   "title": "CodeAtlas AI",
+  "summary": "Repository onboarding and technical auditing in seconds instead of days — a Cerebras x Google Gemma hackathon build.",
+  "status": "shipped",
+  "stack": [
+    "TypeScript",
+    "Python",
+    "Cerebras",
+    "PowerShell"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/code-atlas"
+    }
+  ],
   "kicker": "Hackathon build / code intelligence",
   "year": 2026,
-  "status": "shipped",
-  "summary": "Repository onboarding and technical auditing in seconds instead of days \u2014 a Cerebras x Google Gemma hackathon build.",
   "challenge": "Cut repository onboarding and auditing from days to seconds by running a squad of specialists in parallel instead of one model reading the codebase in sequence.",
   "decisions": [
     "Clone, parse and index once into a NetworkX knowledge graph that every agent shares",
@@ -30,22 +42,10 @@
       "value": "React + SSE, live agent cards"
     }
   ],
-  "stack": [
-    "TypeScript",
-    "Python",
-    "Cerebras",
-    "PowerShell"
-  ],
   "ownership": "Designed and built the repository-audit flow end to end.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/code-atlas"
-    }
-  ],
   "specimen": {
     "kind": "audit",
-    "caption": "Repo audit \u2014 tree, findings, module links",
+    "caption": "Repo audit — tree, findings, module links",
     "callouts": [
       {
         "n": 1,
@@ -61,7 +61,7 @@
       },
       {
         "n": 4,
-        "text": "Elapsed time for the run \u2014 which is the whole claim of the project."
+        "text": "Elapsed time for the run — which is the whole claim of the project."
       }
     ]
   },

@@ -1,11 +1,22 @@
 {
   "slug": "veil",
   "title": "Veil",
+  "summary": "Real-time secret redaction for streamers: API keys, tokens, wallets and seed phrases never make it to the stream.",
+  "status": "in-progress",
+  "stack": [
+    "C#",
+    "Windows",
+    "TypeScript"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/veil"
+    }
+  ],
   "kicker": "Developer tooling / secret protection",
   "year": 2026,
-  "status": "in-progress",
-  "summary": "Real-time secret redaction for streamers: API keys, tokens, wallets and seed phrases never make it to the stream.",
-  "challenge": "Keep a live API key, wallet address or seed phrase out of the stream while you still see it locally \u2014 and do it without adding stream delay.",
+  "challenge": "Keep a live API key, wallet address or seed phrase out of the stream while you still see it locally — and do it without adding stream delay.",
   "decisions": [
     "Blur rectangles over exact screen regions: the local socket carries coordinates and rule ids, never secret text",
     "Detect in the editor where the text is exact, and fall back to OCR only for windows with no detector",
@@ -30,21 +41,10 @@
       "value": "Native OBS filter, pre-encode"
     }
   ],
-  "stack": [
-    "C#",
-    "Windows",
-    "TypeScript"
-  ],
   "ownership": "Designed and built the detection layer and the Windows client end to end.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/veil"
-    }
-  ],
   "specimen": {
     "kind": "redact",
-    "caption": "Capture frame \u2014 the key, then the redaction",
+    "caption": "Capture frame — the key, then the redaction",
     "callouts": [
       {
         "n": 1,

@@ -1,10 +1,21 @@
 {
   "slug": "rstats",
   "title": "rstats",
+  "summary": "A cross-platform Rust terminal dashboard for live system resources, processes, alerts and history.",
+  "status": "shipped",
+  "stack": [
+    "Rust",
+    "TUI",
+    "Cross-platform"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/rstats-cli"
+    }
+  ],
   "kicker": "Systems / resource monitoring",
   "year": 2026,
-  "status": "shipped",
-  "summary": "A cross-platform Rust terminal dashboard for live system resources, processes, alerts and history.",
   "challenge": "Sample CPU, memory, swap, load, network and disk on macOS, Linux and Windows, and keep enough bounded history that a spike is still visible after it has passed.",
   "decisions": [
     "One native binary per platform, shipped through the npm package's optional dependency",
@@ -15,7 +26,7 @@
   "evidence": [
     {
       "label": "Tagged releases",
-      "value": "v0.1.0"
+      "value": "1"
     },
     {
       "label": "License",
@@ -23,28 +34,17 @@
     },
     {
       "label": "Platforms",
-      "value": "macOS \u00b7 Linux \u00b7 Windows"
+      "value": "macOS · Linux · Windows"
     },
     {
       "label": "Headless modes",
       "value": "--once and --watch, plain or JSON"
     }
   ],
-  "stack": [
-    "Rust",
-    "TUI",
-    "Cross-platform"
-  ],
   "ownership": "Designed and built the dashboard and its recording layer end to end.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/rstats-cli"
-    }
-  ],
   "specimen": {
     "kind": "monitor",
-    "caption": "Live monitor \u2014 history, processes, alerts",
+    "caption": "Live monitor — history, processes, alerts",
     "callouts": [
       {
         "n": 1,

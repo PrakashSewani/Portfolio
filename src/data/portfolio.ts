@@ -11,8 +11,14 @@ import { sortProjects, validateProject, type Project } from '../lib/projects';
  */
 const CONTENT = import.meta.glob<unknown>('../../content/projects/*.json', { eager: true, import: 'default' });
 
-/** Every project, validated against the same schema the publish script uses. */
-export const allProjects: Project[] = sortProjects(
+/**
+ * Every project, validated against the same schema the publish script uses.
+ *
+ * Module-internal on purpose: the `/projects` ledger reads the live API/KV index (`loadProjects`,
+ * with the baked snapshot as its fallback), so it is not built from this array — `caseStudies`
+ * below is the only consumer. An export here would suggest otherwise.
+ */
+const allProjects: Project[] = sortProjects(
   Object.entries(CONTENT).map(([file, raw]) => validateProject(raw, `content/projects/${file.replace(/^.*\//, '')}`)),
 );
 

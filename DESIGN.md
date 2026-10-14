@@ -193,9 +193,15 @@ or deploy-config change.
 
 ## 9. Route & content architecture (one page of context)
 
-- `content/projects/<slug>.json` is the single source of truth; the filename must equal the slug.
+- `content/projects/<slug>.json` is the single source of truth; the filename must equal the slug. The
+  files are written in the schema's key order and format (`node scripts/normalize-content.mjs`;
+  `tests/content.test.mjs` asserts it), so a content file and its snapshot entry are byte-identical.
 - The home page's selected work (`src/data/portfolio.ts`) reads the same files — no second copy of
-  a project exists anywhere, so the home summary and the case sheet cannot drift.
+  a project exists anywhere, so the home summary and the case sheet cannot drift. It renders only the
+  files marked `"featured": true`, falling back to the six newest by `order` when none is flagged;
+  `/projects` lists every file. `featured` is for projects that carry case-study content
+  (`challenge` / `decisions` / `specimen`) — those become full case blocks on the landing page, so a
+  flagged file without them renders an empty figure plate.
 - `npm run snapshot` (also a `prebuild` step) bakes them into `public/api/projects.json`, which the
   client falls back to when the API is unavailable — the snapshot carries **full** projects, so a
   case study still renders with KV down. The output is deterministic (no timestamp), so a rebuild

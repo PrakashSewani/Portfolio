@@ -1,10 +1,21 @@
 {
   "slug": "jury-forge",
   "title": "Jury Forge",
+  "summary": "Your own AI code-review team for GitHub — self-hosted, on your own Cloudflare account.",
+  "status": "in-progress",
+  "stack": [
+    "TypeScript",
+    "Astro",
+    "Cloudflare Workers"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/jury-forge"
+    }
+  ],
   "kicker": "Developer tooling / AI review pipeline",
   "year": 2026,
-  "status": "in-progress",
-  "summary": "Your own AI code-review team for GitHub \u2014 self-hosted, on your own Cloudflare account.",
   "challenge": "Give every pull request a full review without sending the repository, the code or the model keys to somebody else's server.",
   "decisions": [
     "One deployable: the Worker serves the dashboard, takes the GitHub webhooks and runs the reviews",
@@ -30,21 +41,10 @@
       "value": "Your own Cloudflare account"
     }
   ],
-  "stack": [
-    "TypeScript",
-    "Astro",
-    "Cloudflare Workers"
-  ],
   "ownership": "Designed and built the review pipeline and its dashboard end to end.",
-  "links": [
-    {
-      "label": "GitHub",
-      "href": "https://github.com/PrakashSewani/jury-forge"
-    }
-  ],
   "specimen": {
     "kind": "review",
-    "caption": "Review dashboard \u2014 verdicts, comments, webhook",
+    "caption": "Review dashboard — verdicts, comments, webhook",
     "callouts": [
       {
         "n": 1,
@@ -64,6 +64,6 @@
       }
     ]
   },
-  "featured": true,
+  "featured": false,
   "order": 6
 }

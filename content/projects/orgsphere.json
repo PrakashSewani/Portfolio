@@ -1,22 +1,22 @@
 {
   "slug": "orgsphere",
   "title": "OrgSphere",
-  "kicker": "Product engineering / organisational graph",
-  "status": "in-progress",
   "summary": "A graph-native organisation platform that replaces static HRMS dashboards with a living organisational graph.",
+  "status": "in-progress",
   "stack": [
     "C#",
     ".NET",
     "Graph model"
   ],
-  "ownership": "Designed and built the graph model and the platform shell end to end.",
   "links": [
     {
       "label": "GitHub",
       "href": "https://github.com/PrakashSewani/org-sphere"
     }
   ],
+  "kicker": "Product engineering / organisational graph",
   "year": 2026,
+  "ownership": "Designed and built the graph model and the platform shell end to end.",
   "featured": false,
   "order": 9
 }

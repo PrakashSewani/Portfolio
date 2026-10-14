@@ -240,7 +240,7 @@
           }
         ]
       },
-      "featured": false,
+      "featured": true,
       "order": 4
     },
     {
@@ -313,7 +313,7 @@
           }
         ]
       },
-      "featured": true,
+      "featured": false,
       "order": 5
     },
     {
@@ -382,7 +382,7 @@
           }
         ]
       },
-      "featured": true,
+      "featured": false,
       "order": 6
     },
     {
@@ -430,7 +430,7 @@
           "value": "Traefik; optional Cloudflare Tunnel"
         }
       ],
-      "ownership": "Designed and built the gateway, routing and tenant model end to end.",
+      "ownership": "Designed the gateway, routing and tenant model; built the Phase 1 and 2 foundation end to end.",
       "specimen": {
         "kind": "gateway",
         "caption": "Request flow — routing, providers, accounting",
@@ -453,7 +453,7 @@
           }
         ]
       },
-      "featured": true,
+      "featured": false,
       "order": 7
     },
     {
@@ -502,21 +502,17 @@
     {
       "slug": "truecontact",
       "title": "TrueContact",
-      "summary": "A personal source of truth for contacts — reconciling the phones, exports and cloud address books that disagree with each other.",
+      "summary": "A personal source of truth for contacts — reconciling the phones, exports and cloud address books that disagree with each other. Archived: it shipped, but the product did not meet the bar I set for it.",
       "status": "archived",
       "stack": [
         "TypeScript",
         "Astro",
-        "Local-first"
+        "Cloudflare Workers"
       ],
       "links": [
         {
           "label": "GitHub",
           "href": "https://github.com/PrakashSewani/true-contact"
-        },
-        {
-          "label": "View live",
-          "href": "https://truecontact.prakashsewani.com/"
         }
       ],
       "kicker": "Product engineering / data reconciliation",
@@ -524,15 +520,11 @@
       "evidence": [
         {
           "label": "Tagged releases",
-          "value": "5"
+          "value": "7"
         },
         {
           "label": "License",
           "value": "MIT"
-        },
-        {
-          "label": "Live",
-          "value": "truecontact.prakashsewani.com"
         }
       ],
       "ownership": "Designed and built the reconciliation flow and its UI end to end.",
@@ -680,7 +672,7 @@
     },
     {
       "slug": "git-vacuum",
-      "title": "git-vacuum",
+      "title": "Git-Vacuum",
       "summary": "A keyboard-first terminal UI for backing up, browsing and synchronising every GitHub repository you own.",
       "status": "shipped",
       "stack": [
@@ -757,6 +749,7 @@
       "summary": "Plays a sound when your AI agent, script, build or workflow finishes, so you stop staring at terminals.",
       "status": "shipped",
       "stack": [
+        "Node.js",
         "CLI"
       ],
       "links": [
@@ -809,7 +802,7 @@
       "evidence": [
         {
           "label": "Tagged releases",
-          "value": "v0.1.0"
+          "value": "1"
         },
         {
           "label": "License",
@@ -975,7 +968,7 @@
     },
     {
       "slug": "algorithm-desk",
-      "title": "algorithm-desk",
+      "title": "Algorithm Desk",
       "summary": "A self-hosted, multilingual practice workspace for writing and running single-file C#, Python and Java problems.",
       "status": "in-progress",
       "stack": [
@@ -1004,7 +997,7 @@
     },
     {
       "slug": "prompt-lance",
-      "title": "prompt-lance",
+      "title": "Prompt Lance",
       "summary": "A Discord bot that turns messy, vibe-coded prompts into clean, structured ones for AI coding assistants.",
       "status": "in-progress",
       "stack": [
@@ -1030,8 +1023,9 @@
       "summary": "Warns you when a site you are visiting sits on a freshly registered domain, the common signature of a phishing page.",
       "status": "shipped",
       "stack": [
-        "Cloudflare Workers",
-        "RDAP"
+        "JavaScript",
+        "Manifest V3",
+        "Cloudflare Workers"
       ],
       "links": [
         {
