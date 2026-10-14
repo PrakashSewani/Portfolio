@@ -60,6 +60,9 @@ body { width: 100%; background: var(--canvas); color: var(--ink); font: 400 var(
 button, a { color: inherit; }
 button { font: inherit; }
 a { text-decoration: none; color: var(--accent); }
+/* Links inside body copy are underlined, as DESIGN.md §5 promises: colour alone is not a
+   distinction, and the underlined affordances elsewhere are per-class borders. */
+main p a, .rail-row dd a, .case-empty a { text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
 p { max-width: var(--measure); }
 ::selection { background: var(--accent-soft); color: var(--ink); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
