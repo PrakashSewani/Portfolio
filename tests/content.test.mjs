@@ -31,7 +31,7 @@ const valid = {
 
 test('content/projects/*.json all validate', async () => {
   const projects = await loadContent();
-  assert.equal(projects.length, 4, 'expected the four shipped project files');
+  assert.ok(projects.length >= 4, 'expected at least the four shipped project files');
   for (const project of projects) {
     assert.match(project.slug, /^[a-z0-9-]+$/);
     assert.ok(project.summary.length > 0);

@@ -57,8 +57,8 @@ async function tempContent(files) {
 test('publish --dry-run validates and reports the keys it would write', async () => {
   const { code, stdout } = await runScript(PUBLISH, ['--dry-run'], credentialFreeEnv());
   assert.equal(code, 0, stdout);
-  assert.match(stdout, /validated 4 project\(s\)/);
-  assert.match(stdout, /index: 4 ledger row\(s\)/);
+  assert.match(stdout, /validated \d+ project\(s\)/);
+  assert.match(stdout, /index: \d+ ledger row\(s\)/);
   assert.match(stdout, /project:class-spy/);
   assert.match(stdout, /--dry-run: nothing written/);
 });

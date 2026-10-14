@@ -1,5 +1,5 @@
 {
-  "count": 4,
+  "count": 23,
   "projects": [
     {
       "slug": "class-spy",
@@ -23,6 +23,7 @@
         }
       ],
       "kicker": "Developer tooling / VS Code extension",
+      "year": 2026,
       "challenge": "Resolve CSS and Tailwind utilities consistently across HTML, React, Vue, Svelte, Astro and Angular while keeping hover feedback immediate.",
       "decisions": [
         "Framework-aware parsing instead of one generic regex pass",
@@ -84,6 +85,7 @@
         }
       ],
       "kicker": "Browser extension / Streaming UX",
+      "year": 2026,
       "challenge": "Discover every episode across all seasons inside SPAs fully controlled by Netflix and Prime Video, with no external APIs, then start playback as if the user had clicked it themselves.",
       "decisions": [
         "MutationObserver-driven detection instead of brittle selectors-on-load",
@@ -144,6 +146,7 @@
         }
       ],
       "kicker": "Full-stack product / Habit platform",
+      "year": 2026,
       "challenge": "Model recurring behaviour and progress so it stays simple for the person using it, while supporting a modern full-stack application architecture underneath.",
       "decisions": [
         "Reusable React UI rather than per-screen components",
@@ -179,7 +182,7 @@
           }
         ]
       },
-      "featured": false,
+      "featured": true,
       "order": 3
     },
     {
@@ -201,6 +204,7 @@
         }
       ],
       "kicker": "Applied NLP / Knowledge retrieval",
+      "year": 2022,
       "challenge": "Find useful answers in unstructured educational material while keeping a fallback for the queries the local source cannot resolve.",
       "decisions": [
         "Document-first retrieval before reaching for the web",
@@ -238,6 +242,532 @@
       },
       "featured": false,
       "order": 4
+    },
+    {
+      "slug": "dormant",
+      "title": "Dormant",
+      "summary": "Manages the lifecycle of local project workspaces: clean, archive and restore a project without losing the repository behind it.",
+      "status": "shipped",
+      "stack": [
+        "Swift",
+        "SwiftUI",
+        "Homebrew"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/dormant-macos"
+        },
+        {
+          "label": "View live",
+          "href": "https://dormant.prakashsewani.com/"
+        }
+      ],
+      "kicker": "macOS utility / developer workflow",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "Tagged releases",
+          "value": "2"
+        },
+        {
+          "label": "License",
+          "value": "MIT"
+        },
+        {
+          "label": "Live",
+          "value": "dormant.prakashsewani.com"
+        }
+      ],
+      "ownership": "Designed and built the macOS workspace utility end to end.",
+      "featured": true,
+      "order": 5
+    },
+    {
+      "slug": "jury-forge",
+      "title": "Jury Forge",
+      "summary": "Your own AI code-review team for GitHub — self-hosted, on your own Cloudflare account.",
+      "status": "in-progress",
+      "stack": [
+        "TypeScript",
+        "Astro",
+        "Cloudflare Workers"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/jury-forge"
+        }
+      ],
+      "kicker": "Developer tooling / AI review pipeline",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the review pipeline and its dashboard end to end.",
+      "featured": true,
+      "order": 6
+    },
+    {
+      "slug": "nexusrelay",
+      "title": "NexusRelay",
+      "summary": "A self-hosted, multi-tenant LLM gateway: one stable OpenAI-compatible API, centralised provider access and model routing.",
+      "status": "in-progress",
+      "stack": [
+        "Go",
+        "LLM routing",
+        "Multi-tenant",
+        "Python"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/NexusRelay"
+        }
+      ],
+      "kicker": "Infrastructure / self-hosted AI gateway",
+      "year": 2026,
+      "ownership": "Designed and built the gateway, routing and tenant model end to end.",
+      "featured": true,
+      "order": 7
+    },
+    {
+      "slug": "toolbelt",
+      "title": "Toolbelt",
+      "summary": "A terminal UI for syncing LLM coding agents and their configs across machines, so a new box starts at parity.",
+      "status": "in-progress",
+      "stack": [
+        "Rust",
+        "TUI"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/dev-rig"
+        }
+      ],
+      "kicker": "Developer tooling / environment portability",
+      "year": 2026,
+      "ownership": "Designed and built the sync tool and its config model end to end.",
+      "featured": false,
+      "order": 8
+    },
+    {
+      "slug": "orgsphere",
+      "title": "OrgSphere",
+      "summary": "A graph-native organisation platform that replaces static HRMS dashboards with a living organisational graph.",
+      "status": "in-progress",
+      "stack": [
+        "C#",
+        ".NET",
+        "Graph model"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/org-sphere"
+        }
+      ],
+      "kicker": "Product engineering / organisational graph",
+      "year": 2026,
+      "ownership": "Designed and built the graph model and the platform shell end to end.",
+      "featured": false,
+      "order": 9
+    },
+    {
+      "slug": "truecontact",
+      "title": "TrueContact",
+      "summary": "A personal source of truth for contacts — reconciling the phones, exports and cloud address books that disagree with each other.",
+      "status": "archived",
+      "stack": [
+        "TypeScript",
+        "Astro",
+        "Local-first"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/true-contact"
+        },
+        {
+          "label": "View live",
+          "href": "https://truecontact.prakashsewani.com/"
+        }
+      ],
+      "kicker": "Product engineering / data reconciliation",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "Tagged releases",
+          "value": "5"
+        },
+        {
+          "label": "License",
+          "value": "MIT"
+        },
+        {
+          "label": "Live",
+          "value": "truecontact.prakashsewani.com"
+        }
+      ],
+      "ownership": "Designed and built the reconciliation flow and its UI end to end.",
+      "featured": false,
+      "order": 10
+    },
+    {
+      "slug": "veil",
+      "title": "Veil",
+      "summary": "Real-time secret redaction for streamers: API keys, tokens, wallets and seed phrases never make it to the stream.",
+      "status": "in-progress",
+      "stack": [
+        "C#",
+        "Windows",
+        "TypeScript"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/veil"
+        }
+      ],
+      "kicker": "Developer tooling / secret protection",
+      "year": 2026,
+      "ownership": "Designed and built the detection layer and the Windows client end to end.",
+      "featured": false,
+      "order": 11
+    },
+    {
+      "slug": "codeatlas-ai",
+      "title": "CodeAtlas AI",
+      "summary": "Repository onboarding and technical auditing in seconds instead of days — a Cerebras x Google Gemma hackathon build.",
+      "status": "shipped",
+      "stack": [
+        "TypeScript",
+        "Python",
+        "Cerebras",
+        "PowerShell"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/code-atlas"
+        }
+      ],
+      "kicker": "Hackathon build / code intelligence",
+      "year": 2026,
+      "ownership": "Designed and built the repository-audit flow end to end.",
+      "featured": false,
+      "order": 12
+    },
+    {
+      "slug": "git-vacuum",
+      "title": "git-vacuum",
+      "summary": "A keyboard-first terminal UI for backing up, browsing and synchronising every GitHub repository you own.",
+      "status": "shipped",
+      "stack": [
+        "Rust",
+        "GitHub API",
+        "TUI"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/git-vacuum"
+        }
+      ],
+      "kicker": "Developer tooling / GitHub hygiene CLI",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "Tagged releases",
+          "value": "2"
+        },
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the CLI and its sync engine end to end.",
+      "featured": false,
+      "order": 13
+    },
+    {
+      "slug": "donesignal",
+      "title": "DoneSignal",
+      "summary": "Plays a sound when your AI agent, script, build or workflow finishes, so you stop staring at terminals.",
+      "status": "shipped",
+      "stack": [
+        "CLI"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/DoneSignal"
+        }
+      ],
+      "kicker": "Developer tooling / agent workflow",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "Tagged releases",
+          "value": "4"
+        },
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the CLI and its audio engine end to end.",
+      "featured": false,
+      "order": 14
+    },
+    {
+      "slug": "rstats",
+      "title": "rstats",
+      "summary": "A cross-platform Rust terminal dashboard for live system resources, processes, alerts and history.",
+      "status": "shipped",
+      "stack": [
+        "Rust",
+        "TUI",
+        "Cross-platform"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/rstats-cli"
+        }
+      ],
+      "kicker": "Systems / resource monitoring",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "Tagged releases",
+          "value": "v0.1.0"
+        },
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the dashboard and its recording layer end to end.",
+      "featured": false,
+      "order": 15
+    },
+    {
+      "slug": "meant",
+      "title": "Meant",
+      "summary": "Turns messy natural intent into the right words for the room — in any text box, no chat thread and no prompt tuning.",
+      "status": "in-progress",
+      "stack": [
+        "TypeScript",
+        "Browser extension"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/meant"
+        }
+      ],
+      "kicker": "Product engineering / writing tool",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the rewrite flow and the extension end to end.",
+      "featured": false,
+      "order": 16
+    },
+    {
+      "slug": "magnetline",
+      "title": "Magnetline",
+      "summary": "Puts the download action into 1337x search results, fetching magnet and torrent links for you.",
+      "status": "shipped",
+      "stack": [
+        "TypeScript",
+        "Manifest V3",
+        "Chromium"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/1337x-auto-links"
+        }
+      ],
+      "kicker": "Browser extension / link extraction",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "Tagged releases",
+          "value": "2"
+        },
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the extension and its extraction flow end to end.",
+      "featured": false,
+      "order": 17
+    },
+    {
+      "slug": "works-after-reinstall",
+      "title": "Works After Reinstall",
+      "summary": "Reinstalling Windows is easy. Recreating your environment isn't — so this automates the second part.",
+      "status": "shipped",
+      "stack": [
+        "Rust",
+        "Windows"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/works-after-reinstall"
+        }
+      ],
+      "kicker": "Developer tooling / machine setup",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the setup automation end to end.",
+      "featured": false,
+      "order": 18
+    },
+    {
+      "slug": "algorithm-desk",
+      "title": "algorithm-desk",
+      "summary": "A self-hosted, multilingual practice workspace for writing and running single-file C#, Python and Java problems.",
+      "status": "in-progress",
+      "stack": [
+        "TypeScript",
+        "Docker",
+        "Multi-language runtimes",
+        "Java"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/algorithm-desk"
+        }
+      ],
+      "kicker": "Developer tooling / practice environment",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the runner and the workspace UI end to end.",
+      "featured": false,
+      "order": 19
+    },
+    {
+      "slug": "prompt-lance",
+      "title": "prompt-lance",
+      "summary": "A Discord bot that turns messy, vibe-coded prompts into clean, structured ones for AI coding assistants.",
+      "status": "in-progress",
+      "stack": [
+        "Python",
+        "Discord bot",
+        "LLM workflows"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/prompt-lance"
+        }
+      ],
+      "kicker": "AI tooling / prompt engineering",
+      "year": 2026,
+      "ownership": "Designed and built the bot and its prompt pipeline end to end.",
+      "featured": false,
+      "order": 20
+    },
+    {
+      "slug": "noobie",
+      "title": "Noobie",
+      "summary": "Warns you when a site you are visiting sits on a freshly registered domain, the common signature of a phishing page.",
+      "status": "shipped",
+      "stack": [
+        "Cloudflare Workers",
+        "RDAP"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/noobie-website"
+        }
+      ],
+      "kicker": "Browser extension / web safety",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the extension and its worker end to end.",
+      "featured": false,
+      "order": 21
+    },
+    {
+      "slug": "findergitclone",
+      "title": "FinderGitClone",
+      "summary": "Clone Git repositories directly from Finder's right-click context menu.",
+      "status": "archived",
+      "stack": [
+        "Swift",
+        "Finder Sync"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/finder-git-clone"
+        }
+      ],
+      "kicker": "macOS integration / Finder extension",
+      "year": 2026,
+      "evidence": [
+        {
+          "label": "License",
+          "value": "MIT"
+        }
+      ],
+      "ownership": "Designed and built the Finder extension end to end.",
+      "featured": false,
+      "order": 22
+    },
+    {
+      "slug": "seedbox",
+      "title": "Seedbox",
+      "summary": "The service stack and configuration behind a self-hosted storage and media box.",
+      "status": "shipped",
+      "stack": [
+        "Shell",
+        "Docker",
+        "Self-hosted"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "href": "https://github.com/PrakashSewani/personal-seedbox"
+        }
+      ],
+      "kicker": "Infrastructure / self-hosted services",
+      "year": 2026,
+      "ownership": "Designed and built the server setup and service stack end to end.",
+      "featured": false,
+      "order": 23
     }
   ]
 }

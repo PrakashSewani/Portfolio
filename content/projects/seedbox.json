@@ -1,0 +1,22 @@
+{
+  "slug": "seedbox",
+  "title": "Seedbox",
+  "kicker": "Infrastructure / self-hosted services",
+  "status": "shipped",
+  "summary": "The service stack and configuration behind a self-hosted storage and media box.",
+  "stack": [
+    "Shell",
+    "Docker",
+    "Self-hosted"
+  ],
+  "ownership": "Designed and built the server setup and service stack end to end.",
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/personal-seedbox"
+    }
+  ],
+  "year": 2026,
+  "featured": false,
+  "order": 23
+}

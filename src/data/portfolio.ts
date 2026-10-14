@@ -11,9 +11,20 @@ import { sortProjects, validateProject, type Project } from '../lib/projects';
  */
 const CONTENT = import.meta.glob<unknown>('../../content/projects/*.json', { eager: true, import: 'default' });
 
-export const caseStudies: Project[] = sortProjects(
+/** Every project, validated against the same schema the publish script uses. */
+export const allProjects: Project[] = sortProjects(
   Object.entries(CONTENT).map(([file, raw]) => validateProject(raw, `content/projects/${file.replace(/^.*\//, '')}`)),
 );
+
+/**
+ * The home page shows the projects marked `featured` in their content file; `/projects` lists
+ * everything. Without the flag the home page would render one case block per content file, which
+ * stops being "selected work" the moment the ledger grows past a handful of entries.
+ */
+export const caseStudies: Project[] = (() => {
+  const featured = allProjects.filter((project) => project.featured);
+  return featured.length > 0 ? featured : allProjects.slice(0, 6);
+})();
 
 export const profile = {
   name: 'Prakash Sewani',

@@ -1,0 +1,30 @@
+{
+  "slug": "donesignal",
+  "title": "DoneSignal",
+  "kicker": "Developer tooling / agent workflow",
+  "status": "shipped",
+  "summary": "Plays a sound when your AI agent, script, build or workflow finishes, so you stop staring at terminals.",
+  "stack": [
+    "CLI"
+  ],
+  "ownership": "Designed and built the CLI and its audio engine end to end.",
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/DoneSignal"
+    }
+  ],
+  "year": 2026,
+  "evidence": [
+    {
+      "label": "Tagged releases",
+      "value": "4"
+    },
+    {
+      "label": "License",
+      "value": "MIT"
+    }
+  ],
+  "featured": false,
+  "order": 14
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "nexusrelay",
+  "title": "NexusRelay",
+  "kicker": "Infrastructure / self-hosted AI gateway",
+  "status": "in-progress",
+  "summary": "A self-hosted, multi-tenant LLM gateway: one stable OpenAI-compatible API, centralised provider access and model routing.",
+  "stack": [
+    "Go",
+    "LLM routing",
+    "Multi-tenant",
+    "Python"
+  ],
+  "ownership": "Designed and built the gateway, routing and tenant model end to end.",
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/NexusRelay"
+    }
+  ],
+  "year": 2026,
+  "featured": true,
+  "order": 7
+}

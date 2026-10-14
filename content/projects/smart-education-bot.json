@@ -2,6 +2,7 @@
   "slug": "smart-education-bot",
   "title": "Smart Education Bot",
   "kicker": "Applied NLP / Knowledge retrieval",
+  "year": 2022,
   "status": "archived",
   "summary": "A PDF question-answering system that combines document extraction, contextual NLP responses, and a web fallback path.",
   "challenge": "Find useful answers in unstructured educational material while keeping a fallback for the queries the local source cannot resolve.",
@@ -11,21 +12,45 @@
     "Graceful web fallback when the document has no answer"
   ],
   "evidence": [
-    { "label": "Retrieval", "value": "Document-first" },
-    { "label": "Fallback", "value": "Web search" }
+    {
+      "label": "Retrieval",
+      "value": "Document-first"
+    },
+    {
+      "label": "Fallback",
+      "value": "Web search"
+    }
   ],
-  "stack": ["Python", "Flask", "BERT", "Transformers", "BeautifulSoup"],
+  "stack": [
+    "Python",
+    "Flask",
+    "BERT",
+    "Transformers",
+    "BeautifulSoup"
+  ],
   "ownership": "Built document extraction, the question-answering path, and the fallback flow.",
   "links": [
-    { "label": "GitHub", "href": "https://github.com/PrakashSewani/SMART-EDUCATION-BOT" }
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/SMART-EDUCATION-BOT"
+    }
   ],
   "specimen": {
     "kind": "knowledge",
     "caption": "Document answer with a confidence read-out",
     "callouts": [
-      { "n": 1, "text": "The source document is named — the answer is traceable to it." },
-      { "n": 2, "text": "The answer is extracted context, not a chat reply." },
-      { "n": 3, "text": "Confidence is shown, so a weak answer is visibly weak." }
+      {
+        "n": 1,
+        "text": "The source document is named \u2014 the answer is traceable to it."
+      },
+      {
+        "n": 2,
+        "text": "The answer is extracted context, not a chat reply."
+      },
+      {
+        "n": 3,
+        "text": "Confidence is shown, so a weak answer is visibly weak."
+      }
     ]
   },
   "featured": false,
