@@ -14,6 +14,7 @@ import {
   validateLedgerList,
   toLedger,
   sortProjects,
+  SPECIMEN_KINDS,
   ProjectSchemaError,
 } from '../src/lib/projects.js';
 import { CONTENT_DIR, ROOT, loadContent } from '../scripts/load-content.mjs';
@@ -98,6 +99,23 @@ test('specimen kind is constrained to the drawn figures', () => {
   );
   assert.equal(withSpecimen.specimen.kind, 'inspector');
   assert.equal(withSpecimen.specimen.callouts[0].text, 'one');
+});
+
+test('every registered kind is accepted, and the eight case-study figures are registered', () => {
+  // A kind is only usable once it is in SPECIMEN_KINDS, so this is the gate between the drawing
+  // and the content: add a kind to the validator, and content may name it.
+  for (const kind of SPECIMEN_KINDS) {
+    const project = validateProject({ ...valid, specimen: { kind, caption: 'Cap' } }, 'demo.json');
+    assert.equal(project.specimen.kind, kind);
+  }
+  for (const kind of ['workspace', 'review', 'gateway', 'repos', 'monitor', 'magnet', 'redact', 'audit']) {
+    assert.ok(SPECIMEN_KINDS.includes(kind), `${kind} must be a registered specimen kind`);
+  }
+  // The rejection names the whole allowed set, so a typo is self-diagnosing.
+  assert.throws(
+    () => validateProject({ ...valid, specimen: { kind: 'workspac', caption: 'x' } }, 'demo.json'),
+    /must be one of .*audit.*none/,
+  );
 });
 
 test('duplicate slugs are rejected', () => {
