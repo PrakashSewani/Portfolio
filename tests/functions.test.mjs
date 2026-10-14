@@ -164,6 +164,33 @@ test('an unseeded namespace reports 404 rather than an empty ledger', async () =
   assert.equal((await response.json()).error, 'projects_not_published');
 });
 
+test('a poisoned index row fails loudly instead of shipping to every client', async () => {
+  const { env, store } = await fakeEnv();
+  for (const poison of [{ ...JSON.parse(store.get('index')).projects[0], challenge: 'leaked case-study key' }, 'not an object']) {
+    const index = JSON.parse(store.get('index'));
+    index.projects[0] = poison;
+    store.set('index', JSON.stringify(index));
+    const response = await apiResponse(request('https://prakashsewani.com/api/projects'), env, 'projects');
+    assert.equal(response.status, 500);
+    assert.equal((await response.json()).error, 'invalid_index');
+  }
+});
+
+test('the ledger order matches the project order for the same data', () => {
+  // The live path (validateLedgerList) and the snapshot path (sortProjects) must agree: two rows
+  // sharing an `order` used to come back in opposite sequences.
+  const rows = validateLedgerList([
+    { ...PROJECT_STUBS, slug: 'alpha', title: 'Alpha', order: 1, year: 2020 },
+    { ...PROJECT_STUBS, slug: 'beta', title: 'Beta', order: 1, year: 2025 },
+  ]);
+  const projects = sortProjects([
+    validateProject({ ...PROJECT_STUBS, links: [{ label: 'GitHub', href: 'https://example.com/a' }], slug: 'alpha', title: 'Alpha', order: 1, year: 2020 }, 'alpha'),
+    validateProject({ ...PROJECT_STUBS, links: [{ label: 'GitHub', href: 'https://example.com/b' }], slug: 'beta', title: 'Beta', order: 1, year: 2025 }, 'beta'),
+  ]);
+  assert.deepEqual(rows.map((row) => row.slug), ['beta', 'alpha']);
+  assert.deepEqual(rows.map((row) => row.slug), projects.map((project) => project.slug));
+});
+
 test('non-GET methods are refused', async () => {
   const { env } = await fakeEnv();
   const response = await apiResponse(request('https://prakashsewani.com/api/projects', { method: 'POST' }), env, 'projects');

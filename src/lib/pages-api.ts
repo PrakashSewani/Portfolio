@@ -81,10 +81,11 @@ async function readIndex(env: ApiEnv): Promise<IndexPayload | null> {
   if (typeof parsed !== 'object' || parsed === null) return null;
   const rows = (parsed as { projects?: unknown }).projects;
   if (!Array.isArray(rows)) return null;
+  const projects = validateLedgerList(rows, 'index');
   return {
     generatedAt: (parsed as IndexPayload).generatedAt,
-    count: (parsed as IndexPayload).count,
-    projects: rows.filter(isProjectRow),
+    count: projects.length,
+    projects,
   };
 }
 
@@ -120,7 +121,15 @@ export async function apiResponse(request: Request, env: ApiEnv, route: string):
     // /api or /api/projects → the ledger
     if (segments.length === 0 || (segments.length === 1 && segments[0] === 'projects')) {
       if (!env.PROJECTS) return unavailable();
-      const index = await readIndex(env);
+      let index: IndexPayload | null;
+      try {
+        index = await readIndex(env);
+      } catch (err) {
+        return json(
+          { error: 'invalid_index', message: err instanceof Error ? err.message : String(err) },
+          { status: 500, headers: { 'cache-control': 'no-store' } },
+        );
+      }
       if (!index) {
         return json(
           { error: 'projects_not_published', message: 'KV has no `index` key — run scripts/publish-projects.mjs' },
