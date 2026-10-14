@@ -273,6 +273,34 @@ test('/projects/<unknown> serves the shell with an honest 404', async () => {
   assert.match(await response.text(), /id="root"/, 'the client still needs the app shell to render its not-found state');
 });
 
+test('a write verb on the page route is refused, like the API route', async () => {
+  const { env } = await fakeEnv();
+  for (const method of ['POST', 'PUT', 'DELETE']) {
+    const response = await shellResponse(
+      request('https://prakashsewani.com/projects/class-spy', { method }),
+      env,
+      'https://prakashsewani.com/projects/class-spy',
+      'class-spy',
+    );
+    assert.equal(response.status, 405, `${method} should be a 405`);
+    assert.equal(response.headers.get('allow'), 'GET, HEAD');
+  }
+});
+
+test('the /projects/<slug> Function answers a malformed escape with the 404 shell', async () => {
+  const { env } = await fakeEnv();
+  const mod = await import('../functions/projects/[slug].ts');
+  for (const raw of ['%', '%ZZ']) {
+    const response = await mod.onRequest({
+      request: request(`https://prakashsewani.com/projects/${raw}`),
+      env,
+      params: { slug: raw },
+    });
+    assert.equal(response.status, 404, `${raw} should fall through to the shell, not throw`);
+    assert.match(await response.text(), /id="root"/);
+  }
+});
+
 test('malformed KV content does not take the case page down', async () => {
   const { env, store } = await fakeEnv();
   store.set('project:habitual', '{ not json');

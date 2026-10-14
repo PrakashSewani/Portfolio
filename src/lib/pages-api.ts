@@ -275,6 +275,8 @@ export async function shellResponse(
   url: URL | string,
   slug: string,
 ): Promise<Response> {
+  if (request.method !== 'GET' && request.method !== 'HEAD') return methodNotAllowed();
+
   if (!env.ASSETS) {
     return new Response(
       '<!doctype html><meta charset="utf-8"><title>Unavailable</title><p>The static assets binding is not available to this Function.',
