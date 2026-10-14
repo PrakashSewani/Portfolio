@@ -153,7 +153,7 @@ The eight case-study figures are built from one box vocabulary — `.fig-row` is
 `.fig-card` / `.node` / `.tree` restack it in place — inside a `.win-frame` (macOS window chrome,
 traffic lights in the titlebar) or a `.night-frame` (terminal and dark dashboard). A dark frame
 flips its own token scope (`--canvas`, `--soft`, `--ink`, `--muted`, `--hairline`) once instead of
-overriding rule by rule, which is what keeps thirteen figures inside the §7 stylesheet budget. The
+overriding rule by rule, which is what keeps 12 figures inside the §7 stylesheet budget. The
 in-figure fact strip is the same `.plate-footnote` strip the plate closes with. `FIG.` numbering
 follows the project's `order`, so a case study's figure number matches its place in the ledger.
 
