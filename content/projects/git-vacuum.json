@@ -16,6 +16,13 @@
   ],
   "kicker": "Developer tooling / GitHub hygiene CLI",
   "year": 2026,
+  "challenge": "Mirror every repository you own locally with no backend, while keeping behind, ahead and dirty state visible while the sync runs.",
+  "decisions": [
+    "Nine crates on hexagonal ports & adapters: service, app and TUI depend only on core traits",
+    "Unidirectional data flow — action, reducer, effect, app event, render",
+    "The GitHub token lives in the OS keyring, never in SQLite, logs or a plaintext file",
+    "SQLite in WAL mode is the local store; the GitHub API is the only outbound dependency"
+  ],
   "evidence": [
     {
       "label": "Tagged releases",
@@ -24,9 +31,43 @@
     {
       "label": "License",
       "value": "MIT"
+    },
+    {
+      "label": "Workspace crates",
+      "value": "9"
+    },
+    {
+      "label": "Default concurrency",
+      "value": "8 clone/fetch workers"
+    },
+    {
+      "label": "Store",
+      "value": "SQLite (WAL), token in OS keyring"
     }
   ],
   "ownership": "Designed and built the CLI and its sync engine end to end.",
+  "specimen": {
+    "kind": "repos",
+    "caption": "Repository dashboard — behind, ahead, dirty",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "Every discovered repository with its ahead/behind counters."
+      },
+      {
+        "n": 2,
+        "text": "A dirty badge for a working tree with uncommitted changes."
+      },
+      {
+        "n": 3,
+        "text": "The bar is the repository's size on disk."
+      },
+      {
+        "n": 4,
+        "text": "Sync status and the worker count for the run."
+      }
+    ]
+  },
   "featured": false,
   "order": 13
 }

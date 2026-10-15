@@ -140,6 +140,30 @@ test('one project returns the full case study', async () => {
   assert.equal(project.specimen.kind, 'inspector');
 });
 
+test('a case study serves the figure kind its content names', async () => {
+  // The eight figures drawn for the 2026 case studies, plus the original, read back through the
+  // API the case page actually calls.
+  const figures = {
+    'class-spy': 'inspector',
+    dormant: 'workspace',
+    'jury-forge': 'review',
+    nexusrelay: 'gateway',
+    veil: 'redact',
+    'codeatlas-ai': 'audit',
+    'git-vacuum': 'repos',
+    rstats: 'monitor',
+    magnetline: 'magnet',
+  };
+  const { env } = await fakeEnv();
+  for (const [slug, kind] of Object.entries(figures)) {
+    const response = await apiResponse(request(`https://prakashsewani.com/api/projects/${slug}`), env, `projects/${slug}`);
+    assert.equal(response.status, 200, `${slug} must serve its case study`);
+    const project = await response.json();
+    assert.equal(project.specimen.kind, kind, `${slug} must carry the ${kind} figure`);
+    assert.ok(project.specimen.callouts.length > 0, `${slug} must annotate its figure`);
+  }
+});
+
 test('an unknown slug is a 404 JSON, not the app shell', async () => {
   const { env } = await fakeEnv();
   const response = await apiResponse(request('https://prakashsewani.com/api/projects/nope'), env, 'projects/nope');

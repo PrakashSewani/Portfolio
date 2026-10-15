@@ -7,7 +7,21 @@
 export declare const PROJECT_STATUSES: readonly ['shipped', 'in-progress', 'archived'];
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 
-export declare const SPECIMEN_KINDS: readonly ['inspector', 'roulette', 'habit', 'knowledge', 'none'];
+export declare const SPECIMEN_KINDS: readonly [
+  'inspector',
+  'roulette',
+  'habit',
+  'knowledge',
+  'workspace',
+  'review',
+  'gateway',
+  'repos',
+  'monitor',
+  'magnet',
+  'redact',
+  'audit',
+  'none',
+];
 export type SpecimenKind = (typeof SPECIMEN_KINDS)[number];
 
 export declare const SLUG_RE: RegExp;

@@ -17,7 +17,55 @@
   ],
   "kicker": "Infrastructure / self-hosted AI gateway",
   "year": 2026,
+  "challenge": "Give applications one stable OpenAI-compatible API while provider credentials, routing, budgets, rate limits and audit history live in one place.",
+  "decisions": [
+    "Normalize every provider behind an adapter; clients only ever see a gateway model alias",
+    "PostgreSQL is the durable truth and Redis holds only disposable rate-limit and deny state",
+    "Money is integer nanos of an ISO 4217 currency — binary floating point is banned",
+    "Attempts are recorded before dispatch, so potentially billable work is never treated as unstarted",
+    "Fail closed: losing Redis stops finite limits, losing PostgreSQL stops untracked dispatch"
+  ],
+  "evidence": [
+    {
+      "label": "Providers verified",
+      "value": "OpenAI · Anthropic · Ollama"
+    },
+    {
+      "label": "Durable truth",
+      "value": "PostgreSQL; Redis is disposable"
+    },
+    {
+      "label": "Deployment",
+      "value": "Docker Compose, self-hosted"
+    },
+    {
+      "label": "Ingress",
+      "value": "Traefik; optional Cloudflare Tunnel"
+    }
+  ],
   "ownership": "Designed the gateway, routing and tenant model; built the Phase 1 and 2 foundation end to end.",
+  "specimen": {
+    "kind": "gateway",
+    "caption": "Request flow — routing, providers, accounting",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "Clients hold a NexusRelay key and a gateway model alias, never a provider key."
+      },
+      {
+        "n": 2,
+        "text": "The gateway authenticates, applies organization policy and picks an eligible route."
+      },
+      {
+        "n": 3,
+        "text": "Provider adapters translate the normalized request; OpenAI, Anthropic and Ollama are the verified targets."
+      },
+      {
+        "n": 4,
+        "text": "Tokens and cost are attributed per attempt, in integer nanos, before the request closes."
+      }
+    ]
+  },
   "featured": false,
   "order": 7
 }

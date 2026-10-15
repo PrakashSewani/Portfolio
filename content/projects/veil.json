@@ -16,7 +16,54 @@
   ],
   "kicker": "Developer tooling / secret protection",
   "year": 2026,
+  "challenge": "Keep a live API key, wallet address or seed phrase out of the stream while you still see it locally — and do it without adding stream delay.",
+  "decisions": [
+    "Blur rectangles over exact screen regions: the local socket carries coordinates and rule ids, never secret text",
+    "Detect in the editor where the text is exact, and fall back to OCR only for windows with no detector",
+    "Redact inside the OBS encode pipeline rather than switching the whole scene",
+    "Detection rules adapted from gitleaks, seed phrases from the BIP-39 wordlist"
+  ],
+  "evidence": [
+    {
+      "label": "Phases shipped",
+      "value": "1a + 1b"
+    },
+    {
+      "label": "Detectors",
+      "value": "Keys, tokens, JWTs, seed phrases, cards"
+    },
+    {
+      "label": "Leak surface",
+      "value": "Coordinates and rule ids only"
+    },
+    {
+      "label": "Phase 2",
+      "value": "Native OBS filter, pre-encode"
+    }
+  ],
   "ownership": "Designed and built the detection layer and the Windows client end to end.",
+  "specimen": {
+    "kind": "redact",
+    "caption": "Capture frame — the key, then the redaction",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "The key stays visible in your own editor."
+      },
+      {
+        "n": 2,
+        "text": "On the stream the same line is a blur rectangle."
+      },
+      {
+        "n": 3,
+        "text": "A seed phrase counts as one secret spanning twelve words."
+      },
+      {
+        "n": 4,
+        "text": "How many secrets the detector is masking right now."
+      }
+    ]
+  },
   "featured": false,
   "order": 11
 }

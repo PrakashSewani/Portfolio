@@ -18,7 +18,21 @@
 
 export const PROJECT_STATUSES = ['shipped', 'in-progress', 'archived'];
 
-export const SPECIMEN_KINDS = ['inspector', 'roulette', 'habit', 'knowledge', 'none'];
+export const SPECIMEN_KINDS = [
+  'inspector',
+  'roulette',
+  'habit',
+  'knowledge',
+  'workspace',
+  'review',
+  'gateway',
+  'repos',
+  'monitor',
+  'magnet',
+  'redact',
+  'audit',
+  'none',
+];
 
 const REQUIRED_KEYS = ['slug', 'title', 'summary', 'status', 'stack', 'links'];
 const OPTIONAL_KEYS = [

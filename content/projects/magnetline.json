@@ -16,6 +16,13 @@
   ],
   "kicker": "Browser extension / link extraction",
   "year": 2026,
+  "challenge": "Put the magnet and .torrent controls into a search result where those links do not exist yet — with no server, no account and no visit to each torrent's own page.",
+  "decisions": [
+    "Resolve each row's links in the background and cache the answers for the list",
+    "Both controls are real links, so the browser's own Copy link address works on the magnet",
+    "Bounded background prefetch: every request comes from your own browser session",
+    "Nothing to run server-side — no server, no account and no telemetry"
+  ],
   "evidence": [
     {
       "label": "Tagged releases",
@@ -24,9 +31,39 @@
     {
       "label": "License",
       "value": "MIT"
+    },
+    {
+      "label": "Browsers",
+      "value": "Brave · Chrome · Edge"
+    },
+    {
+      "label": "Network",
+      "value": "No server, no account"
+    },
+    {
+      "label": "Install",
+      "value": "Unpacked, from a release zip"
     }
   ],
   "ownership": "Designed and built the extension and its extraction flow end to end.",
+  "specimen": {
+    "kind": "magnet",
+    "caption": "Search results — magnet and .torrent in the row",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "A magnet control and a .torrent control sit right after every result title."
+      },
+      {
+        "n": 2,
+        "text": "The highlighted row is one whose links have already resolved."
+      },
+      {
+        "n": 3,
+        "text": "Resolution happens in the background for the rows you are looking at, then gets cached."
+      }
+    ]
+  },
   "featured": false,
   "order": 17
 }

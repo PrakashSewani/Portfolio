@@ -143,10 +143,19 @@ callouts       →  numbered annotations tied to the figure
 footnote strip →  the strip of facts that closes the specimen
 ```
 
-Drawn figures are keyed by `kind`: `inspector`, `roulette`, `habit`, `knowledge`, `none`.
+Drawn figures are keyed by `kind`: `inspector`, `roulette`, `habit`, `knowledge`, `workspace`,
+`review`, `gateway`, `repos`, `monitor`, `magnet`, `redact`, `audit`, `none`.
 All six legacy figure classes (`inspector-mockup`, `code-row`, `inspection-card`, `habit-mockup`,
 `knowledge-mockup`, `roulette-mockup`) survive the rewrite and are restyled in the spec-sheet
 idiom, so the drawn figures and the plate share one token map.
+
+The eight case-study figures are built from one box vocabulary — `.fig-row` is the box, and
+`.fig-card` / `.node` / `.tree` restack it in place — inside a `.win-frame` (macOS window chrome,
+traffic lights in the titlebar) or a `.night-frame` (terminal and dark dashboard). A dark frame
+flips its own token scope (`--canvas`, `--soft`, `--ink`, `--muted`, `--hairline`) once instead of
+overriding rule by rule, which is what keeps 12 figures inside the §7 stylesheet budget. The
+in-figure fact strip is the same `.plate-footnote` strip the plate closes with. `FIG.` numbering
+follows the project's `order`, so a case study's figure number matches its place in the ledger.
 
 A callout's number is its `n` from the content file, rendered as `data-n` and used by the marker
 (`content: attr(data-n)`) — the number is data, not DOM order, so a validated `n` can never be

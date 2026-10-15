@@ -16,6 +16,13 @@
   ],
   "kicker": "Systems / resource monitoring",
   "year": 2026,
+  "challenge": "Sample CPU, memory, swap, load, network and disk on macOS, Linux and Windows, and keep enough bounded history that a spike is still visible after it has passed.",
+  "decisions": [
+    "One native binary per platform, shipped through the npm package's optional dependency",
+    "Bounded per-metric history drawn as sparklines instead of a scrolling log",
+    "Alerts are sustained: threshold, duration, severity, cooldown and a recovery threshold",
+    "Recordings are portable JSONL, so an interrupted session stays loadable"
+  ],
   "evidence": [
     {
       "label": "Tagged releases",
@@ -24,9 +31,39 @@
     {
       "label": "License",
       "value": "MIT"
+    },
+    {
+      "label": "Platforms",
+      "value": "macOS · Linux · Windows"
+    },
+    {
+      "label": "Headless modes",
+      "value": "--once and --watch, plain or JSON"
     }
   ],
   "ownership": "Designed and built the dashboard and its recording layer end to end.",
+  "specimen": {
+    "kind": "monitor",
+    "caption": "Live monitor — history, processes, alerts",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "CPU and memory history, drawn from the bounded per-metric buffers."
+      },
+      {
+        "n": 2,
+        "text": "The process table, sortable by CPU or memory."
+      },
+      {
+        "n": 3,
+        "text": "A sustained alert: the threshold has to hold for its duration before it fires."
+      },
+      {
+        "n": 4,
+        "text": "The same collector's headless line, the one --watch prints."
+      }
+    ]
+  },
   "featured": false,
   "order": 15
 }

@@ -20,6 +20,13 @@
   ],
   "kicker": "macOS utility / developer workflow",
   "year": 2026,
+  "challenge": "Free up a project's disk space without ever risking the repository behind it — every byte removed has to be confidently regenerable, and every restore has to be verifiable.",
+  "decisions": [
+    "Classify before deleting: nothing goes unless it is confidently regenerable",
+    "Archive into ~/.dormant/store/ and verify the archive before the working copy is removed",
+    "Restore checks every file against the manifest checksums, then asks before running any install",
+    "A missing `code` command is a hard error, never a silent Finder fallback (D-015)"
+  ],
   "evidence": [
     {
       "label": "Tagged releases",
@@ -32,9 +39,35 @@
     {
       "label": "Live",
       "value": "dormant.prakashsewani.com"
+    },
+    {
+      "label": "Distribution",
+      "value": "Homebrew tap + DMG"
+    },
+    {
+      "label": "Data",
+      "value": "Local-only, no telemetry"
     }
   ],
   "ownership": "Designed and built the macOS workspace utility end to end.",
+  "specimen": {
+    "kind": "workspace",
+    "caption": "Workspace rail — clean, archive, restore",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "Each local workspace, with the disk it is currently occupying."
+      },
+      {
+        "n": 2,
+        "text": "The three lifecycle actions, from the Finder menu or the menu bar app."
+      },
+      {
+        "n": 3,
+        "text": "What the last clean and archive actually reclaimed."
+      }
+    ]
+  },
   "featured": false,
   "order": 5
 }

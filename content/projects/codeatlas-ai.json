@@ -17,7 +17,54 @@
   ],
   "kicker": "Hackathon build / code intelligence",
   "year": 2026,
+  "challenge": "Cut repository onboarding and auditing from days to seconds by running a squad of specialists in parallel instead of one model reading the codebase in sequence.",
+  "decisions": [
+    "Clone, parse and index once into a NetworkX knowledge graph that every agent shares",
+    "A planner agent dispatches the specialists, and each one returns structured JSON",
+    "The dashboard streams agent results live over server-sent events",
+    "Every analysis benchmarks Cerebras against a second provider on identical prompts"
+  ],
+  "evidence": [
+    {
+      "label": "Specialists",
+      "value": "6 + planner"
+    },
+    {
+      "label": "Model",
+      "value": "Gemma 4 31B on Cerebras"
+    },
+    {
+      "label": "Build",
+      "value": "Cerebras x Google DeepMind Gemma 4 hackathon"
+    },
+    {
+      "label": "Dashboard",
+      "value": "React + SSE, live agent cards"
+    }
+  ],
   "ownership": "Designed and built the repository-audit flow end to end.",
+  "specimen": {
+    "kind": "audit",
+    "caption": "Repo audit — tree, findings, module links",
+    "callouts": [
+      {
+        "n": 1,
+        "text": "The repository is cloned, parsed and indexed once."
+      },
+      {
+        "n": 2,
+        "text": "Findings arrive per specialist, each grounded in the shared knowledge graph."
+      },
+      {
+        "n": 3,
+        "text": "Module links are read out of the graph the agents query by tool call."
+      },
+      {
+        "n": 4,
+        "text": "Elapsed time for the run — which is the whole claim of the project."
+      }
+    ]
+  },
   "featured": false,
   "order": 12
 }
