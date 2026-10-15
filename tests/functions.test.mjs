@@ -17,6 +17,11 @@ import { apiResponse, injectMeta, sitemapResponse, shellResponse } from '../src/
 import { sortProjects, toLedger, validateLedgerList, validateProject } from '../src/lib/projects.js';
 import { ROOT, loadContent } from '../scripts/load-content.mjs';
 
+// The content set is data: assert against whatever `content/projects` holds, not a literal.
+const CONTENT = await loadContent();
+const CONTENT_COUNT = CONTENT.length;
+const CONTENT_SLUGS = CONTENT.map((project) => project.slug).sort();
+
 const SHELL = [
   '<!doctype html>',
   '<html><head>',
@@ -77,13 +82,14 @@ test('the ledger route returns rows with caching + ETag and no case-study keys',
   assert.ok(response.headers.get('etag'));
 
   const payload = await response.json();
-  assert.equal(payload.count, 4);
-  assert.deepEqual(payload.projects.map((row) => row.slug), [
-    'class-spy',
-    'episode-roulette',
-    'habitual',
-    'smart-education-bot',
-  ]);
+  assert.equal(payload.count, CONTENT_COUNT);
+  // Where the *set* only has to match, order does not — but this payload feeds the numbered
+  // ledger table, so the order is behaviour: compare unsorted against the content order.
+  assert.deepEqual(
+    payload.projects.map((row) => row.slug),
+    CONTENT.map((project) => project.slug),
+    'the ledger must come out in the content order the table renders',
+  );
   for (const row of payload.projects) {
     for (const key of ['challenge', 'decisions', 'evidence', 'specimen', 'links']) {
       assert.equal(row[key], undefined, `ledger row leaked ${key}`);
@@ -95,7 +101,7 @@ test('/api on its own also returns the ledger', async () => {
   const { env } = await fakeEnv();
   const response = await apiResponse(request('https://prakashsewani.com/api'), env, '');
   assert.equal(response.status, 200);
-  assert.equal((await response.json()).count, 4);
+  assert.equal((await response.json()).count, CONTENT_COUNT);
 });
 
 test('the ledger honours If-None-Match with a 304', async () => {
@@ -171,13 +177,8 @@ test('the snapshot URL still serves the baked JSON if the Function is asked for 
   assert.equal(response.status, 200);
   assert.match(response.headers.get('content-type'), /application\/json/);
   const payload = await response.json();
-  assert.equal(payload.count, 4);
-  assert.deepEqual(payload.projects.map((project) => project.slug), [
-    'class-spy',
-    'episode-roulette',
-    'habitual',
-    'smart-education-bot',
-  ]);
+  assert.equal(payload.count, CONTENT_COUNT);
+  assert.deepEqual(payload.projects.map((project) => project.slug).sort(), CONTENT_SLUGS);
   assert.ok(payload.projects[0].challenge, 'the snapshot must hold full projects, not just ledger rows');
 });
 
@@ -191,7 +192,7 @@ test('the snapshot Function does not forward the client conditional headers to t
     'projects.json',
   );
   assert.equal(response.status, 200);
-  assert.equal((await response.json()).count, 4);
+  assert.equal((await response.json()).count, CONTENT_COUNT);
 });
 
 test('a misconfigured KV binding degrades to a 503 the client can fall back from', async () => {
@@ -253,7 +254,7 @@ test('/sitemap.xml lists the home page, the index and every project', async () =
   const xml = await response.text();
   assert.match(xml, /<loc>https:\/\/prakashsewani\.com\/<\/loc>/);
   assert.match(xml, /<loc>https:\/\/prakashsewani\.com\/projects<\/loc>/);
-  for (const slug of ['class-spy', 'episode-roulette', 'habitual', 'smart-education-bot']) {
+  for (const slug of CONTENT_SLUGS) {
     assert.ok(xml.includes(`<loc>https://prakashsewani.com/projects/${slug}</loc>`), `sitemap is missing ${slug}`);
   }
 });

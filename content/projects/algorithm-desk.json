@@ -1,0 +1,29 @@
+{
+  "slug": "algorithm-desk",
+  "title": "Algorithm Desk",
+  "summary": "A self-hosted, multilingual practice workspace for writing and running single-file C#, Python and Java problems.",
+  "status": "in-progress",
+  "stack": [
+    "TypeScript",
+    "Docker",
+    "Multi-language runtimes",
+    "Java"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/algorithm-desk"
+    }
+  ],
+  "kicker": "Developer tooling / practice environment",
+  "year": 2026,
+  "evidence": [
+    {
+      "label": "License",
+      "value": "MIT"
+    }
+  ],
+  "ownership": "Designed and built the runner and the workspace UI end to end.",
+  "featured": false,
+  "order": 19
+}

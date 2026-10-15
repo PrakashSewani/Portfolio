@@ -1,0 +1,27 @@
+{
+  "slug": "findergitclone",
+  "title": "FinderGitClone",
+  "summary": "Clone Git repositories directly from Finder's right-click context menu.",
+  "status": "archived",
+  "stack": [
+    "Swift",
+    "Finder Sync"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/finder-git-clone"
+    }
+  ],
+  "kicker": "macOS integration / Finder extension",
+  "year": 2026,
+  "evidence": [
+    {
+      "label": "License",
+      "value": "MIT"
+    }
+  ],
+  "ownership": "Designed and built the Finder extension end to end.",
+  "featured": false,
+  "order": 22
+}

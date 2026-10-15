@@ -1,0 +1,27 @@
+{
+  "slug": "meant",
+  "title": "Meant",
+  "summary": "Turns messy natural intent into the right words for the room — in any text box, no chat thread and no prompt tuning.",
+  "status": "in-progress",
+  "stack": [
+    "TypeScript",
+    "Browser extension"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/meant"
+    }
+  ],
+  "kicker": "Product engineering / writing tool",
+  "year": 2026,
+  "evidence": [
+    {
+      "label": "License",
+      "value": "MIT"
+    }
+  ],
+  "ownership": "Designed and built the rewrite flow and the extension end to end.",
+  "featured": false,
+  "order": 16
+}

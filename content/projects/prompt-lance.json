@@ -1,0 +1,22 @@
+{
+  "slug": "prompt-lance",
+  "title": "Prompt Lance",
+  "summary": "A Discord bot that turns messy, vibe-coded prompts into clean, structured ones for AI coding assistants.",
+  "status": "in-progress",
+  "stack": [
+    "Python",
+    "Discord bot",
+    "LLM workflows"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/prompt-lance"
+    }
+  ],
+  "kicker": "AI tooling / prompt engineering",
+  "year": 2026,
+  "ownership": "Designed and built the bot and its prompt pipeline end to end.",
+  "featured": false,
+  "order": 20
+}

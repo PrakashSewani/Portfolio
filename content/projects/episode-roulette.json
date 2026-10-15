@@ -1,9 +1,27 @@
 {
   "slug": "episode-roulette",
   "title": "Episode Roulette",
-  "kicker": "Browser extension / Streaming UX",
-  "status": "shipped",
   "summary": "A Chrome and Safari WebExtension that injects a Random Episode button into Netflix and Prime Video series pages, discovering every episode across all seasons and picking one with equal probability.",
+  "status": "shipped",
+  "stack": [
+    "TypeScript",
+    "Manifest V3",
+    "Safari Web Extensions",
+    "Vite",
+    "MutationObserver"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/episode-roulette"
+    },
+    {
+      "label": "Install for Chrome",
+      "href": "https://chromewebstore.google.com/detail/bdmfplkinmebmilgknedfgnpggmfhion"
+    }
+  ],
+  "kicker": "Browser extension / Streaming UX",
+  "year": 2026,
   "challenge": "Discover every episode across all seasons inside SPAs fully controlled by Netflix and Prime Video, with no external APIs, then start playback as if the user had clicked it themselves.",
   "decisions": [
     "MutationObserver-driven detection instead of brittle selectors-on-load",
@@ -11,23 +29,36 @@
     "Platform-native UI so the button looks like it shipped with the player"
   ],
   "evidence": [
-    { "label": "Browsers", "value": "Chrome + Safari" },
-    { "label": "External APIs used", "value": "0" },
-    { "label": "Distribution", "value": "Chrome Web Store" }
+    {
+      "label": "Browsers",
+      "value": "Chrome + Safari"
+    },
+    {
+      "label": "External APIs used",
+      "value": "0"
+    },
+    {
+      "label": "Distribution",
+      "value": "Chrome Web Store"
+    }
   ],
-  "stack": ["TypeScript", "Manifest V3", "Safari Web Extensions", "Vite", "MutationObserver"],
   "ownership": "Built discovery, the probability model, and the native playback integration.",
-  "links": [
-    { "label": "GitHub", "href": "https://github.com/PrakashSewani/episode-roulette" },
-    { "label": "Install for Chrome", "href": "https://chromewebstore.google.com/detail/bdmfplkinmebmilgknedfgnpggmfhion" }
-  ],
   "specimen": {
     "kind": "roulette",
     "caption": "Injected player — random episode",
     "callouts": [
-      { "n": 1, "text": "The button is injected into the series page, not a separate app." },
-      { "n": 2, "text": "Season-by-season episode discovery, counted per season." },
-      { "n": 3, "text": "One episode picked at equal probability from the full set." }
+      {
+        "n": 1,
+        "text": "The button is injected into the series page, not a separate app."
+      },
+      {
+        "n": 2,
+        "text": "Season-by-season episode discovery, counted per season."
+      },
+      {
+        "n": 3,
+        "text": "One episode picked at equal probability from the full set."
+      }
     ]
   },
   "featured": true,

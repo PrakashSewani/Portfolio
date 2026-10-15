@@ -1,9 +1,23 @@
 {
   "slug": "smart-education-bot",
   "title": "Smart Education Bot",
-  "kicker": "Applied NLP / Knowledge retrieval",
-  "status": "archived",
   "summary": "A PDF question-answering system that combines document extraction, contextual NLP responses, and a web fallback path.",
+  "status": "archived",
+  "stack": [
+    "Python",
+    "Flask",
+    "BERT",
+    "Transformers",
+    "BeautifulSoup"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/SMART-EDUCATION-BOT"
+    }
+  ],
+  "kicker": "Applied NLP / Knowledge retrieval",
+  "year": 2022,
   "challenge": "Find useful answers in unstructured educational material while keeping a fallback for the queries the local source cannot resolve.",
   "decisions": [
     "Document-first retrieval before reaching for the web",
@@ -11,23 +25,34 @@
     "Graceful web fallback when the document has no answer"
   ],
   "evidence": [
-    { "label": "Retrieval", "value": "Document-first" },
-    { "label": "Fallback", "value": "Web search" }
+    {
+      "label": "Retrieval",
+      "value": "Document-first"
+    },
+    {
+      "label": "Fallback",
+      "value": "Web search"
+    }
   ],
-  "stack": ["Python", "Flask", "BERT", "Transformers", "BeautifulSoup"],
   "ownership": "Built document extraction, the question-answering path, and the fallback flow.",
-  "links": [
-    { "label": "GitHub", "href": "https://github.com/PrakashSewani/SMART-EDUCATION-BOT" }
-  ],
   "specimen": {
     "kind": "knowledge",
     "caption": "Document answer with a confidence read-out",
     "callouts": [
-      { "n": 1, "text": "The source document is named — the answer is traceable to it." },
-      { "n": 2, "text": "The answer is extracted context, not a chat reply." },
-      { "n": 3, "text": "Confidence is shown, so a weak answer is visibly weak." }
+      {
+        "n": 1,
+        "text": "The source document is named — the answer is traceable to it."
+      },
+      {
+        "n": 2,
+        "text": "The answer is extracted context, not a chat reply."
+      },
+      {
+        "n": 3,
+        "text": "Confidence is shown, so a weak answer is visibly weak."
+      }
     ]
   },
-  "featured": false,
+  "featured": true,
   "order": 4
 }

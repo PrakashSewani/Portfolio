@@ -1,0 +1,32 @@
+{
+  "slug": "rstats",
+  "title": "rstats",
+  "summary": "A cross-platform Rust terminal dashboard for live system resources, processes, alerts and history.",
+  "status": "shipped",
+  "stack": [
+    "Rust",
+    "TUI",
+    "Cross-platform"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/rstats-cli"
+    }
+  ],
+  "kicker": "Systems / resource monitoring",
+  "year": 2026,
+  "evidence": [
+    {
+      "label": "Tagged releases",
+      "value": "1"
+    },
+    {
+      "label": "License",
+      "value": "MIT"
+    }
+  ],
+  "ownership": "Designed and built the dashboard and its recording layer end to end.",
+  "featured": false,
+  "order": 15
+}

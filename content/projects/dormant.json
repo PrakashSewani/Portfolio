@@ -1,0 +1,40 @@
+{
+  "slug": "dormant",
+  "title": "Dormant",
+  "summary": "Manages the lifecycle of local project workspaces: clean, archive and restore a project without losing the repository behind it.",
+  "status": "shipped",
+  "stack": [
+    "Swift",
+    "SwiftUI",
+    "Homebrew"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/dormant-macos"
+    },
+    {
+      "label": "View live",
+      "href": "https://dormant.prakashsewani.com/"
+    }
+  ],
+  "kicker": "macOS utility / developer workflow",
+  "year": 2026,
+  "evidence": [
+    {
+      "label": "Tagged releases",
+      "value": "2"
+    },
+    {
+      "label": "License",
+      "value": "MIT"
+    },
+    {
+      "label": "Live",
+      "value": "dormant.prakashsewani.com"
+    }
+  ],
+  "ownership": "Designed and built the macOS workspace utility end to end.",
+  "featured": false,
+  "order": 5
+}

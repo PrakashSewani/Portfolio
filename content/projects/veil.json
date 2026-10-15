@@ -1,0 +1,22 @@
+{
+  "slug": "veil",
+  "title": "Veil",
+  "summary": "Real-time secret redaction for streamers: API keys, tokens, wallets and seed phrases never make it to the stream.",
+  "status": "in-progress",
+  "stack": [
+    "C#",
+    "Windows",
+    "TypeScript"
+  ],
+  "links": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/PrakashSewani/veil"
+    }
+  ],
+  "kicker": "Developer tooling / secret protection",
+  "year": 2026,
+  "ownership": "Designed and built the detection layer and the Windows client end to end.",
+  "featured": false,
+  "order": 11
+}
