@@ -7,8 +7,11 @@
 
 export const PROJECT_STATUSES = ['shipped', 'in-progress', 'archived'];
 
-/** Where a project sits on the signal path, sensor → screen. */
-export const STAGES = ['sense', 'edge', 'gateway', 'services', 'screen'];
+/**
+ * The five layers of a system, bottom to top. A project names the layers it works in; the first one
+ * is its primary layer. The site's mark lights exactly these.
+ */
+export const LAYERS = ['machine', 'infrastructure', 'software', 'intelligence', 'interface'];
 
 /** The drawn figure a case study can carry. Anything without a drawing uses `none`. */
 export const SPECIMEN_KINDS = [
@@ -27,11 +30,11 @@ export const SPECIMEN_KINDS = [
   'none',
 ];
 
-const REQUIRED_KEYS = ['slug', 'title', 'summary', 'status', 'stack', 'links'];
+const REQUIRED_KEYS = ['slug', 'title', 'summary', 'status', 'stack', 'links', 'layers'];
 const OPTIONAL_KEYS = [
   'kicker',
   'year',
-  'stage',
+  'invariant',
   'challenge',
   'decisions',
   'evidence',
@@ -100,13 +103,13 @@ export function validateProject(raw, source = 'project') {
     throw new ProjectSchemaError(source, `status "${status}" must be one of ${PROJECT_STATUSES.join(' | ')}`);
   }
 
-  let stage;
-  if (raw.stage !== undefined) {
-    stage = requireString(source, 'stage', raw.stage);
-    if (!STAGES.includes(stage)) {
-      throw new ProjectSchemaError(source, `stage "${stage}" must be one of ${STAGES.join(' | ')}`);
+  const layers = requireStringArray(source, 'layers', raw.layers);
+  for (const layer of layers) {
+    if (!LAYERS.includes(layer)) {
+      throw new ProjectSchemaError(source, `layer "${layer}" must be one of ${LAYERS.join(' | ')}`);
     }
   }
+  if (new Set(layers).size !== layers.length) throw new ProjectSchemaError(source, 'layers must not repeat');
 
   if (!Array.isArray(raw.links) || raw.links.length < 1) {
     throw new ProjectSchemaError(source, 'links must be an array with at least one { label, href }');
@@ -192,9 +195,10 @@ export function validateProject(raw, source = 'project') {
     status,
     stack: requireStringArray(source, 'stack', raw.stack),
     links,
+    layers,
     kicker: optionalString(source, 'kicker', raw.kicker),
     year,
-    stage,
+    invariant: optionalString(source, 'invariant', raw.invariant),
     challenge: optionalString(source, 'challenge', raw.challenge),
     decisions,
     evidence,

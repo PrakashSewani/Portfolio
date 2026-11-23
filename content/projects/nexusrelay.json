@@ -7,7 +7,11 @@
     "Go",
     "LLM routing",
     "Multi-tenant",
-    "Python"
+    "Python",
+    "PostgreSQL",
+    "Redis",
+    "Docker",
+    "Traefik"
   ],
   "links": [
     {
@@ -15,9 +19,14 @@
       "href": "https://github.com/PrakashSewani/NexusRelay"
     }
   ],
+  "layers": [
+    "infrastructure",
+    "intelligence",
+    "software"
+  ],
   "kicker": "Infrastructure / self-hosted AI gateway",
   "year": 2026,
-  "stage": "gateway",
+  "invariant": "Fail closed: losing Redis stops finite limits, losing PostgreSQL stops untracked dispatch.",
   "challenge": "Give applications one stable OpenAI-compatible API while provider credentials, routing, budgets, rate limits and audit history live in one place.",
   "decisions": [
     "Normalize every provider behind an adapter; clients only ever see a gateway model alias",
@@ -68,5 +77,5 @@
     ]
   },
   "featured": true,
-  "order": 3
+  "order": 1
 }

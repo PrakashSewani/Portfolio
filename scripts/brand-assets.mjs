@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * brand-assets.mjs — regenerate the favicon set and the social card from one source of truth.
+ * brand-assets.mjs — regenerate the favicon set and the social card from one source of truth: the
+ * mark (five stacked planes, src/components/LayerMark.tsx) and the stack the hero draws.
  *
  *   node scripts/brand-assets.mjs
  *
- * The social card is an HTML page screenshotted with headless Edge/Chrome (the project's own fonts,
- * loaded from node_modules), so it uses the same typefaces as the site; the icons are rasterised
- * in-process. The trace drawn on the card is the real telemetry generator from
- * src/lib/telemetry.ts, outage and all.
+ * The social card is an HTML page screenshotted with headless Edge/Chrome, using the site's own
+ * fonts from node_modules; the icons are rasterised in-process (headless browsers refuse windows
+ * small enough for a 16 px favicon).
  * Needs Microsoft Edge or Chrome installed; set BROWSER=<path> to override the lookup.
  */
 import { execFileSync } from 'node:child_process';
@@ -17,11 +17,12 @@ import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { crc32, deflateSync } from 'node:zlib';
-import { CHANNELS, DOWN_S, LIVE_S, SAMPLE_RATE, inOutage, isDelivered, sample } from '../src/lib/telemetry.ts';
 import { ROOT } from './load-content.mjs';
+import { loadContent } from './load-content.mjs';
+import { LAYERS } from '../src/lib/projects.js';
 
 const PUBLIC = path.join(ROOT, 'public');
-const FONTS = (pkg, file) => pathToFileURL(path.join(ROOT, 'node_modules', pkg, 'files', file)).href;
+const FONT = (pkg, file) => pathToFileURL(path.join(ROOT, 'node_modules', pkg, 'files', file)).href;
 
 const CANDIDATES = [
   process.env.BROWSER,
@@ -35,124 +36,93 @@ const CANDIDATES = [
 const browser = CANDIDATES.find((p) => existsSync(p));
 if (!browser) throw new Error('no Edge/Chrome found — set BROWSER=<path>');
 
-const AMBER = '#f5a524';
-const INK = '#17120a';
+// Tokens (src/styles/tokens.css).
+const BG = '#0b0c0d';
+const INK = '#ecebe6';
+const MUTED = '#a7a6a0';
+const FAINT = '#8e8d87';
+const SIGNAL = '#c8f25c';
+const LINE = '#383c3f';
 
-const markSvg = (size) => `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="${AMBER}"/>
-  <path d="M9 36h11l6-17 9 28 6-18 3 7h11" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`;
+// ---------------------------------------------------------------------------------------------
+// The icon: the mark redrawn for small sizes. A solid top plane sits over the front edges of the
+// planes beneath it. Tab sizes (the SVG, 16, 32, 48) get three layers, because five outlines blur
+// into one block at 16 px; app-icon sizes (180, 192, 512) get all five.
 
-/** The telemetry trace for the card: real samples, with the outage hatched exactly as on the site. */
-function traceSvg(width, height) {
-  const windowS = 7;
-  const now = 10.6; // mid-outage, so the card shows the whole story
-  const t0 = now - windowS;
-  const rows = 3;
-  const rowH = height / rows;
-  const ids = [CHANNELS[0].id, CHANNELS[2].id, CHANNELS[1].id];
-  let body = '';
-  let gap = null;
-  for (let i = Math.floor(t0 * SAMPLE_RATE); i <= Math.floor(now * SAMPLE_RATE); i += 1) {
-    const ts = i / SAMPLE_RATE;
-    if (!isDelivered(ts, now) && inOutage(ts)) {
-      const x = ((ts - t0) / windowS) * width;
-      gap = gap ? [gap[0], x] : [x, x];
-    }
-  }
-  ids.forEach((id, r) => {
-    let d = '';
-    let pen = false;
-    for (let i = Math.floor(t0 * SAMPLE_RATE); i <= Math.floor(now * SAMPLE_RATE); i += 1) {
-      const ts = i / SAMPLE_RATE;
-      if (!isDelivered(ts, now)) {
-        pen = false;
-        continue;
-      }
-      const x = ((ts - t0) / windowS) * width;
-      const y = r * rowH + rowH / 2 - sample(id, i) * (rowH / 2 - 10);
-      d += `${pen ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
-      pen = true;
-    }
-    body += `<path d="${d}" fill="none" stroke="${AMBER}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
-  });
-  const hatch = gap
-    ? `<rect x="${gap[0]}" y="0" width="${gap[1] - gap[0]}" height="${height}" fill="url(#h)"/><line x1="${gap[0]}" x2="${gap[0]}" y1="0" y2="${height}" stroke="#ff7a6b" stroke-width="1.5" stroke-dasharray="6 6"/>`
-    : '';
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-  <defs><pattern id="h" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#ff7a6b" stroke-opacity=".35" stroke-width="1.5"/></pattern></defs>
-  ${hatch}${body}</svg>`;
+const TILE = 64;
+const TILE_R = 13;
+
+function iconGeometry(layers) {
+  const hw = 23;
+  const hh = 11.5;
+  const step = layers >= 5 ? 7.4 : 11;
+  const stroke = layers >= 5 ? 3.4 : 4.8;
+  const height = 2 * hh + (layers - 1) * step;
+  const cy0 = (TILE - height) / 2 + hh; // centre of the solid top plane
+  const lips = Array.from({ length: layers - 1 }, (_, k) => cy0 + (k + 1) * step);
+  return { cx: TILE / 2, hw, hh, cy0, stroke, lips };
 }
 
-const cardHtml = () => `<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face{font-family:'Instrument Serif';font-style:normal;src:url('${FONTS('@fontsource/instrument-serif', 'instrument-serif-latin-400-normal.woff2')}')}
-@font-face{font-family:'Instrument Serif';font-style:italic;src:url('${FONTS('@fontsource/instrument-serif', 'instrument-serif-latin-400-italic.woff2')}')}
-@font-face{font-family:'Mono';font-weight:100 800;src:url('${FONTS('@fontsource-variable/jetbrains-mono', 'jetbrains-mono-latin-wght-normal.woff2')}')}
-*{box-sizing:border-box;margin:0}
-body{width:1200px;height:630px;background:#0c0d0f;color:#ece8df;position:relative;overflow:hidden;font-family:'Mono'}
-.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(236,232,223,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(236,232,223,.06) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:radial-gradient(ellipse 90% 80% at 30% 30%,#000 25%,transparent 80%)}
-.top{position:absolute;left:72px;top:60px;display:flex;align-items:center;gap:16px;font-size:22px;color:#a09d95;letter-spacing:.02em}
-.mark{width:44px;height:44px}
-h1{position:absolute;left:72px;top:150px;width:1000px;font-family:'Instrument Serif',serif;font-weight:400;font-size:112px;line-height:.98;letter-spacing:-.03em}
-h1 em{color:${AMBER}}
-.sub{position:absolute;left:72px;top:416px;font-size:24px;color:#a09d95;letter-spacing:.02em}
-.trace{position:absolute;left:0;bottom:0;width:1200px;height:150px;opacity:.95}
-.fade{position:absolute;left:0;bottom:0;width:1200px;height:150px;background:linear-gradient(90deg,#0c0d0f 0,transparent 12%,transparent 100%)}
-</style></head><body>
-<div class="grid"></div>
-<div class="top"><span class="mark">${markSvg(44)}</span>prakashsewani.com</div>
-<h1>Software from the <em>sensor</em><br>to the <em>screen</em>.</h1>
-<div class="sub">Prakash Sewani · Senior Software Engineer · Rust · Go · TypeScript · .NET</div>
-<div class="trace">${traceSvg(1200, 150)}</div><div class="fade"></div>
-</body></html>`;
+const r2 = (n) => Math.round(n * 100) / 100;
 
-/**
- * Icons are rasterised here instead of screenshotted: headless browsers refuse windows under ~500px,
- * and a 16px favicon is exactly where a hand-rolled, supersampled rasteriser is the right tool.
- */
-const PATH = [[9, 36], [20, 36], [26, 19], [35, 47], [41, 29], [44, 36], [55, 36]];
-const distToSegment = (px, py, [ax, ay], [bx, by]) => {
+const markSvg = (layers = 3) => {
+  const { cx, hw, hh, cy0, stroke, lips } = iconGeometry(layers);
+  const top = `<path d="M${r2(cx)} ${r2(cy0 - hh)}L${r2(cx + hw)} ${r2(cy0)}L${r2(cx)} ${r2(cy0 + hh)}L${r2(cx - hw)} ${r2(cy0)}Z" fill="${SIGNAL}"/>`;
+  const rest = lips
+    .map((cy) => `<path d="M${r2(cx - hw)} ${r2(cy)}L${r2(cx)} ${r2(cy + hh)}L${r2(cx + hw)} ${r2(cy)}" fill="none" stroke="${SIGNAL}" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/>`)
+    .join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${TILE} ${TILE}"><rect width="${TILE}" height="${TILE}" rx="${TILE_R}" fill="${BG}"/>${top}${rest}</svg>`;
+};
+
+const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const inRoundedSquare = (x, y) => {
+  if (x < 0 || y < 0 || x > TILE || y > TILE) return false;
+  const cx = Math.min(Math.max(x, TILE_R), TILE - TILE_R);
+  const cy = Math.min(Math.max(y, TILE_R), TILE - TILE_R);
+  return Math.hypot(x - cx, y - cy) <= TILE_R;
+};
+const distToSegment = (px, py, ax, ay, bx, by) => {
   const dx = bx - ax;
   const dy = by - ay;
   const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)));
   return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
 };
-const inRoundedSquare = (x, y, size = 64, r = 14) => {
-  if (x < 0 || y < 0 || x > size || y > size) return false;
-  const cx = Math.min(Math.max(x, r), size - r);
-  const cy = Math.min(Math.max(y, r), size - r);
-  return Math.hypot(x - cx, y - cy) <= r;
-};
-const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 
-function rasterise(size) {
-  const SS = 4;
-  const amber = hex(AMBER);
-  const ink = hex(INK);
+function colourAt(x, y, g) {
+  if (!inRoundedSquare(x, y)) return null;
+  if (Math.abs(x - g.cx) / g.hw + Math.abs(y - g.cy0) / g.hh <= 1) return SIGNAL;
+  for (const cy of g.lips) {
+    const d = Math.min(distToSegment(x, y, g.cx - g.hw, cy, g.cx, cy + g.hh), distToSegment(x, y, g.cx, cy + g.hh, g.cx + g.hw, cy));
+    if (d <= g.stroke / 2) return SIGNAL;
+  }
+  return BG;
+}
+
+function rasterise(size, layers) {
+  const g = iconGeometry(layers);
+  const SS = 6;
   const px = Buffer.alloc(size * size * 4);
   for (let y = 0; y < size; y += 1) {
     for (let x = 0; x < size; x += 1) {
       let a = 0;
       let r = 0;
-      let g = 0;
+      let gg = 0;
       let b = 0;
       for (let sy = 0; sy < SS; sy += 1) {
         for (let sx = 0; sx < SS; sx += 1) {
-          const ux = ((x + (sx + 0.5) / SS) / size) * 64;
-          const uy = ((y + (sy + 0.5) / SS) / size) * 64;
-          if (!inRoundedSquare(ux, uy)) continue;
-          const stroke = PATH.slice(1).some((p, i) => distToSegment(ux, uy, PATH[i], p) <= 2.5);
-          const c = stroke ? ink : amber;
+          const c = colourAt(((x + (sx + 0.5) / SS) / size) * TILE, ((y + (sy + 0.5) / SS) / size) * TILE, g);
+          if (!c) continue;
+          const [cr, cg, cb] = hex(c);
           a += 1;
-          r += c[0];
-          g += c[1];
-          b += c[2];
+          r += cr;
+          gg += cg;
+          b += cb;
         }
       }
       const o = (y * size + x) * 4;
       if (a) {
         px[o] = Math.round(r / a);
-        px[o + 1] = Math.round(g / a);
+        px[o + 1] = Math.round(gg / a);
         px[o + 2] = Math.round(b / a);
       }
       px[o + 3] = Math.round((a / (SS * SS)) * 255);
@@ -188,22 +158,6 @@ function encodePng(w, h, rgba) {
   ]);
 }
 
-async function shot(tmp, name, html, width, height, outFile, transparent) {
-  const htmlPath = path.join(tmp, `${name}.html`);
-  await writeFile(htmlPath, html);
-  const args = [
-    '--headless=new',
-    '--disable-gpu',
-    '--hide-scrollbars',
-    '--force-device-scale-factor=1',
-    `--window-size=${width},${height}`,
-    `--screenshot=${outFile}`,
-    ...(transparent ? ['--default-background-color=00000000'] : []),
-    pathToFileURL(htmlPath).href,
-  ];
-  execFileSync(browser, args, { stdio: 'ignore', timeout: 60_000 });
-}
-
 /** A .ico is a small directory around PNG payloads, which every current browser accepts. */
 function buildIco(entries) {
   const header = Buffer.alloc(6);
@@ -226,24 +180,104 @@ function buildIco(entries) {
   return Buffer.concat([header, ...dir, ...entries.map((e) => e.png)]);
 }
 
+// ---------------------------------------------------------------------------------------------
+// The social card: the name, the statement, and the stack with its real per-layer project counts.
+
+const NAMES = { machine: 'Machine', infrastructure: 'Infrastructure', software: 'Software', intelligence: 'Intelligence', interface: 'Interface' };
+
+function stackSvg(counts) {
+  const S = 140;
+  const KX = 0.95;
+  const KY = 0.3;
+  const CX = S * KX + 6;
+  const STEP = 68;
+  const TOP = 16;
+  const W = CX + S * KX + 40 + 240;
+  const H = TOP + 4 * STEP + 2 * S * KY + 16;
+  const top = (i) => TOP + (4 - i) * STEP;
+  let body = '';
+  LAYERS.forEach((id, i) => {
+    const t = top(i);
+    const cy = t + S * KY;
+    const pts = [
+      [CX, t],
+      [CX + S * KX, t + S * KY],
+      [CX, t + 2 * S * KY],
+      [CX - S * KX, t + S * KY],
+    ]
+      .map((p) => p.map((n) => n.toFixed(1)).join(','))
+      .join(' ');
+    body += `<polygon points="${pts}" fill="#0e1011" fill-opacity=".82" stroke="#4b5054" stroke-width="1.2"/>`;
+    body += `<path d="M${CX + S * KX} ${cy}H${CX + S * KX + 30}" stroke="${LINE}" stroke-width="1.2"/>`;
+    body += `<ellipse cx="${CX}" cy="${cy}" rx="11" ry="4" fill="${BG}" stroke="${SIGNAL}" stroke-width="1.4"/>`;
+    if (i < 4) body += `<path d="M${CX} ${cy}V${cy - STEP}" stroke="${SIGNAL}" stroke-opacity=".6" stroke-width="1.4"/>`;
+    const lx = CX + S * KX + 40;
+    body += `<circle cx="${lx + 4}" cy="${cy}" r="4" fill="${SIGNAL}"/>`;
+    body += `<text x="${lx + 18}" y="${cy + 6}" font-family="Mono" font-size="14" fill="${FAINT}">0${i + 1}</text>`;
+    body += `<text x="${lx + 46}" y="${cy + 7}" font-family="Archivo" font-stretch="112%" font-weight="650" font-size="18" fill="${INK}">${NAMES[id].toUpperCase()}</text>`;
+    body += `<text x="${lx + 46}" y="${cy + 28}" font-family="Mono" font-size="14" fill="${FAINT}">${counts[id]} projects</text>`;
+  });
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${body}</svg>`;
+}
+
+const cardHtml = (counts, total) => `<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:'Archivo';font-weight:100 900;font-stretch:62% 125%;src:url('${FONT('@fontsource-variable/archivo', 'archivo-latin-wdth-normal.woff2')}') format('woff2-variations')}
+@font-face{font-family:'Mono';font-weight:500;src:url('${FONT('@fontsource/ibm-plex-mono', 'ibm-plex-mono-latin-500-normal.woff2')}')}
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:630px;background:${BG};color:${INK};position:relative;overflow:hidden;font-family:'Archivo'}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(236,235,230,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(236,235,230,.08) 1px,transparent 1px),linear-gradient(rgba(236,235,230,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(236,235,230,.045) 1px,transparent 1px);background-size:120px 120px,120px 120px,24px 24px,24px 24px;-webkit-mask-image:radial-gradient(ellipse 60% 80% at 75% 45%,#000 25%,transparent 80%)}
+.top{position:absolute;left:64px;top:56px;display:flex;align-items:center;gap:14px;font-family:'Mono';font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:${MUTED}}
+.top i{display:block;width:9px;height:9px;border-radius:50%;background:${SIGNAL}}
+h1{position:absolute;left:60px;top:150px;font-size:90px;font-weight:780;font-stretch:125%;line-height:.88;letter-spacing:-.04em;text-transform:uppercase}
+p{position:absolute;left:64px;top:390px;width:520px;font-size:27px;line-height:1.38;color:${INK}}
+.foot{position:absolute;left:64px;bottom:52px;font-family:'Mono';font-size:17px;color:${FAINT};letter-spacing:.02em}
+.stack{position:absolute;right:16px;top:118px}
+</style></head><body>
+<div class="grid"></div>
+<div class="top"><i></i>prakashsewani.com</div>
+<h1>Prakash<br>Sewani</h1>
+<p>Software engineer. I build systems through every layer, from the machine to the interface.</p>
+<div class="foot">${total} projects across ${LAYERS.length} layers</div>
+<div class="stack">${stackSvg(counts)}</div>
+</body></html>`;
+
+async function shot(tmp, name, html, width, height, outFile) {
+  const htmlPath = path.join(tmp, `${name}.html`);
+  await writeFile(htmlPath, html);
+  execFileSync(
+    browser,
+    [
+      '--headless=new',
+      '--disable-gpu',
+      '--hide-scrollbars',
+      '--force-device-scale-factor=1',
+      `--window-size=${width},${height}`,
+      `--screenshot=${outFile}`,
+      pathToFileURL(htmlPath).href,
+    ],
+    { stdio: 'ignore', timeout: 60_000 },
+  );
+}
+
+const projects = await loadContent();
+const counts = Object.fromEntries(LAYERS.map((id) => [id, projects.filter((p) => p.layers.includes(id)).length]));
+
 const tmp = await mkdtemp(path.join(os.tmpdir(), 'brand-'));
 await mkdir(PUBLIC, { recursive: true });
 
-await writeFile(path.join(PUBLIC, 'favicon.svg'), markSvg(64) + '\n');
-await shot(tmp, 'og', cardHtml(), 1200, 630, path.join(PUBLIC, 'og-image.png'), false);
+await writeFile(path.join(PUBLIC, 'favicon.svg'), markSvg(3) + '\n');
+await shot(tmp, 'og', cardHtml(counts, projects.length), 1200, 630, path.join(PUBLIC, 'og-image.png'));
 
-const pngs = {
-  'favicon-16x16.png': 16,
-  'favicon-32x32.png': 32,
-  'apple-touch-icon.png': 180,
-  'android-chrome-192x192.png': 192,
-  'android-chrome-512x512.png': 512,
-};
-for (const [file, size] of Object.entries(pngs)) await writeFile(path.join(PUBLIC, file), rasterise(size));
+/** [file, size, layers]: three layers where the icon is tab-sized, all five where it has room. */
+const pngs = [
+  ['favicon-16x16.png', 16, 3],
+  ['favicon-32x32.png', 32, 3],
+  ['apple-touch-icon.png', 180, 5],
+  ['android-chrome-192x192.png', 192, 5],
+  ['android-chrome-512x512.png', 512, 5],
+];
+for (const [file, size, layers] of pngs) await writeFile(path.join(PUBLIC, file), rasterise(size, layers));
 
-await writeFile(
-  path.join(PUBLIC, 'favicon.ico'),
-  buildIco([16, 32, 48].map((size) => ({ size, png: rasterise(size) }))),
-);
+await writeFile(path.join(PUBLIC, 'favicon.ico'), buildIco([16, 32, 48].map((size) => ({ size, png: rasterise(size, 3) }))));
 
 console.log(`brand assets written to public/ (social card rendered with ${path.basename(browser)})`);

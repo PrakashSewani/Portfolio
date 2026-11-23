@@ -14,9 +14,12 @@
       "href": "https://github.com/PrakashSewani/1337x-auto-links"
     }
   ],
+  "layers": [
+    "interface"
+  ],
   "kicker": "Browser extension / link extraction",
   "year": 2026,
-  "stage": "screen",
+  "invariant": "No server, no account, no telemetry: every request comes from your own browser session.",
   "challenge": "Put the magnet and .torrent controls into a search result where those links do not exist yet — with no server, no account and no visit to each torrent's own page.",
   "decisions": [
     "Resolve each row's links in the background and cache the answers for the list",
@@ -66,5 +69,5 @@
     ]
   },
   "featured": false,
-  "order": 17
+  "order": 9
 }

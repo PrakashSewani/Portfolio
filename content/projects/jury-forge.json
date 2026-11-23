@@ -14,9 +14,13 @@
       "href": "https://github.com/PrakashSewani/jury-forge"
     }
   ],
+  "layers": [
+    "intelligence",
+    "infrastructure"
+  ],
   "kicker": "Developer tooling / AI review pipeline",
   "year": 2026,
-  "stage": "services",
+  "invariant": "The repository, the code and the model keys never go to somebody else’s server.",
   "challenge": "Give every pull request a full review without sending the repository, the code or the model keys to somebody else's server.",
   "decisions": [
     "One deployable: the Worker serves the dashboard, takes the GitHub webhooks and runs the reviews",

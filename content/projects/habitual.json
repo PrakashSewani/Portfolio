@@ -15,9 +15,12 @@
       "href": "https://github.com/PrakashSewani/Habitual"
     }
   ],
+  "layers": [
+    "interface",
+    "software"
+  ],
   "kicker": "Full-stack product / Habit platform",
   "year": 2026,
-  "stage": "screen",
   "challenge": "Model recurring behaviour and progress so it stays simple for the person using it, while supporting a modern full-stack application architecture underneath.",
   "decisions": [
     "Reusable React UI rather than per-screen components",
@@ -54,5 +57,5 @@
     ]
   },
   "featured": false,
-  "order": 8
+  "order": 16
 }

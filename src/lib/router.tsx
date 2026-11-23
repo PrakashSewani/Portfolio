@@ -4,11 +4,12 @@
  * browser's own fragment scroll runs before the page has rendered.
  *
  *   useRoute()             → the current pathname ('/', '/projects/rstats')
- *   navigate(to)           → pushState + re-render + scroll to the fragment (or the top)
+ *   navigate(to)           → pushState + re-render + scroll, inside a view transition when supported
  *   useLinkInterception()  → turns <a href="/…" data-link> into a client-side navigation
- *   matchProjectRoute(p)   → the slug for /projects/<slug>, else null
+ *   matchRoute(p)          → { kind: 'home' | 'index' | 'case' | 'missing', slug? }
  */
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 const listeners = new Set<() => void>();
 
@@ -23,6 +24,20 @@ function emit() {
 
 export const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (update: () => void) => { finished: Promise<void> };
+};
+
+/** Run a DOM-changing update inside a view transition when the browser has them and motion is welcome. */
+function withTransition(update: () => void): Promise<void> {
+  const doc = document as ViewTransitionDocument;
+  if (!doc.startViewTransition || prefersReducedMotion()) {
+    update();
+    return Promise.resolve();
+  }
+  return doc.startViewTransition(update).finished.catch(() => undefined);
+}
 
 /** Scroll to `#id` (or the top) once React has committed the route. */
 export function scrollToHash(hash: string, smooth = true) {
@@ -45,12 +60,26 @@ export function navigate(to: string, options: { replace?: boolean } = {}) {
   const pathPart = hashAt === -1 ? to : to.slice(0, hashAt);
   const target = pathPart === '' ? window.location.pathname : pathPart.startsWith('/') ? pathPart : `/${pathPart}`;
   const full = hash ? `${target}#${hash}` : target;
-  if (full !== `${window.location.pathname}${window.location.hash}`) {
+  const samePage = target.replace(/\/+$/, '') === window.location.pathname.replace(/\/+$/, '');
+
+  if (samePage) {
+    // An in-page jump: no re-render, no transition, just history and scroll.
+    if (full !== `${window.location.pathname}${window.location.hash}`) {
+      if (options.replace) window.history.replaceState(null, '', full);
+      else window.history.pushState(null, '', full);
+    }
+    scrollToHash(hash);
+    return;
+  }
+
+  void withTransition(() => {
     if (options.replace) window.history.replaceState(null, '', full);
     else window.history.pushState(null, '', full);
-    emit();
-  }
-  scrollToHash(hash);
+    flushSync(emit);
+    if (!hash) window.scrollTo({ top: 0, behavior: 'instant' });
+  }).then(() => {
+    if (hash) scrollToHash(hash);
+  });
 }
 
 export function useRoute(): string {
@@ -78,7 +107,8 @@ export function useLinkInterception() {
       event.preventDefault();
       navigate(href);
     };
-    const onPopState = () => emit();
+    // Render synchronously so the browser's own scroll restoration lands on the new content.
+    const onPopState = () => flushSync(emit);
     document.addEventListener('click', onClick);
     window.addEventListener('popstate', onPopState);
     return () => {
@@ -88,16 +118,20 @@ export function useLinkInterception() {
   }, []);
 }
 
+export type Route = { kind: 'home' } | { kind: 'index' } | { kind: 'case'; slug: string } | { kind: 'missing' };
+
 /**
- * The slug for `/projects/<slug>`, else null. Decoding is guarded: a malformed percent-escape must
- * not throw during render; the raw segment is returned so the case page shows "no such project".
+ * Decoding is guarded: a malformed percent-escape must not throw during render; the raw segment is
+ * returned so the case page shows "no such project".
  */
-export function matchProjectRoute(path: string): string | null {
+export function matchRoute(path: string): Route {
+  if (path === '/') return { kind: 'home' };
+  if (path === '/projects') return { kind: 'index' };
   const match = path.match(/^\/projects\/([^/]+)$/);
-  if (!match) return null;
+  if (!match) return { kind: 'missing' };
   try {
-    return decodeURIComponent(match[1]);
+    return { kind: 'case', slug: decodeURIComponent(match[1]) };
   } catch {
-    return match[1];
+    return { kind: 'case', slug: match[1] };
   }
 }

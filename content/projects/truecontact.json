@@ -14,9 +14,12 @@
       "href": "https://github.com/PrakashSewani/true-contact"
     }
   ],
+  "layers": [
+    "software",
+    "infrastructure"
+  ],
   "kicker": "Product engineering / data reconciliation",
   "year": 2026,
-  "stage": "services",
   "evidence": [
     {
       "label": "Tagged releases",
@@ -29,5 +32,5 @@
   ],
   "ownership": "Designed and built the reconciliation flow and its UI end to end.",
   "featured": false,
-  "order": 13
+  "order": 21
 }

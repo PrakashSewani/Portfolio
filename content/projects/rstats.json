@@ -14,9 +14,13 @@
       "href": "https://github.com/PrakashSewani/rstats-cli"
     }
   ],
+  "layers": [
+    "machine",
+    "interface"
+  ],
   "kicker": "Systems / resource monitoring",
   "year": 2026,
-  "stage": "sense",
+  "invariant": "An alert fires only after its threshold has held for the full duration.",
   "challenge": "Sample CPU, memory, swap, load, network and disk on macOS, Linux and Windows, and keep enough bounded history that a spike is still visible after it has passed.",
   "decisions": [
     "One native binary per platform, shipped through the npm package's optional dependency",
@@ -65,6 +69,6 @@
       }
     ]
   },
-  "featured": true,
-  "order": 1
+  "featured": false,
+  "order": 7
 }

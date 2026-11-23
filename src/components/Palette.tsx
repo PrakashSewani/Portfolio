@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { SECTIONS, SIGNAL_PATH, profile } from '../data/profile';
-import { languagesOf, projects, type Project } from '../data/projects';
+import { LAYERS } from '../data/layers';
+import { SECTIONS, profile } from '../data/profile';
+import { STATUS_LABEL, languageCounts, languagesOf, projects, type Project } from '../data/projects';
 import { navigate } from '../lib/router';
-import { getTheme, setTheme, toggleTheme } from '../lib/theme';
-import { ArrowRight, Search } from './Icons';
+import { ArrowUpRight, Search } from './Icons';
 
 interface OutputLine {
   text: string;
   href?: string;
-  internal?: boolean;
 }
 
 interface Item {
@@ -25,7 +24,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** `projects --lang rust --status shipped` → { text: '', lang: 'rust', status: 'shipped' } */
+/** `projects --lang rust --status shipped` → { verb: 'projects', flags: { lang: 'rust', status: 'shipped' } } */
 function parseQuery(raw: string) {
   const tokens = raw.trim().split(/\s+/).filter(Boolean);
   const flags: Record<string, string> = {};
@@ -37,16 +36,17 @@ function parseQuery(raw: string) {
       i += 1;
     } else words.push(t);
   }
-  return { verb: (words[0] ?? '').toLowerCase(), rest: words.slice(1).join(' ').toLowerCase(), flags, words };
+  return { verb: (words[0] ?? '').toLowerCase(), flags, words };
 }
 
 function matchesFlags(p: Project, flags: Record<string, string>): boolean {
   if (flags.lang && !languagesOf(p).some((l) => l.toLowerCase() === flags.lang || l.toLowerCase().replace('#', 'sharp') === flags.lang)) return false;
-  if (flags.stage && p.stage !== flags.stage) return false;
+  if (flags.layer && !p.layers.some((l) => l === flags.layer)) return false;
   if (flags.status && p.status.replace('-', '') !== flags.status.replace('-', '')) return false;
   return true;
 }
 
+/** Ctrl/⌘ K or `/`. Plain search over sections, commands and projects, plus a few typed commands. */
 export default function Palette({ open, onClose }: Props) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
@@ -56,26 +56,25 @@ export default function Palette({ open, onClose }: Props) {
   const listRef = useRef<HTMLUListElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
 
-  const close = () => onClose();
-
   const base = useMemo<Item[]>(() => {
     const go = (to: string) => () => {
       navigate(to);
     };
-    const open_ = (url: string) => () => {
+    const openUrl = (url: string) => () => {
       window.open(url, '_blank', 'noopener');
     };
+    const langs = languageCounts().map(([lang]) => lang);
     const commands: Item[] = [
       {
         id: 'whoami',
         label: 'whoami',
-        hint: 'who is this',
+        hint: 'who built this',
         group: 'Commands',
         run: () => [
           { text: `${profile.name} — ${profile.role}, ${profile.company}` },
           { text: `${profile.location} · IST (UTC+5:30)` },
-          { text: 'Rust · Go · TypeScript · C# / .NET · Python · Swift' },
-          { text: 'Sensor to screen: devices, edge, gateways, services, UI.' },
+          { text: `${projects.length} projects of my own · ${langs.join(' · ')}` },
+          { text: 'Every layer: machine, infrastructure, software, intelligence, interface.' },
         ],
       },
       {
@@ -87,46 +86,45 @@ export default function Palette({ open, onClose }: Props) {
           { text: profile.email, href: `mailto:${profile.email}` },
           { text: 'GitHub', href: profile.github },
           { text: 'LinkedIn', href: profile.linkedin },
+          { text: 'Résumé', href: profile.resume },
         ],
       },
-      { id: 'resume', label: 'resume', hint: 'opens in a new tab', group: 'Commands', run: open_(profile.resume) },
-      {
-        id: 'projects',
-        label: 'projects',
-        hint: 'try: projects --lang rust',
-        group: 'Commands',
-        run: () => {
-          setQuery('projects ');
-          setOutput(null);
-          inputRef.current?.focus();
-          return [{ text: 'Filter with --lang, --stage, --status. e.g. projects --stage edge --status shipped' }];
-        },
-      },
-      { id: 'theme-light', label: 'theme light', hint: 'paper', group: 'Commands', run: () => setTheme('light') },
-      { id: 'theme-dark', label: 'theme dark', hint: 'graphite', group: 'Commands', run: () => setTheme('dark') },
-      { id: 'theme-toggle', label: 'theme toggle', hint: getTheme() === 'dark' ? 'to light' : 'to dark', group: 'Commands', run: () => toggleTheme() },
       {
         id: 'copy-email',
         label: 'copy email',
         hint: profile.email,
         group: 'Commands',
         run: () => {
-          void navigator.clipboard?.writeText(profile.email);
+          if (!navigator.clipboard) return [{ text: `clipboard unavailable — ${profile.email}`, href: `mailto:${profile.email}` }];
+          void navigator.clipboard.writeText(profile.email);
           return [{ text: `copied ${profile.email}` }];
         },
       },
-      { id: 'github', label: 'github', hint: 'opens in a new tab', group: 'Commands', run: open_(profile.github) },
-      { id: 'linkedin', label: 'linkedin', hint: 'opens in a new tab', group: 'Commands', run: open_(profile.linkedin) },
+      { id: 'resume', label: 'resume', hint: 'opens in a new tab', group: 'Commands', run: openUrl(profile.resume) },
+      { id: 'github', label: 'github', hint: 'opens in a new tab', group: 'Commands', run: openUrl(profile.github) },
+      { id: 'linkedin', label: 'linkedin', hint: 'opens in a new tab', group: 'Commands', run: openUrl(profile.linkedin) },
+      { id: 'index', label: 'index', hint: 'every project, searchable', group: 'Commands', run: go('/projects') },
+      {
+        id: 'projects',
+        label: 'projects',
+        hint: 'try: projects --layer machine',
+        group: 'Commands',
+        run: () => {
+          setQuery('projects ');
+          setOutput(null);
+          inputRef.current?.focus();
+          return [{ text: 'Filter with --layer, --lang, --status. e.g. projects --layer intelligence --status shipped' }];
+        },
+      },
       {
         id: 'help',
         label: 'help',
         hint: 'what can I type',
         group: 'Commands',
         run: () => [
-          { text: 'whoami · contact · resume · github · linkedin' },
-          { text: 'theme light|dark|toggle' },
-          { text: 'projects [--lang rust] [--stage edge] [--status shipped]' },
-          { text: 'goto <section> or just start typing a project name' },
+          { text: 'whoami · contact · copy email · resume · github · linkedin · index' },
+          { text: 'projects [--layer machine] [--lang rust] [--status shipped]' },
+          { text: 'goto <section>, or just start typing a project name' },
         ],
       },
     ];
@@ -137,28 +135,27 @@ export default function Palette({ open, onClose }: Props) {
       group: 'Go to',
       run: go(`/#${s.id}`),
     }));
-    const stages: Item[] = SIGNAL_PATH.map((s) => ({
-      id: `stage-${s.id}`,
-      label: `projects --stage ${s.id}`,
-      hint: s.title,
-      group: 'Signal path',
+    const layers: Item[] = LAYERS.map((l) => ({
+      id: `layer-${l.id}`,
+      label: `projects --layer ${l.id}`,
+      hint: l.line,
+      group: 'Layers',
       run: () => {
-        setQuery(`projects --stage ${s.id}`);
+        setQuery(`projects --layer ${l.id}`);
         setActive(0);
       },
     }));
-    return [...sections, ...commands, ...stages];
+    return [...sections, ...commands, ...layers];
   }, []);
 
-  const projectItem = (p: Project): Item => ({
-    id: `project-${p.slug}`,
-    label: p.title,
-    hint: `${p.status.replace('-', ' ')}${p.year ? ` · ${p.year}` : ''}`,
-    group: 'Projects',
-    run: () => navigate(`/projects/${p.slug}`),
-  });
-
   const items = useMemo<Item[]>(() => {
+    const projectItem = (p: Project): Item => ({
+      id: `project-${p.slug}`,
+      label: p.title,
+      hint: `${STATUS_LABEL[p.status]}${p.year ? ` · ${p.year}` : ''}`,
+      group: 'Projects',
+      run: () => navigate(`/projects/${p.slug}`),
+    });
     const { verb, flags, words } = parseQuery(query);
     const hasFlags = Object.keys(flags).length > 0;
     if (verb === 'projects' || hasFlags) {
@@ -179,24 +176,22 @@ export default function Palette({ open, onClose }: Props) {
       ...base.filter(hit),
       ...projects.filter((p) => `${p.title} ${p.stack.join(' ')} ${p.summary}`.toLowerCase().includes(q)).map(projectItem),
     ];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, base]);
 
   useEffect(() => setActive(0), [query]);
 
   useEffect(() => {
-    if (open) {
-      returnFocus.current = document.activeElement as HTMLElement | null;
-      setQuery('');
-      setOutput(null);
-      setActive(0);
-      window.setTimeout(() => inputRef.current?.focus(), 0);
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = '';
-        returnFocus.current?.focus?.();
-      };
-    }
+    if (!open) return;
+    returnFocus.current = document.activeElement as HTMLElement | null;
+    setQuery('');
+    setOutput(null);
+    setActive(0);
+    window.setTimeout(() => inputRef.current?.focus(), 0);
+    document.documentElement.classList.add('is-locked');
+    return () => {
+      document.documentElement.classList.remove('is-locked');
+      returnFocus.current?.focus?.();
+    };
   }, [open]);
 
   useEffect(() => {
@@ -209,13 +204,13 @@ export default function Palette({ open, onClose }: Props) {
     if (!item) return;
     const result = item.run();
     if (result && result.length) setOutput(result);
-    else close();
+    else onClose();
   };
 
   const onKey = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       e.preventDefault();
-      close();
+      onClose();
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       setActive((i) => Math.min(i + 1, Math.max(items.length - 1, 0)));
@@ -243,8 +238,8 @@ export default function Palette({ open, onClose }: Props) {
   let lastGroup = '';
 
   return (
-    <div className="palette-scrim" onMouseDown={(e) => e.target === e.currentTarget && close()}>
-      <div className="palette" role="dialog" aria-modal="true" aria-label="Command palette" ref={dialogRef} onKeyDown={onKey}>
+    <div className="palette-scrim" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="palette" role="dialog" aria-modal="true" aria-label="Search and commands" ref={dialogRef} onKeyDown={onKey}>
         <div className="palette-input">
           <Search size={18} />
           <input
@@ -254,14 +249,14 @@ export default function Palette({ open, onClose }: Props) {
               setQuery(e.target.value);
               setOutput(null);
             }}
-            placeholder="Type a command or search…  (try whoami)"
+            placeholder="Search projects, or type a command (try whoami)"
             spellCheck={false}
             autoComplete="off"
             role="combobox"
             aria-expanded="true"
             aria-controls="palette-list"
             aria-activedescendant={items[active] ? `pal-${items[active].id}` : undefined}
-            aria-label="Command or search"
+            aria-label="Search or command"
           />
           <kbd>Esc</kbd>
         </div>
@@ -271,7 +266,7 @@ export default function Palette({ open, onClose }: Props) {
             {output.map((line) =>
               line.href ? (
                 <a key={line.text} href={line.href} target={line.href.startsWith('mailto') ? undefined : '_blank'} rel="noreferrer">
-                  {line.text} <ArrowRight size={13} />
+                  {line.text} <ArrowUpRight size={13} />
                 </a>
               ) : (
                 <p key={line.text}>{line.text}</p>
@@ -301,13 +296,23 @@ export default function Palette({ open, onClose }: Props) {
               </li>
             );
           })}
-          {items.length === 0 && <li className="palette-empty">No match. Try <code>help</code>.</li>}
+          {items.length === 0 && (
+            <li className="palette-empty">
+              No match. Try <code>help</code>.
+            </li>
+          )}
         </ul>
 
         <div className="palette-foot">
-          <span><kbd>↑</kbd> <kbd>↓</kbd> move</span>
-          <span><kbd>Enter</kbd> run</span>
-          <span><kbd>Esc</kbd> close</span>
+          <span>
+            <kbd>↑</kbd> <kbd>↓</kbd> move
+          </span>
+          <span>
+            <kbd>Enter</kbd> run
+          </span>
+          <span>
+            <kbd>Esc</kbd> close
+          </span>
         </div>
       </div>
     </div>

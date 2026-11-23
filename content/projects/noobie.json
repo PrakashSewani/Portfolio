@@ -14,9 +14,12 @@
       "href": "https://github.com/PrakashSewani/noobie-website"
     }
   ],
+  "layers": [
+    "interface",
+    "infrastructure"
+  ],
   "kicker": "Browser extension / web safety",
   "year": 2026,
-  "stage": "screen",
   "evidence": [
     {
       "label": "License",
@@ -25,5 +28,5 @@
   ],
   "ownership": "Designed and built the extension and its worker end to end.",
   "featured": false,
-  "order": 21
+  "order": 13
 }

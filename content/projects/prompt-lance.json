@@ -14,10 +14,12 @@
       "href": "https://github.com/PrakashSewani/prompt-lance"
     }
   ],
+  "layers": [
+    "intelligence"
+  ],
   "kicker": "AI tooling / prompt engineering",
   "year": 2026,
-  "stage": "services",
   "ownership": "Designed and built the bot and its prompt pipeline end to end.",
   "featured": false,
-  "order": 20
+  "order": 19
 }

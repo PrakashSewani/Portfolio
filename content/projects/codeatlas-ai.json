@@ -7,7 +7,9 @@
     "TypeScript",
     "Python",
     "Cerebras",
-    "PowerShell"
+    "PowerShell",
+    "React",
+    "NetworkX"
   ],
   "links": [
     {
@@ -15,9 +17,13 @@
       "href": "https://github.com/PrakashSewani/code-atlas"
     }
   ],
+  "layers": [
+    "intelligence",
+    "software"
+  ],
   "kicker": "Hackathon build / code intelligence",
   "year": 2026,
-  "stage": "services",
+  "invariant": "Clone, parse and index once: every agent reads the same knowledge graph.",
   "challenge": "Cut repository onboarding and auditing from days to seconds by running a squad of specialists in parallel instead of one model reading the codebase in sequence.",
   "decisions": [
     "Clone, parse and index once into a NetworkX knowledge graph that every agent shares",
@@ -66,6 +72,6 @@
       }
     ]
   },
-  "featured": false,
-  "order": 14
+  "featured": true,
+  "order": 3
 }

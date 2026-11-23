@@ -5,8 +5,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { validateProject, validateProjectList, sortProjects, STAGES, SPECIMEN_KINDS, ProjectSchemaError } from '../src/lib/projects.js';
+import { validateProject, validateProjectList, sortProjects, LAYERS, SPECIMEN_KINDS, ProjectSchemaError } from '../src/lib/projects.js';
 import { CONTENT_DIR, ROOT, loadContent } from '../scripts/load-content.mjs';
+import { PRINCIPLES } from '../src/data/principles.ts';
+import { LAYERS as LAYER_COPY } from '../src/data/layers.ts';
 
 const valid = {
   slug: 'demo',
@@ -15,6 +17,7 @@ const valid = {
   status: 'shipped',
   stack: ['TypeScript'],
   links: [{ label: 'GitHub', href: 'https://example.com/demo' }],
+  layers: ['software'],
 };
 
 test('content/projects/*.json all validate, and each file is named after its slug', async () => {
@@ -34,9 +37,14 @@ test('every content file is in the schema’s canonical form', async () => {
   }
 });
 
-test('every project sits on the signal path', async () => {
-  for (const project of await loadContent()) {
-    assert.ok(STAGES.includes(project.stage), `${project.slug} needs a stage`);
+test('the layer copy covers exactly the schema’s layers, bottom to top', () => {
+  assert.deepEqual(LAYER_COPY.map((l) => l.id), [...LAYERS]);
+});
+
+test('every layer has at least one project in it', async () => {
+  const projects = await loadContent();
+  for (const layer of LAYERS) {
+    assert.ok(projects.some((p) => p.layers.includes(layer)), `no project works in "${layer}"`);
   }
 });
 
@@ -44,24 +52,44 @@ test('featured projects carry the full case-file keys, and there are six', async
   const featured = (await loadContent()).filter((p) => p.featured);
   assert.equal(featured.length, 6, 'the home page promises six case files');
   for (const p of featured) {
-    for (const key of ['kicker', 'challenge', 'decisions', 'evidence', 'ownership', 'specimen']) {
+    for (const key of ['kicker', 'invariant', 'challenge', 'decisions', 'evidence', 'ownership', 'specimen']) {
       assert.ok(p[key], `${p.slug} is featured but has no ${key}`);
     }
     assert.notEqual(p.specimen.kind, 'none', `${p.slug} is featured but has no drawn figure`);
   }
+  const all = await loadContent();
   assert.deepEqual(
-    featured.map((p) => p.stage),
-    ['sense', 'edge', 'gateway', 'gateway', 'services', 'screen'],
-    'featured work is ordered along the signal path',
+    all.slice(0, 6).map((p) => p.slug),
+    featured.map((p) => p.slug),
+    'case files come first in the order',
   );
 });
 
-test('every figure kind a featured project names is actually drawn', async () => {
+test('the six case files between them cover every layer', async () => {
+  const featured = (await loadContent()).filter((p) => p.featured);
+  for (const layer of LAYERS) assert.ok(featured.some((p) => p.layers.includes(layer)), `no case file in "${layer}"`);
+});
+
+test('every figure kind a case file names is actually drawn', async () => {
   const source = await readFile(path.join(ROOT, 'src', 'components', 'Figures.tsx'), 'utf8');
   for (const p of (await loadContent()).filter((x) => x.featured)) {
     assert.match(source, new RegExp(`\\b${p.specimen.kind}:\\s*\\w+`), `no drawing registered for kind "${p.specimen.kind}"`);
   }
   assert.ok(SPECIMEN_KINDS.includes('none'));
+});
+
+test('every principle’s evidence is quoted verbatim from that project’s content', async () => {
+  const bySlug = new Map((await loadContent()).map((p) => [p.slug, p]));
+  for (const principle of PRINCIPLES) {
+    if (!principle.evidence) {
+      assert.ok(principle.derived, `principle ${principle.n} has neither a quote nor a derived figure`);
+      continue;
+    }
+    const project = bySlug.get(principle.evidence.slug);
+    assert.ok(project, `principle ${principle.n} cites missing project "${principle.evidence.slug}"`);
+    const text = [project.summary, project.challenge, project.invariant, ...(project.decisions ?? [])].filter(Boolean).join('\n');
+    assert.ok(text.includes(principle.evidence.quote), `principle ${principle.n}: "${principle.evidence.quote}" is not in ${project.slug}.json`);
+  }
 });
 
 test('the data module has no second copy of the projects', async () => {
@@ -73,14 +101,19 @@ test('the data module has no second copy of the projects', async () => {
 test('the schema accepts a minimal project', () => {
   const project = validateProject(valid, 'demo.json');
   assert.equal(project.slug, 'demo');
-  assert.equal(project.stage, undefined);
+  assert.deepEqual(project.layers, ['software']);
+  assert.equal(project.invariant, undefined);
 });
 
-test('unknown keys, bad slugs, statuses, stages and links are hard errors', () => {
+test('unknown keys, bad slugs, statuses, layers and links are hard errors', () => {
   assert.throws(() => validateProject({ ...valid, tehc: [] }, 'demo.json'), ProjectSchemaError);
   assert.throws(() => validateProject({ ...valid, slug: 'Not A Slug' }, 'demo.json'), /must match/);
   assert.throws(() => validateProject({ ...valid, status: 'maybe' }, 'demo.json'), /shipped \| in-progress \| archived/);
-  assert.throws(() => validateProject({ ...valid, stage: 'cloud' }, 'demo.json'), /sense \| edge/);
+  assert.throws(() => validateProject({ ...valid, layers: ['cloud'] }, 'demo.json'), /machine \| infrastructure/);
+  assert.throws(() => validateProject({ ...valid, layers: [] }, 'demo.json'), /at least 1 entry/);
+  assert.throws(() => validateProject({ ...valid, layers: ['software', 'software'] }, 'demo.json'), /must not repeat/);
+  assert.throws(() => validateProject({ ...valid, layers: undefined }, 'demo.json'), /missing required key/);
+  assert.throws(() => validateProject({ ...valid, stage: 'edge' }, 'demo.json'), /unknown key/);
   assert.throws(() => validateProject({ ...valid, stack: [] }, 'demo.json'), /at least 1 entry/);
   assert.throws(() => validateProject({ ...valid, links: [{ label: 'G', href: 'ftp://x' }] }, 'demo.json'), /http\(s\) URL/);
   assert.throws(() => validateProject({ ...valid, year: 12 }, 'demo.json'), /year must be an integer/);

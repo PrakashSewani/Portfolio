@@ -13,9 +13,11 @@
       "href": "https://github.com/PrakashSewani/works-after-reinstall"
     }
   ],
+  "layers": [
+    "machine"
+  ],
   "kicker": "Developer tooling / machine setup",
   "year": 2026,
-  "stage": "edge",
   "evidence": [
     {
       "label": "License",
@@ -24,5 +26,5 @@
   ],
   "ownership": "Designed and built the setup automation end to end.",
   "featured": false,
-  "order": 18
+  "order": 12
 }
