@@ -16,6 +16,7 @@
   ],
   "kicker": "Browser extension / link extraction",
   "year": 2026,
+  "stage": "screen",
   "challenge": "Put the magnet and .torrent controls into a search result where those links do not exist yet — with no server, no account and no visit to each torrent's own page.",
   "decisions": [
     "Resolve each row's links in the background and cache the answers for the list",

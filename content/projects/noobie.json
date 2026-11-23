@@ -16,6 +16,7 @@
   ],
   "kicker": "Browser extension / web safety",
   "year": 2026,
+  "stage": "screen",
   "evidence": [
     {
       "label": "License",

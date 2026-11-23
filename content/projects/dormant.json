@@ -20,6 +20,7 @@
   ],
   "kicker": "macOS utility / developer workflow",
   "year": 2026,
+  "stage": "edge",
   "challenge": "Free up a project's disk space without ever risking the repository behind it — every byte removed has to be confidently regenerable, and every restore has to be verifiable.",
   "decisions": [
     "Classify before deleting: nothing goes unless it is confidently regenerable",
@@ -69,5 +70,5 @@
     ]
   },
   "featured": false,
-  "order": 5
+  "order": 10
 }

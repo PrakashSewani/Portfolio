@@ -16,6 +16,7 @@
   ],
   "kicker": "Developer tooling / secret protection",
   "year": 2026,
+  "stage": "gateway",
   "challenge": "Keep a live API key, wallet address or seed phrase out of the stream while you still see it locally — and do it without adding stream delay.",
   "decisions": [
     "Blur rectangles over exact screen regions: the local socket carries coordinates and rule ids, never secret text",
@@ -64,6 +65,6 @@
       }
     ]
   },
-  "featured": false,
-  "order": 11
+  "featured": true,
+  "order": 4
 }

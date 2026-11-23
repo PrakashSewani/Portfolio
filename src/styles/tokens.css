@@ -1,0 +1,65 @@
+/*
+ * Design tokens — the whole visual system lives in this file.
+ *
+ * Two schemes, one token map. Dark is the default; light ("paper") is a toggle. scripts/check-tokens.mjs
+ * reads this file and fails the build if a declared text pair drops below WCAG AA in either scheme.
+ *
+ * One accent (phosphor amber). --ok and --bad exist only to mean "link healthy" / "link down".
+ */
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0c0d0f;
+  --raised: #131519;
+  --inset: #090a0b;
+  --line: #22252a;
+  --line-strong: #363a41;
+  --ink: #ece8df;
+  --muted: #a09d95;
+  --faint: #8a877f;
+  --accent: #f5a524;
+  --accent-fill: #f5a524;
+  --on-accent: #17120a;
+  --ok: #5ec27f;
+  --bad: #ff7a6b;
+  --trace: #f5a524;
+  --grid: rgba(236, 232, 223, 0.07);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 24px 60px -30px rgba(0, 0, 0, 0.8);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f4f1ea;
+  --raised: #fbf9f4;
+  --inset: #ebe7de;
+  --line: #dcd6c9;
+  --line-strong: #b9b2a2;
+  --ink: #16140f;
+  --muted: #5b574e;
+  --faint: #6a6559;
+  --accent: #9a5700;
+  --accent-fill: #f5a524;
+  --on-accent: #17120a;
+  --ok: #1a6b38;
+  --bad: #b3261e;
+  --trace: #b86a00;
+  --grid: rgba(22, 20, 15, 0.09);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 24px 50px -32px rgba(60, 40, 0, 0.35);
+}
+
+:root {
+  --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --wrap: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --bar-h: 60px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 140ms;
+  --t: 220ms;
+}

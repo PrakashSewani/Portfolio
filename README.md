@@ -1,121 +1,87 @@
 # Prakash Sewani — Portfolio
 
-[prakashsewani.com](https://prakashsewani.com)
+[prakashsewani.com](https://prakashsewani.com) · **Software from the sensor to the screen.**
 
-Personal portfolio of Prakash Sewani, Senior Software Engineer. A single-page application built to
-the "spec sheet" design system in [`DESIGN.md`](./DESIGN.md): one token map, a drawn specimen plate
-per project, and content that renders at two densities (home summary and full case sheet) from the
-same files.
+A static React 19 + Vite site organised as a signal path: Sense → Edge → Gateway → Services → Screen.
+The hero is a live, deterministic telemetry simulation whose link drops and recovers with zero
+samples lost; the work section is six case files with drawn figures; the archive is every project,
+filterable. The design contract is [`DESIGN.md`](./DESIGN.md).
 
-## Tech stack
+## Stack
 
-- **React 19** + **TypeScript**
-- **Vite 6** build tooling
-- **Motion** (Framer Motion) for animations
-- **Lucide Icons**
-- Custom CSS with a token map (`src/lib/index.css`), no UI framework
-- **Cloudflare Pages** host: Pages Functions + Workers KV for the `/api/*` content API, the
-  KV-generated `/sitemap.xml`, and per-project head-tag injection
+- **React 19** + **TypeScript**, **Vite 6**. No UI framework, no animation library, no icon package
+  (the icons are inline SVG), so the only runtime dependency is React.
+- Plain CSS with a two-theme token map (`src/styles/tokens.css`).
+- Fonts are self-hosted through `@fontsource` (Instrument Serif, Geist, JetBrains Mono), with no CDN.
+- Hosted on **Cloudflare Pages** as a plain static site (`npm run build` → `dist/`).
 
-## Prerequisites
+## Run it
 
-**Node.js ≥ 22.18.** The site itself builds on older Node, but `npm test` runs the Functions
-straight from their TypeScript sources (`node --test`), and Node only strips TypeScript types from a
-`.ts` import unflagged from 22.18 — so that is the floor. `.nvmrc` and `engines` pin it for the
-build image.
+Node **≥ 22.18** (`.nvmrc` pins it; the tests import TypeScript sources directly).
 
 ```bash
 npm install
-npm run dev
+npm run dev      # http://localhost:3000
 ```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-## Scripts
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Vite dev server on port 3000 |
-| `npm run build` | Bakes the content snapshot (`prebuild`), then `vite build` into `dist/` |
-| `npm run preview` | Serves the built output |
-| `npm run lint` | `tsc --noEmit` — the type gate |
-| `npm test` | `node --test tests/*.test.mjs` — content contract, Functions routes, script exit codes |
-| `npm run check:tokens` | `scripts/check-design-tokens.mjs` — the WCAG AA / token-map gate |
-| `npm run snapshot` | Rebakes `public/api/projects.json` (deterministic; a rebuild leaves the tree clean) |
-| `node scripts/publish-projects.mjs` | Validates content and syncs it into KV (`--dry-run` and `--emit` need no credentials) |
+| `npm run dev` | Vite dev server |
+| `npm run build` | `vite build`, then `scripts/prerender.mjs` |
+| `npm run preview` | Serve the built `dist/` |
+| `npm run lint` | `tsc --noEmit` |
+| `npm test` | `node --test tests/*.test.mjs` (content contract, telemetry invariants) |
+| `npm run check:tokens` | WCAG AA contrast gate for both themes |
+| `npm run check` | lint + tokens + tests |
+| `npm run normalize` | Rewrite `content/projects/*.json` in canonical form |
+| `node scripts/brand-assets.mjs` | Regenerate favicons and the social card (needs Edge or Chrome) |
 
-## Project structure
+## Structure
 
 ```
-content/
-└── projects/                  # the single source of truth: one <slug>.json per project
-functions/                     # Cloudflare Pages Functions (thin adapters)
-├── api/[[route]].ts           #   /api/projects, /api/projects/<slug>, /api/projects.json
-├── projects/[slug].ts         #   /projects/<slug> — app shell + real title/OG/canonical
-└── sitemap.xml.ts             #   /sitemap.xml, generated from KV
-public/
-├── _routes.json               # functions include/exclude list (keeps the snapshot a static asset)
-└── api/projects.json          # the baked fallback snapshot (generated; committed byte-stable)
-scripts/
-├── load-content.mjs           # read + validate content/projects against the schema
-├── build-snapshot.mjs         # prebuild: content → public/api/projects.json
-├── publish-projects.mjs       # validate + sync KV (index + one key per project, deletes stale keys)
-└── check-design-tokens.mjs    # the contrast / banned-device gate
+content/projects/*.json     the single source of truth for every project
 src/
-├── App.tsx                    # layout, routing, scroll progress, command palette
-├── main.tsx                   # entry point
-├── vite-env.d.ts              # Vite client types (import.meta.glob)
-├── components/                # Navbar, HeroDashboard, Projects, SpecimenPlate, …
-├── pages/
-│   ├── Projects.tsx           # /projects — the ledger
-│   └── ProjectCase.tsx        # /projects/<slug> — one case study
-├── data/
-│   ├── navigation.ts          # the shared section-navigation contract
-│   └── portfolio.ts           # profile + the home cases, read from content/projects/*.json
-└── lib/
-    ├── index.css              # all styles (the token map DESIGN.md §2 defines)
-    ├── projects.js            # the content schema + browser loader (plain ESM)
-    ├── projects.d.ts          # its type declarations
-    ├── pages-api.ts           # the /api + sitemap + shell logic (unit-testable, no runtime)
-    └── router.tsx             # ~1 KB history router
-tests/                         # node --test suites
-wrangler.toml                  # the Pages project config + the PROJECTS KV binding
-DESIGN.md                      # the normative design contract (tokens, contrast, motion)
+  App.tsx, main.tsx
+  components/               StatusBar, Hero, TelemetryPanel, SignalPath, Work, Figures,
+                            Experience, Archive, Contact, Palette, Icons
+  pages/ProjectCase.tsx     /projects/<slug>
+  data/                     projects.ts (validated content), profile.ts (copy, signal-path stages)
+  lib/                      projects.js (+ .d.ts, the schema), telemetry.ts, theme.ts, router.tsx
+  styles/                   tokens.css, base.css, sections.css
+scripts/
+  prerender.mjs             post-build: per-project HTML (real title/OG/canonical) + sitemap.xml
+  check-tokens.mjs          contrast gate
+  load-content.mjs, normalize-content.mjs, brand-assets.mjs
+tests/                      content.test.mjs, telemetry.test.mjs
 ```
 
 ## Content model
 
-`content/projects/<slug>.json` is the only description of a project. The filename must equal the
-slug. Everything else reads it:
+`content/projects/<slug>.json` is the only description of a project; the filename must equal the slug.
+The schema (`src/lib/projects.js`) rejects unknown keys, so a typo fails the build.
 
-- the home page's selected work (`src/data/portfolio.ts` inlines the same files at build time),
-- the `/projects` ledger and `/projects/<slug>` case sheets (via KV, written by
-  `scripts/publish-projects.mjs`),
-- the baked fallback snapshot and the sitemap.
+- `stage`: where it sits on the signal path (`sense | edge | gateway | services | screen`). Required by the tests.
+- `featured: true`: shown as a case file on the home page. Exactly six are expected, each with
+  `kicker`, `challenge`, `decisions`, `evidence`, `ownership` and a `specimen.kind` that has a drawing
+  in `src/components/Figures.tsx`. Everything else lives in the archive and gets a lighter case page.
+- `order`: explicit ordering; then newest `year`, then title.
 
-**The home page shows only the projects marked `"featured": true`; `/projects` lists all of them.**
-Flag a project only when it carries the case-study keys (`challenge`, `decisions`, `specimen`) — the
-home page renders a flagged project as a full case block, so a thin file there renders an empty
-figure plate. If nothing is flagged, the home page falls back to the six newest by `order`.
+Adding a project is one file. The home page, archive, command palette, case pages, prerendered HTML and
+sitemap all read it.
 
-Every file is written in the schema's own key order and format
-(`node scripts/normalize-content.mjs`, `--check` reports drift) — a content file and its entry in the
-baked snapshot are byte-identical, and `tests/content.test.mjs` fails if one drifts off.
+## The hero's guarantee
 
-Adding a project is one file plus `node scripts/publish-projects.mjs`.
+`src/lib/telemetry.ts` is a pure simulation: every reading is a function of its sample index, an
+outage hides exactly the samples taken during it, and each one is back-filled in order when the link
+returns. `tests/telemetry.test.mjs` pins that nothing is ever lost, so the "0 lost" readout is a
+property of the model, not decoration. The feed is labelled as simulated on the page.
 
-## Icons
+## Deploy
 
-Favicons, PWA icons and the social preview image live in `public/`.
-
-- `favicon.ico` — multi-resolution ICO (16/32/48/256)
-- `favicon-16x16.png` / `favicon-32x32.png` — PNG favicons
-- `apple-touch-icon.png` — 180x180 for iOS home screen
-- `android-chrome-192x192.png` / `android-chrome-512x512.png` — PWA icons
-- `og-image.png` — 1200x630 social preview card
-
-These still bake the pre-spec-sheet palette; regenerating them for the current token map is
-explicitly out of scope for this pass (DESIGN.md §8).
+Cloudflare Pages, Git-integrated: build command `npm run build`, output directory `dist`, Node 22.18+.
+Unknown paths fall back to `index.html`; `/projects/<slug>` is served from its prerendered file.
+There is no server code and no KV binding; if an old `PROJECTS` KV namespace still exists in the
+Cloudflare dashboard it is unused and can be deleted.
 
 ## License
 

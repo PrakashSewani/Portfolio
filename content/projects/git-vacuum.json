@@ -16,6 +16,7 @@
   ],
   "kicker": "Developer tooling / GitHub hygiene CLI",
   "year": 2026,
+  "stage": "edge",
   "challenge": "Mirror every repository you own locally with no backend, while keeping behind, ahead and dirty state visible while the sync runs.",
   "decisions": [
     "Nine crates on hexagonal ports & adapters: service, app and TUI depend only on core traits",
@@ -68,6 +69,6 @@
       }
     ]
   },
-  "featured": false,
-  "order": 13
+  "featured": true,
+  "order": 2
 }
