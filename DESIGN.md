@@ -1,85 +1,103 @@
-# DESIGN.md — Sensor to Screen
+# DESIGN.md — Cold Start
 
 The design contract for prakashsewani.com. `src/styles/tokens.css` is normative for colour;
 `scripts/check-tokens.mjs` enforces it. Anything in the stylesheets that contradicts this file is a bug.
 
 ## Idea
 
-The page **is** a signal path. A reading is only useful if it survives the trip from the sensor to
-the screen, so the site is organised in those hops (Sense → Edge → Gateway → Services → Screen), and
-the first thing a visitor sees is the claim being demonstrated rather than described: live telemetry
-whose link drops, buffers at the sensor, and back-fills with nothing lost.
+**The site boots like a system.** The hero is a cross-section of five layers, bottom to top:
+Machine, Infrastructure, Software, Intelligence, Interface. On load, power comes up from the bottom:
+each plane draws in, its callout appears, and a pulse climbs the bus through their centres. The name
+settles from condensed-thin to expanded-bold as the stack comes online. Under it, the **cold-start
+readout** shows how long this page actually took to come up, measured in the visitor's browser.
 
-Look and feel: an instrument panel, not a poster. Restrained graphite (or warm paper), hairlines,
-mono metadata, one serif for personality, one amber accent. Calm over loud.
+**The narrative spine is invariants.** Every good system is built around one rule it must never
+break. The Rules section states mine; every case file leads with the project's own invariant, quoted
+from its content file. That is the thing to remember about this engineer: he decides what must never
+happen, then builds so it cannot.
+
+**The mark** is five stacked planes; lit planes are the layers a project works in. It is the logo,
+the depth gauge in the Layers section, the tag on every project and the social card. The favicon is
+the same idea redrawn for small sizes (`scripts/brand-assets.mjs`): a solid top plane over the front
+edges of the planes beneath, three layers at tab sizes and all five at app-icon sizes, because five
+outlines blur into one block at 16 px.
+
+**The header** carries the name and the six sections, nothing else. The palette (Ctrl/⌘ K or `/`)
+and the project index are there for whoever finds them; neither is advertised in the bar.
+
+Look and feel: an engineering lab at night. Carbon black, bone-white type, graphite hairlines, one
+signal colour. Wide, industrial display type; mono for anything a machine would print.
 
 ## Principles
 
-1. **Demonstrate, don't assert.** The hero is a working model with a test behind it. Figures are drawn
-   from how each tool actually works and say they are illustrations.
-2. **One accent.** Phosphor amber, for interaction, emphasis and the trace. `--ok` and `--bad` exist
-   only to mean "link healthy" and "link down"; they are never decoration.
-3. **Evidence before adjectives.** A case file leads with the problem, the decisions and the evidence.
-   No invented metrics: every number comes from a repo or a content file.
-4. **Two reading paths.** The 30-second skim (who, what, proof, contact) and the deep path (case
-   pages, the archive, the command palette) read the same content at different densities.
-5. **Motion explains.** Transform and opacity only, 140–600 ms, and `prefers-reduced-motion` is
-   honoured everywhere (the hero renders one static frame mid-outage).
-6. **Contrast is a test.** AA is checked by script in both themes, not eyeballed.
+1. **Colour means state (ISA-101).** The interface is greyscale. `--signal` means energised, active
+   or focused; `--alarm` means abnormal and appears only inside drawings of abnormal states. Neither
+   is decoration, and nothing depends on colour alone (status also has a shape and a word).
+2. **Nothing fake.** No simulated data, no invented numbers. The cold-start readout is the browser's
+   own Navigation and Paint Timing; every count (projects per layer, per status, per language) is
+   derived from `content/projects`; principle quotes are checked verbatim against their content
+   file by a test; the footer's script weight is measured at build. Figures say they are illustrations.
+3. **Evidence before adjectives.** A case file runs problem → invariant → approach → facts.
+4. **Two reading paths.** The 30-second skim (hero, rules, case titles, contact) and the deep path
+   (case pages, the index, the palette) read the same content at different densities.
+5. **Motion explains.** Transform and opacity, plus three one-time effects: the plane outlines
+   drawing, the bus growing, and the name's width/weight settling. The idle pulse pauses off-screen.
+   `prefers-reduced-motion` gets the finished frame, no pulse, no smooth scroll, no view transitions.
+6. **Sharp, not soft.** Radius 0–2 px. Shared hairline grids (spec sheets, ledgers) instead of
+   floating cards. No glassmorphism, no decorative gradients, no glow.
 
-## Tokens
+## Tokens (dark only)
 
-Defined in `src/styles/tokens.css`, two schemes (dark default, light "paper"), switched by
-`data-theme` on `<html>` before first paint.
+| Token | Value | Role |
+| --- | --- | --- |
+| `--bg` | `#0b0c0d` | page |
+| `--raised` | `#121415` | palette, hovered rows and tiles |
+| `--inset` | `#080909` | figures |
+| `--plane` | `#0e1011` | stack planes, figure boxes |
+| `--line` / `--line-strong` | `#222527` / `#383c3f` | hairlines |
+| `--ink` | `#ecebe6` | text |
+| `--muted` | `#a7a6a0` | secondary text |
+| `--faint` | `#8e8d87` | mono metadata (≥ 4.5:1 everywhere) |
+| `--signal` / `--on-signal` | `#c8f25c` / `#0b0c0d` | energised, active, focus; text on a signal fill |
+| `--alarm` | `#ff8466` | abnormal state inside figures only |
 
-| Token | Dark | Light | Role |
-| --- | --- | --- | --- |
-| `--bg` | `#0c0d0f` | `#f4f1ea` | page |
-| `--raised` | `#131519` | `#fbf9f4` | cards, palette |
-| `--inset` | `#090a0b` | `#ebe7de` | figures, telemetry panel |
-| `--ink` | `#ece8df` | `#16140f` | text |
-| `--muted` | `#a09d95` | `#5b574e` | secondary text |
-| `--faint` | `#8a877f` | `#6a6559` | mono metadata (still ≥ 4.5:1) |
-| `--accent` | `#f5a524` | `#9a5700` | links, numbers, emphasis (text) |
-| `--accent-fill` / `--on-accent` | `#f5a524` / `#17120a` | same | buttons, active chips |
-| `--trace` | `#f5a524` | `#b86a00` | signal line, progress bar, packet (graphical, ≥ 3:1) |
-| `--ok` / `--bad` | `#5ec27f` / `#ff7a6b` | `#1a6b38` / `#b3261e` | link up / link down only |
-
-Run `npm run check:tokens` for the full pair table.
+`npm run check:tokens` prints every pair and fails below AA.
 
 ## Type
 
-- **Instrument Serif** (display, italic for emphasis words): headings.
-- **Geist** (variable): body.
-- **JetBrains Mono** (variable): telemetry, metadata, labels, the palette. Ligatures off, so `--` stays `--`.
+- **Archivo Variable** (weight 100–900, width 62–125 %): everything that is not mono. Display at
+  `font-stretch: 118–125%`, uppercase for the name, layer names and the stack callouts; prose at 100 %.
+- **IBM Plex Mono** 400/500: labels, metadata, readouts, the palette. Ligatures off.
 
-Labels are 11–12 px mono, uppercase, letter-spaced, and short. Body is 16 px at 1.6; prose is capped
-near 60–65 characters.
+Labels are 11–12 px mono, uppercase, letter-spaced. Body is 17 px at 1.6; prose caps near 60–65 ch.
 
 ## Signature elements
 
-- **Telemetry panel** (`TelemetryPanel.tsx` + `lib/telemetry.ts`): four channels, 60 Hz, 7 s window.
-  Cycle: 8 s live, 3 s outage (hatched gap, sensor buffering), 1.4 s back-fill (green). The HUD counts
-  are computed from the same delivery function the canvas uses.
-- **Signal path** (`SignalPath.tsx`): five stages as an ARIA tablist (arrow keys, Home/End); a packet
-  slides between them. Each stage lists the projects built there.
-- **Case files** (`Work.tsx`, `Figures.tsx`): problem → decisions → evidence → links beside a drawn SVG
-  figure. A figure is keyed by `specimen.kind`; projects without one get a terminal card built from
-  their own stack.
-- **Archive** (`Archive.tsx`): a ledger filterable by stage, language and status, searchable, sortable.
-- **Palette** (`Palette.tsx`): Ctrl/⌘ + K or `/`. Accepts commands (`whoami`, `contact`, `theme light`,
-  `projects --lang rust --status shipped`, `goto work`) as well as plain search.
+- **Stack diagram** (`home/StackDiagram.tsx`): five planes drawn flat in a 220-unit space and placed
+  with one matrix each, so patterns and glyphs lie on the plane. The SVG is decorative; the five
+  callout buttons beside it are the real control (hover/focus lifts a plane, click jumps to the layer).
+- **Cold-start readout** (`home/BootReadout.tsx`, `lib/boot.ts`): server response, first paint, DOM
+  ready, interactive. Unknown values stay an em dash. `tests/boot.test.mjs` pins the mapping.
+- **Rules** (`home/Principles.tsx`, `data/principles.ts`): each rule links to a verbatim quote or a
+  derived figure.
+- **Layers** (`home/Layers.tsx`): read from the surface down, with a sticky depth gauge (the mark).
+- **Case files** (`home/CaseFiles.tsx`, `Figures.tsx`): text column plus a sticky drawn figure.
+- **Bench** (`home/Bench.tsx`): a ruled spec-sheet grid, filterable by layer and status.
+- **Index** (`pages/ProjectIndex.tsx`) and **case pages** (`pages/ProjectCase.tsx`). Missing content
+  fields render nothing in production and a dashed "content slot" in dev.
+- **Palette** (Ctrl/⌘ K or `/`, deliberately unadvertised): search plus a few typed commands; lazy-loaded.
+- **View transitions** between pages; the project title morphs.
 
 ## Banned
 
-- A second accent, gradients as decoration, glow beyond the signal packet.
+- A second accent colour; colour as decoration; gradients other than masks; glow.
 - Hard offset shadows (the token script fails on them).
-- Animation of anything but `opacity` and `transform` (plus the canvas).
+- Fake terminals, simulated metrics, progress bars for skills, logo walls.
 - Text that depends on colour alone; `--faint` or `--muted` below AA.
-- Invented numbers, logos or testimonials.
+- Invented numbers, outcomes, clients or testimonials.
 
 ## Quality bars
 
-- Lighthouse (mobile, simulated throttling): performance ≥ 95; accessibility, best practices and SEO 100.
+- Lighthouse (mobile, simulated throttling): performance ≥ 95; accessibility, best practices, SEO 100.
 - Keyboard complete; visible focus; skip link; every figure has an accessible name.
-- One runtime dependency (React). `vite build` warns above 300 kB for a single chunk.
+- One runtime dependency (React) plus self-hosted fonts. `vite build` warns above 300 kB for a chunk.

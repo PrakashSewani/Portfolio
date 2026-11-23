@@ -1,58 +1,46 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prakash Sewani — Senior Software Engineer, sensor to screen</title>
-    <meta name="description" content="Prakash Sewani is a senior software engineer building software from the sensor to the screen: edge and native tools in Rust and Go, gateways and APIs, and the interfaces on top." />
+    <title>Prakash Sewani — Software engineer, every layer of the system</title>
+    <meta name="description" content="Prakash Sewani is a software engineer who builds systems through every layer: machines and industrial automation, infrastructure, backend services, AI, and the interfaces on top." />
     <meta name="author" content="Prakash Sewani" />
-    <meta name="theme-color" content="#0c0d0f" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0c0d" />
+    <meta name="color-scheme" content="dark" />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://prakashsewani.com/" />
-    <meta property="og:title" content="Prakash Sewani — Senior Software Engineer, sensor to screen" />
-    <meta property="og:description" content="Edge and native tools, gateways and APIs, and the interfaces on top. Case files, an archive of 23 projects, and a live telemetry demo." />
+    <meta property="og:title" content="Prakash Sewani — Software engineer, every layer of the system" />
+    <meta property="og:description" content="Six case files, each built around one rule it never breaks, and a bench of everything else. Machines, infrastructure, software, intelligence and interfaces." />
     <meta property="og:image" content="https://prakashsewani.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Prakash Sewani — Software from the sensor to the screen" />
+    <meta property="og:image:alt" content="Prakash Sewani — five stacked layers: machine, infrastructure, software, intelligence, interface" />
     <meta property="og:site_name" content="Prakash Sewani" />
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Prakash Sewani — Senior Software Engineer, sensor to screen" />
-    <meta name="twitter:description" content="Edge and native tools, gateways and APIs, and the interfaces on top. Case files, an archive of 23 projects, and a live telemetry demo." />
+    <meta name="twitter:title" content="Prakash Sewani — Software engineer, every layer of the system" />
+    <meta name="twitter:description" content="Six case files, each built around one rule it never breaks, and a bench of everything else. Machines, infrastructure, software, intelligence and interfaces." />
     <meta name="twitter:image" content="https://prakashsewani.com/og-image.png" />
-    <meta name="twitter:image:alt" content="Prakash Sewani — Software from the sensor to the screen" />
+    <meta name="twitter:image:alt" content="Prakash Sewani — five stacked layers: machine, infrastructure, software, intelligence, interface" />
     <meta name="twitter:creator" content="@PrakashSewani" />
 
     <link rel="canonical" href="https://prakashsewani.com/" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href="/favicon.ico?v=3" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
+    <link rel="manifest" href="/site.webmanifest?v=3" />
 
-    <!-- Apply the stored or system theme before first paint, so there is no flash. -->
+    <!-- Dark only. Paint the page colour before the stylesheet arrives, and let CSS know JS is on. -->
     <style>
-      html { background: #0c0d0f; }
-      html[data-theme='light'] { background: #f4f1ea; }
+      html { background: #0b0c0d; color: #ecebe6; }
     </style>
     <script>
-      (function () {
-        var d = document.documentElement;
-        d.classList.add('js');
-        var t;
-        try { t = localStorage.getItem('ps-theme'); } catch (e) {}
-        if (t !== 'light' && t !== 'dark') {
-          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        }
-        d.setAttribute('data-theme', t);
-        var m = document.querySelector('meta[name="theme-color"]');
-        if (m) m.setAttribute('content', t === 'light' ? '#f4f1ea' : '#0c0d0f');
-      })();
+      document.documentElement.classList.add('js');
     </script>
 
     <script type="application/ld+json">
@@ -62,12 +50,35 @@
         "name": "Prakash Sewani",
         "jobTitle": "Senior Software Engineer",
         "url": "https://prakashsewani.com",
+        "email": "mailto:contact@prakashsewani.com",
         "sameAs": [
           "https://www.linkedin.com/in/prakash-s-2a389721a/",
           "https://github.com/PrakashSewani"
         ],
-        "knowsAbout": ["Rust", "Go", "TypeScript", ".NET", "Edge computing", "Real-time systems", "Microfrontends", "GraphQL"],
+        "knowsAbout": [
+          "Software engineering",
+          "System architecture",
+          "Backend engineering",
+          "Python",
+          "C#",
+          ".NET",
+          "React",
+          "TypeScript",
+          "Node.js",
+          "Redis",
+          "Docker",
+          "Linux",
+          "Industrial automation",
+          "Modbus",
+          "IoT",
+          "Artificial intelligence",
+          "LLM infrastructure",
+          "Developer tools",
+          "Performance optimization",
+          "System integration"
+        ],
         "worksFor": { "@type": "Organization", "name": "Wonderbiz Technologies" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Mumbai" },
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Kalyan",
@@ -80,15 +91,15 @@
   <body>
     <div id="root">
       <noscript>
-        <main style="max-width: 640px; margin: 0 auto; padding: 96px 24px; font-family: system-ui, sans-serif; color: #ece8df; line-height: 1.6">
+        <main style="max-width: 640px; margin: 0 auto; padding: 96px 24px; font-family: system-ui, sans-serif; color: #ecebe6; line-height: 1.6">
           <h1>Prakash Sewani</h1>
-          <p>Senior Software Engineer. Software from the sensor to the screen: edge and native tools in Rust and Go, gateways and APIs, and the interfaces on top.</p>
+          <p>Software engineer. I build systems through every layer: the machines and infrastructure underneath, the services and AI in the middle, and the interfaces people actually touch.</p>
+          <p><a style="color: #c8f25c" href="/projects">Every project</a></p>
           <p>
-            <a style="color: #f5a524" href="https://github.com/PrakashSewani">GitHub</a> ·
-            <a style="color: #f5a524" href="https://www.linkedin.com/in/prakash-s-2a389721a/">LinkedIn</a> ·
-            <a style="color: #f5a524" href="mailto:contact@prakashsewani.com">contact@prakashsewani.com</a>
+            <a style="color: #c8f25c" href="https://github.com/PrakashSewani">GitHub</a> ·
+            <a style="color: #c8f25c" href="https://www.linkedin.com/in/prakash-s-2a389721a/">LinkedIn</a> ·
+            <a style="color: #c8f25c" href="mailto:contact@prakashsewani.com">contact@prakashsewani.com</a>
           </p>
-          <p>This site is a React app; enable JavaScript to see the case files and the live telemetry demo.</p>
         </main>
       </noscript>
     </div>

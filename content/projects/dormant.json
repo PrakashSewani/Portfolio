@@ -18,9 +18,12 @@
       "href": "https://dormant.prakashsewani.com/"
     }
   ],
+  "layers": [
+    "machine"
+  ],
   "kicker": "macOS utility / developer workflow",
   "year": 2026,
-  "stage": "edge",
+  "invariant": "Nothing is deleted unless it is confidently regenerable.",
   "challenge": "Free up a project's disk space without ever risking the repository behind it — every byte removed has to be confidently regenerable, and every restore has to be verifiable.",
   "decisions": [
     "Classify before deleting: nothing goes unless it is confidently regenerable",
@@ -70,5 +73,5 @@
     ]
   },
   "featured": false,
-  "order": 10
+  "order": 8
 }

@@ -13,9 +13,11 @@
       "href": "https://github.com/PrakashSewani/meant"
     }
   ],
+  "layers": [
+    "interface"
+  ],
   "kicker": "Product engineering / writing tool",
   "year": 2026,
-  "stage": "screen",
   "evidence": [
     {
       "label": "License",
@@ -24,5 +26,5 @@
   ],
   "ownership": "Designed and built the rewrite flow and the extension end to end.",
   "featured": false,
-  "order": 16
+  "order": 18
 }

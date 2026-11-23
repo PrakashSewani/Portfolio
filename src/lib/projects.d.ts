@@ -3,8 +3,8 @@
 export declare const PROJECT_STATUSES: readonly ['shipped', 'in-progress', 'archived'];
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 
-export declare const STAGES: readonly ['sense', 'edge', 'gateway', 'services', 'screen'];
-export type StageId = (typeof STAGES)[number];
+export declare const LAYERS: readonly ['machine', 'infrastructure', 'software', 'intelligence', 'interface'];
+export type LayerId = (typeof LAYERS)[number];
 
 export declare const SPECIMEN_KINDS: readonly [
   'inspector',
@@ -53,9 +53,12 @@ export interface Project {
   status: ProjectStatus;
   stack: string[];
   links: ProjectLink[];
+  /** At least one; the first is the primary layer. */
+  layers: LayerId[];
   kicker?: string;
   year?: number;
-  stage?: StageId;
+  /** The one rule the system never breaks, in the project's own terms. */
+  invariant?: string;
   challenge?: string;
   decisions?: string[];
   evidence?: ProjectEvidence[];

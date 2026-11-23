@@ -7,7 +7,9 @@
     "TypeScript",
     "Docker",
     "Multi-language runtimes",
-    "Java"
+    "Java",
+    "C#",
+    "Python"
   ],
   "links": [
     {
@@ -15,9 +17,12 @@
       "href": "https://github.com/PrakashSewani/algorithm-desk"
     }
   ],
+  "layers": [
+    "infrastructure",
+    "software"
+  ],
   "kicker": "Developer tooling / practice environment",
   "year": 2026,
-  "stage": "services",
   "evidence": [
     {
       "label": "License",
@@ -26,5 +31,5 @@
   ],
   "ownership": "Designed and built the runner and the workspace UI end to end.",
   "featured": false,
-  "order": 19
+  "order": 20
 }

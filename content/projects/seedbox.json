@@ -14,10 +14,12 @@
       "href": "https://github.com/PrakashSewani/personal-seedbox"
     }
   ],
+  "layers": [
+    "infrastructure"
+  ],
   "kicker": "Infrastructure / self-hosted services",
   "year": 2026,
-  "stage": "edge",
   "ownership": "Designed and built the server setup and service stack end to end.",
   "featured": false,
-  "order": 23
+  "order": 14
 }

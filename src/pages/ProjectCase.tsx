@@ -1,118 +1,177 @@
-import { useEffect } from 'react';
-import { CaseFigure } from '../components/Figures';
+import type { ReactNode } from 'react';
+import { CaseFigure, hasFigure } from '../components/Figures';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from '../components/Icons';
-import { SIGNAL_PATH, profile } from '../data/profile';
-import { bySlug, projects } from '../data/projects';
+import LayerMark, { layerNames } from '../components/LayerMark';
+import { layerById } from '../data/layers';
+import { profile } from '../data/profile';
+import { STATUS_LABEL, bySlug, caseNumber, featured, projects, type Project } from '../data/projects';
+import { useDocumentMeta } from '../lib/meta';
+import NotFound from './NotFound';
 
-/** Keep the document head honest on client-side navigation (the prerender does it for first loads). */
-function useHead(title: string, description: string, path: string) {
-  useEffect(() => {
-    const prev = document.title;
-    const set = (sel: string, attr: string, value: string) => document.querySelector(sel)?.setAttribute(attr, value);
-    document.title = title;
-    set('meta[name="description"]', 'content', description);
-    set('meta[property="og:title"]', 'content', title);
-    set('meta[property="og:description"]', 'content', description);
-    set('meta[property="og:url"]', 'content', `https://prakashsewani.com${path}`);
-    set('link[rel="canonical"]', 'href', `https://prakashsewani.com${path}`);
-    return () => {
-      document.title = prev;
-    };
-  }, [title, description, path]);
+/**
+ * In dev builds only: a dashed box where a content field would render, naming the field to add.
+ * Production never shows it, so a thin project page is simply shorter, never visibly unfinished.
+ */
+function Slot({ field, slug, what }: { field: string; slug: string; what: string }) {
+  if (!import.meta.env.DEV) return null;
+  return (
+    <div className="slot" role="note">
+      <span className="label">Content slot · dev only</span>
+      <p>
+        Add <code>{field}</code> to <code>content/projects/{slug}.json</code> for {what}.
+      </p>
+    </div>
+  );
+}
+
+function Section({ n, title, children }: { n: string; title: string; children: ReactNode }) {
+  return (
+    <section className="cp-section reveal">
+      <h2 className="cp-label">
+        <span>{n}</span>
+        {title}
+      </h2>
+      <div className="cp-body">{children}</div>
+    </section>
+  );
+}
+
+/** Previous/next stay within the case files for a case, and walk the whole list otherwise. */
+function neighbours(project: Project): [Project, Project] {
+  const list = project.featured ? featured : projects;
+  const i = list.indexOf(project);
+  return [list[(i - 1 + list.length) % list.length], list[(i + 1) % list.length]];
 }
 
 export default function ProjectCase({ slug }: { slug: string }) {
   const project = bySlug.get(slug);
-  useHead(
-    project ? `${project.title} — case study | ${profile.name}` : `Not found | ${profile.name}`,
-    project ? project.summary : 'No such project.',
-    `/projects/${slug}`,
-  );
+  useDocumentMeta({
+    title: project ? `${project.title} — case study | ${profile.name}` : `No such project | ${profile.name}`,
+    description: project?.summary,
+    path: `/projects/${slug}`,
+    noindex: !project,
+  });
 
-  if (!project) {
-    return (
-      <section className="section wrap case-page">
-        <p className="sec-no">404 / No such project</p>
-        <h1 className="case-title">There is no project called “{slug}”.</h1>
-        <p className="lede">
-          <a href="/#archive" data-link>
-            Browse the archive
-          </a>
-          .
-        </p>
-      </section>
-    );
-  }
+  if (!project) return <NotFound path={`/projects/${slug}`} what="project" />;
 
-  const index = projects.findIndex((p) => p.slug === slug);
-  const prev = projects[(index - 1 + projects.length) % projects.length];
-  const next = projects[(index + 1) % projects.length];
-  const stage = SIGNAL_PATH.find((s) => s.id === project.stage);
+  const n = caseNumber(project);
+  const [prev, next] = neighbours(project);
+  const primary = layerById.get(project.layers[0]);
+  let section = 0;
+  const num = () => String(++section).padStart(2, '0');
 
   return (
-    <article className="section case-page">
+    <article className="page cp">
       <div className="wrap">
-        <a className="back" href="/#work" data-link>
-          <ArrowLeft size={14} /> All work
-        </a>
+        <nav className="cp-crumbs" aria-label="Breadcrumb">
+          <a href={project.featured ? '/#work' : '/#bench'} data-link>
+            <ArrowLeft size={14} /> {project.featured ? 'Case files' : 'Bench'}
+          </a>
+          <span aria-hidden="true">/</span>
+          <a href="/projects" data-link>
+            Index
+          </a>
+        </nav>
 
-        <header className="case-head">
-          <p className="case-meta">
-            {stage && <span>Stage {stage.n} · {stage.label}</span>}
-            <span className="case-status" data-status={project.status}>
-              {project.status.replace('-', ' ')}
-            </span>
+        <header className="cp-head">
+          <p className="cp-meta">
+            {n ? <span className="case-n">Case {n}</span> : <span className="case-n">{project.kicker?.split('/')[0]?.trim()}</span>}
+            <span className={`status status-${project.status}`}>{STATUS_LABEL[project.status]}</span>
             {project.year && <span>{project.year}</span>}
           </p>
-          <h1 className="case-title">{project.title}</h1>
+          <h1 className="cp-title" style={{ viewTransitionName: `title-${project.slug}` }}>
+            {project.title}
+          </h1>
           {project.kicker && <p className="case-kicker">{project.kicker}</p>}
-          <p className="lede">{project.summary}</p>
-          <div className="case-links">
-            {project.links.map((l, i) => (
-              <a key={l.href} className={`btn ${i === 0 ? 'btn-primary' : ''}`} href={l.href} target="_blank" rel="noreferrer">
-                {l.label} <ArrowUpRight size={16} />
-              </a>
-            ))}
-          </div>
+          <p className="cp-summary">{project.summary}</p>
+
+          <dl className="cp-strip">
+            <div>
+              <dt className="label">Layers</dt>
+              <dd className="cp-layers">
+                <LayerMark lit={project.layers} size={28} />
+                {layerNames(project.layers)}
+              </dd>
+            </div>
+            <div>
+              <dt className="label">Stack</dt>
+              <dd className="cp-stack">
+                {project.stack.map((s) => (
+                  <span key={s}>{s}</span>
+                ))}
+              </dd>
+            </div>
+            <div>
+              <dt className="label">Links</dt>
+              <dd className="cp-links">
+                {project.links.map((l) => (
+                  <a key={l.href} className="link" href={l.href} target="_blank" rel="noreferrer">
+                    {l.label} <ArrowUpRight />
+                  </a>
+                ))}
+              </dd>
+            </div>
+          </dl>
         </header>
 
-        <div className="case-body">
-          <div className="case-main">
-            {project.challenge && (
-              <section className="case-section">
-                <span className="label">The problem</span>
-                <p className="case-large">{project.challenge}</p>
-              </section>
-            )}
-            {project.decisions && (
-              <section className="case-section">
-                <span className="label">Decisions</span>
-                <ol className="decisions">
-                  {project.decisions.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ol>
-              </section>
-            )}
-            {project.ownership && (
-              <section className="case-section">
-                <span className="label">My part</span>
-                <p>{project.ownership}</p>
-              </section>
-            )}
-          </div>
+        <div className="cp-sections">
+          {project.challenge ? (
+            <Section n={num()} title="Problem">
+              <p className="cp-lead">{project.challenge}</p>
+            </Section>
+          ) : (
+            <Slot field="challenge" slug={project.slug} what="the problem this project solves" />
+          )}
 
-          <aside className="case-aside">
-            <CaseFigure project={project} />
-            {project.specimen?.callouts && (
-              <ol className="callouts">
-                {project.specimen.callouts.map((c) => (
-                  <li key={c.n}>{c.text}</li>
+          {project.invariant ? (
+            <Section n={num()} title="Invariant">
+              <blockquote className="invariant invariant-lg">
+                <p className="invariant-text">{project.invariant}</p>
+              </blockquote>
+            </Section>
+          ) : (
+            <Slot field="invariant" slug={project.slug} what="the one rule the system never breaks" />
+          )}
+
+          {project.decisions ? (
+            <Section n={num()} title="Approach">
+              <ol className="decisions decisions-lg">
+                {project.decisions.map((d, i) => (
+                  <li key={d}>
+                    <span className="decision-n">{String(i + 1).padStart(2, '0')}</span>
+                    <span>{d}</span>
+                  </li>
                 ))}
               </ol>
-            )}
-            {project.evidence && (
-              <dl className="evidence">
+            </Section>
+          ) : (
+            <Slot field="decisions" slug={project.slug} what="the approach and the key technical decisions" />
+          )}
+
+          {hasFigure(project) && project.specimen ? (
+            <Section n={num()} title="How it works">
+              <figure className="cp-figure">
+                <CaseFigure project={project} />
+                <figcaption className="figure-caption">{project.specimen.caption}</figcaption>
+              </figure>
+              {project.specimen.callouts && (
+                <ol className="callouts">
+                  {project.specimen.callouts.map((c) => (
+                    <li key={c.n}>
+                      <span className="decision-n">{String(c.n).padStart(2, '0')}</span>
+                      <span>{c.text}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </Section>
+          ) : (
+            <Slot field="specimen (with a drawing in Figures.tsx)" slug={project.slug} what="a drawn figure of how it works" />
+          )}
+
+          {project.evidence ? (
+            <Section n={num()} title="Facts">
+              <dl className="facts facts-lg">
                 {project.evidence.map((e) => (
                   <div key={e.label}>
                     <dt>{e.label}</dt>
@@ -120,25 +179,42 @@ export default function ProjectCase({ slug }: { slug: string }) {
                   </div>
                 ))}
               </dl>
-            )}
-            <ul className="chips" aria-label="Stack">
-              {project.stack.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-          </aside>
+            </Section>
+          ) : (
+            <Slot field="evidence" slug={project.slug} what="verifiable facts (releases, licence, distribution, measured outcomes)" />
+          )}
+
+          {project.ownership && (
+            <Section n={num()} title="My part">
+              <p className="cp-lead">{project.ownership}</p>
+            </Section>
+          )}
+
+          {primary && (
+            <Section n={num()} title="Where it sits">
+              <p className="prose muted">
+                Primary layer: <strong className="cp-strong">{primary.name}</strong>, {primary.line.toLowerCase()}.{' '}
+                <a className="inline-link" href={`/#layer-${primary.id}`} data-link>
+                  See the layer
+                </a>
+                .
+              </p>
+            </Section>
+          )}
         </div>
 
-        <nav className="case-nav" aria-label="More projects">
-          <a href={`/projects/${prev.slug}`} data-link>
-            <span className="label">Previous</span>
-            <strong>{prev.title}</strong>
+        <nav className="cp-pager" aria-label={project.featured ? 'Other case files' : 'Other projects'}>
+          <a href={`/projects/${prev.slug}`} data-link className="cp-pager-prev">
+            <span className="label">
+              <ArrowLeft size={13} /> Previous
+            </span>
+            <span className="cp-pager-title">{prev.title}</span>
           </a>
-          <a href={`/projects/${next.slug}`} data-link>
-            <span className="label">Next</span>
-            <strong>
-              {next.title} <ArrowRight size={14} />
-            </strong>
+          <a href={`/projects/${next.slug}`} data-link className="cp-pager-next">
+            <span className="label">
+              Next <ArrowRight size={13} />
+            </span>
+            <span className="cp-pager-title">{next.title}</span>
           </a>
         </nav>
       </div>

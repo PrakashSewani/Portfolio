@@ -13,9 +13,11 @@
       "href": "https://github.com/PrakashSewani/DoneSignal"
     }
   ],
+  "layers": [
+    "machine"
+  ],
   "kicker": "Developer tooling / agent workflow",
   "year": 2026,
-  "stage": "sense",
   "evidence": [
     {
       "label": "Tagged releases",
@@ -28,5 +30,5 @@
   ],
   "ownership": "Designed and built the CLI and its audio engine end to end.",
   "featured": false,
-  "order": 15
+  "order": 11
 }

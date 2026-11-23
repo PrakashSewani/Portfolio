@@ -13,10 +13,12 @@
       "href": "https://github.com/PrakashSewani/dev-rig"
     }
   ],
+  "layers": [
+    "machine"
+  ],
   "kicker": "Developer tooling / environment portability",
   "year": 2026,
-  "stage": "edge",
   "ownership": "Designed and built the sync tool and its config model end to end.",
   "featured": false,
-  "order": 11
+  "order": 15
 }

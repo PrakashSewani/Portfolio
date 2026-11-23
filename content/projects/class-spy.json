@@ -19,9 +19,12 @@
       "href": "https://marketplace.visualstudio.com/items?itemName=PrakashSewani.class-spy"
     }
   ],
+  "layers": [
+    "interface"
+  ],
   "kicker": "Developer tooling / VS Code extension",
   "year": 2026,
-  "stage": "screen",
+  "invariant": "The hover card is the product, so its feedback has to stay immediate.",
   "challenge": "Resolve CSS and Tailwind utilities consistently across HTML, React, Vue, Svelte, Astro and Angular while keeping hover feedback immediate.",
   "decisions": [
     "Framework-aware parsing instead of one generic regex pass",
