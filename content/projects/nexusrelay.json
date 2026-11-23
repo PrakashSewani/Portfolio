@@ -17,6 +17,7 @@
   ],
   "kicker": "Infrastructure / self-hosted AI gateway",
   "year": 2026,
+  "stage": "gateway",
   "challenge": "Give applications one stable OpenAI-compatible API while provider credentials, routing, budgets, rate limits and audit history live in one place.",
   "decisions": [
     "Normalize every provider behind an adapter; clients only ever see a gateway model alias",
@@ -66,6 +67,6 @@
       }
     ]
   },
-  "featured": false,
-  "order": 7
+  "featured": true,
+  "order": 3
 }

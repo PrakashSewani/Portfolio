@@ -17,6 +17,7 @@
   ],
   "kicker": "Hackathon build / code intelligence",
   "year": 2026,
+  "stage": "services",
   "challenge": "Cut repository onboarding and auditing from days to seconds by running a squad of specialists in parallel instead of one model reading the codebase in sequence.",
   "decisions": [
     "Clone, parse and index once into a NetworkX knowledge graph that every agent shares",
@@ -66,5 +67,5 @@
     ]
   },
   "featured": false,
-  "order": 12
+  "order": 14
 }

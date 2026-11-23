@@ -16,7 +16,8 @@
   ],
   "kicker": "Product engineering / organisational graph",
   "year": 2026,
+  "stage": "services",
   "ownership": "Designed and built the graph model and the platform shell end to end.",
   "featured": false,
-  "order": 9
+  "order": 12
 }

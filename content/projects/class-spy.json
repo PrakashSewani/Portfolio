@@ -21,6 +21,7 @@
   ],
   "kicker": "Developer tooling / VS Code extension",
   "year": 2026,
+  "stage": "screen",
   "challenge": "Resolve CSS and Tailwind utilities consistently across HTML, React, Vue, Svelte, Astro and Angular while keeping hover feedback immediate.",
   "decisions": [
     "Framework-aware parsing instead of one generic regex pass",
@@ -57,5 +58,5 @@
     ]
   },
   "featured": true,
-  "order": 1
+  "order": 6
 }

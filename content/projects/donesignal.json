@@ -15,6 +15,7 @@
   ],
   "kicker": "Developer tooling / agent workflow",
   "year": 2026,
+  "stage": "sense",
   "evidence": [
     {
       "label": "Tagged releases",
@@ -27,5 +28,5 @@
   ],
   "ownership": "Designed and built the CLI and its audio engine end to end.",
   "featured": false,
-  "order": 14
+  "order": 15
 }

@@ -1,25 +1,12 @@
 /**
- * Content contract tests — the schema every consumer agrees on.
- *
- * Run with:  npm test   (node --test, no test framework dependency)
+ * Content contract tests. Run with: npm test (node --test, no framework dependency).
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import {
-  validateProject,
-  validateProjectList,
-  validateLedgerRow,
-  validateLedgerList,
-  toLedger,
-  sortProjects,
-  SPECIMEN_KINDS,
-  ProjectSchemaError,
-} from '../src/lib/projects.js';
+import { validateProject, validateProjectList, sortProjects, STAGES, SPECIMEN_KINDS, ProjectSchemaError } from '../src/lib/projects.js';
 import { CONTENT_DIR, ROOT, loadContent } from '../scripts/load-content.mjs';
-
-const SNAPSHOT = path.join(ROOT, 'public', 'api', 'projects.json');
 
 const valid = {
   slug: 'demo',
@@ -30,139 +17,81 @@ const valid = {
   links: [{ label: 'GitHub', href: 'https://example.com/demo' }],
 };
 
-test('content/projects/*.json all validate', async () => {
-  const files = (await readdir(CONTENT_DIR)).filter((file) => file.endsWith('.json'));
+test('content/projects/*.json all validate, and each file is named after its slug', async () => {
+  const files = (await readdir(CONTENT_DIR)).filter((f) => f.endsWith('.json')).sort();
   const projects = await loadContent();
-  assert.equal(projects.length, files.length, 'every content file must load');
-  for (const project of projects) {
-    assert.match(project.slug, /^[a-z0-9-]+$/);
-    assert.ok(project.summary.length > 0);
-    assert.ok(project.stack.length > 0);
-    assert.ok(project.links.length > 0);
-  }
+  assert.equal(projects.length, files.length);
+  assert.deepEqual(files.map((f) => f.replace(/\.json$/, '')), projects.map((p) => p.slug).sort());
 });
 
-test('every project file is named after its slug', async () => {
-  const projects = await loadContent();
-  const files = (await readdir(CONTENT_DIR)).filter((file) => file.endsWith('.json')).sort();
-  assert.deepEqual(files.map((file) => file.replace(/\.json$/, '')), projects.map((project) => project.slug).sort());
-});
-
-test('every content file is written in the schema’s canonical form', async () => {
-  // One format for the whole set: the schema's key order, and the bytes
-  // `scripts/build-snapshot.mjs` would emit — so a content file and its snapshot entry are
-  // byte-identical. `node scripts/normalize-content.mjs` rewrites them that way.
-  const files = (await readdir(CONTENT_DIR)).filter((file) => file.endsWith('.json')).sort();
+test('every content file is in the schema’s canonical form', async () => {
+  const files = (await readdir(CONTENT_DIR)).filter((f) => f.endsWith('.json')).sort();
   for (const file of files) {
     const source = `content/projects/${file}`;
     const text = await readFile(path.join(CONTENT_DIR, file), 'utf8');
     const canonical = `${JSON.stringify(validateProject(JSON.parse(text), source), null, 2)}\n`;
-    assert.equal(text, canonical, `${source} is off-contract — run \`node scripts/normalize-content.mjs\``);
+    assert.equal(text.replace(/\r\n/g, '\n'), canonical, `${source} is off-contract — run \`npm run normalize\``);
   }
 });
 
-test('the baked snapshot matches content/projects (no drift)', async () => {
-  const projects = await loadContent();
-  const snapshot = JSON.parse(await readFile(SNAPSHOT, 'utf8'));
-  assert.equal(snapshot.count, projects.length);
-  // JSON drops `undefined` keys, so compare against the round-trip rather than the literals.
+test('every project sits on the signal path', async () => {
+  for (const project of await loadContent()) {
+    assert.ok(STAGES.includes(project.stage), `${project.slug} needs a stage`);
+  }
+});
+
+test('featured projects carry the full case-file keys, and there are six', async () => {
+  const featured = (await loadContent()).filter((p) => p.featured);
+  assert.equal(featured.length, 6, 'the home page promises six case files');
+  for (const p of featured) {
+    for (const key of ['kicker', 'challenge', 'decisions', 'evidence', 'ownership', 'specimen']) {
+      assert.ok(p[key], `${p.slug} is featured but has no ${key}`);
+    }
+    assert.notEqual(p.specimen.kind, 'none', `${p.slug} is featured but has no drawn figure`);
+  }
   assert.deepEqual(
-    snapshot.projects.map((project) => project.slug),
-    projects.map((project) => project.slug),
+    featured.map((p) => p.stage),
+    ['sense', 'edge', 'gateway', 'gateway', 'services', 'screen'],
+    'featured work is ordered along the signal path',
   );
-  assert.deepEqual(snapshot.projects, JSON.parse(JSON.stringify(projects)), 'run `npm run snapshot` after editing content');
 });
 
-test('the home page has no second copy of the projects', async () => {
-  // The home section used to carry a hand-maintained array that drifted from content/projects on
-  // challenge/ownership/decisions/summary. It now derives from the same content files, so the only
-  // thing to guard is that nobody reintroduces a literal project list in the data module.
-  const source = await readFile(path.join(ROOT, 'src', 'data', 'portfolio.ts'), 'utf8');
-  assert.match(source, /import\.meta\.glob.*content\/projects/, 'the home data must source the content files');
-  assert.ok(!/slug:\s*'/.test(source), 'src/data/portfolio.ts must not carry a second project list');
+test('every figure kind a featured project names is actually drawn', async () => {
+  const source = await readFile(path.join(ROOT, 'src', 'components', 'Figures.tsx'), 'utf8');
+  for (const p of (await loadContent()).filter((x) => x.featured)) {
+    assert.match(source, new RegExp(`\\b${p.specimen.kind}:\\s*\\w+`), `no drawing registered for kind "${p.specimen.kind}"`);
+  }
+  assert.ok(SPECIMEN_KINDS.includes('none'));
 });
 
-test('the schema accepts a minimal project and fills nothing in', () => {
+test('the data module has no second copy of the projects', async () => {
+  const source = await readFile(path.join(ROOT, 'src', 'data', 'projects.ts'), 'utf8');
+  assert.match(source, /import\.meta\.glob.*content\/projects/);
+  assert.ok(!/slug:\s*'/.test(source));
+});
+
+test('the schema accepts a minimal project', () => {
   const project = validateProject(valid, 'demo.json');
   assert.equal(project.slug, 'demo');
-  assert.equal(project.kicker, undefined);
-  assert.equal(project.year, undefined);
+  assert.equal(project.stage, undefined);
 });
 
-test('unknown keys are a hard error', () => {
-  assert.throws(() => validateProject({ ...valid, tehc: ['oops'] }, 'demo.json'), ProjectSchemaError);
-  assert.throws(() => validateProject({ ...valid, evidence: [{ label: 'a', value: 'b', extra: 1 }] }, 'demo.json'), /unknown key/);
-});
-
-test('required keys, slug and status are enforced', () => {
-  const { links, ...withoutLinks } = valid;
-  assert.throws(() => validateProject(withoutLinks, 'demo.json'), /missing required key: links/);
+test('unknown keys, bad slugs, statuses, stages and links are hard errors', () => {
+  assert.throws(() => validateProject({ ...valid, tehc: [] }, 'demo.json'), ProjectSchemaError);
   assert.throws(() => validateProject({ ...valid, slug: 'Not A Slug' }, 'demo.json'), /must match/);
-  assert.throws(() => validateProject({ ...valid, status: 'maybe' }, 'demo.json'), /must be one of shipped \| in-progress \| archived/);
+  assert.throws(() => validateProject({ ...valid, status: 'maybe' }, 'demo.json'), /shipped \| in-progress \| archived/);
+  assert.throws(() => validateProject({ ...valid, stage: 'cloud' }, 'demo.json'), /sense \| edge/);
   assert.throws(() => validateProject({ ...valid, stack: [] }, 'demo.json'), /at least 1 entry/);
   assert.throws(() => validateProject({ ...valid, links: [{ label: 'G', href: 'ftp://x' }] }, 'demo.json'), /http\(s\) URL/);
   assert.throws(() => validateProject({ ...valid, year: 12 }, 'demo.json'), /year must be an integer/);
 });
 
-test('specimen kind is constrained to the drawn figures', () => {
-  assert.throws(() => validateProject({ ...valid, specimen: { kind: 'hologram', caption: 'x' } }, 'demo.json'), /specimen.kind/);
-  const withSpecimen = validateProject(
-    { ...valid, specimen: { kind: 'inspector', caption: 'Cap', callouts: [{ n: 1, text: 'one' }] } },
-    'demo.json',
-  );
-  assert.equal(withSpecimen.specimen.kind, 'inspector');
-  assert.equal(withSpecimen.specimen.callouts[0].text, 'one');
-});
-
-test('every registered kind is accepted, and the eight case-study figures are registered', () => {
-  // A kind is only usable once it is in SPECIMEN_KINDS, so this is the gate between the drawing
-  // and the content: add a kind to the validator, and content may name it.
-  for (const kind of SPECIMEN_KINDS) {
-    const project = validateProject({ ...valid, specimen: { kind, caption: 'Cap' } }, 'demo.json');
-    assert.equal(project.specimen.kind, kind);
-  }
-  for (const kind of ['workspace', 'review', 'gateway', 'repos', 'monitor', 'magnet', 'redact', 'audit']) {
-    assert.ok(SPECIMEN_KINDS.includes(kind), `${kind} must be a registered specimen kind`);
-  }
-  // The rejection names the whole allowed set, so a typo is self-diagnosing.
-  assert.throws(
-    () => validateProject({ ...valid, specimen: { kind: 'workspac', caption: 'x' } }, 'demo.json'),
-    /must be one of .*audit.*none/,
-  );
-});
-
-test('duplicate slugs are rejected', () => {
-  assert.throws(() => validateProjectList([valid, { ...valid, title: 'Twin' }], 'list'), /duplicate slug/);
-});
-
-test('a ledger row is a project projection and refuses case-study keys', () => {
-  const row = validateLedgerRow(toLedger(validateProject(valid, 'demo.json')), 'row');
-  assert.deepEqual(Object.keys(row).sort(), [
-    'featured', 'kicker', 'order', 'ownership', 'slug', 'stack', 'status', 'summary', 'title', 'year',
+test('lists reject duplicate slugs and sort by order, then newest year, then title', () => {
+  assert.throws(() => validateProjectList([valid, valid]), /duplicate slug/);
+  const sorted = sortProjects([
+    { title: 'B', year: 2025 },
+    { title: 'A', year: 2026 },
+    { title: 'C', order: 1, year: 2020 },
   ]);
-  assert.throws(() => validateLedgerRow({ ...row, challenge: 'sneaky' }, 'row'), /must not carry the case-study key "challenge"/);
-  assert.throws(() => validateLedgerRow({ ...row, links: [] }, 'row'), /must not carry the case-study key "links"/);
-});
-
-test('the ledger list sorts by order and rejects duplicates', () => {
-  const rows = validateLedgerList([
-    toLedger(validateProject({ ...valid, slug: 'second', order: 2 }, 'b')),
-    toLedger(validateProject({ ...valid, slug: 'first', order: 1 }, 'a')),
-  ]);
-  assert.deepEqual(rows.map((row) => row.slug), ['first', 'second']);
-  assert.throws(() => validateLedgerList([rows[0], rows[0]]), /duplicate slug/);
-  assert.throws(() => validateLedgerList('nope'), /must be a JSON array/);
-});
-
-test('sortProjects puts explicit order first, then newest year, then title', () => {
-  const explicit = validateProject({ ...valid, slug: 'a', title: 'Alpha', order: 9 }, 'a');
-  const noOrder = validateProject({ ...valid, slug: 'b', title: 'Beta' }, 'b');
-  const withYear = validateProject({ ...valid, slug: 'c', title: 'Gamma', year: 2025 }, 'c');
-  assert.deepEqual(sortProjects([noOrder, withYear, explicit]).map((project) => project.slug), ['a', 'c', 'b']);
-
-  const byYear = [
-    validateProject({ ...valid, slug: 'old', title: 'Old' }, 'old'),
-    validateProject({ ...valid, slug: 'new', title: 'New', year: 2025 }, 'new'),
-  ];
-  assert.deepEqual(sortProjects(byYear).map((project) => project.slug), ['new', 'old']);
+  assert.deepEqual(sorted.map((p) => p.title), ['C', 'A', 'B']);
 });

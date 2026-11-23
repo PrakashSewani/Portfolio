@@ -1,9 +1,10 @@
 /**
- * A ~1 KB history router. No react-router dependency; the host already answers every
- * unknown path with the app shell, so real path routes work without a hash fallback.
+ * A ~1 KB history router. The host answers every unknown path with the app shell, so real path
+ * routes work without a hash fallback; `#section` fragments are handled here too, because the
+ * browser's own fragment scroll runs before the page has rendered.
  *
- *   useRoute()             → the current pathname ('/', '/projects', '/projects/class-spy')
- *   navigate(to)           → pushState + re-render + jump to the top
+ *   useRoute()             → the current pathname ('/', '/projects/rstats')
+ *   navigate(to)           → pushState + re-render + scroll to the fragment (or the top)
  *   useLinkInterception()  → turns <a href="/…" data-link> into a client-side navigation
  *   matchProjectRoute(p)   → the slug for /projects/<slug>, else null
  */
@@ -20,17 +21,36 @@ function emit() {
   for (const listener of listeners) listener();
 }
 
+export const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Scroll to `#id` (or the top) once React has committed the route. */
+export function scrollToHash(hash: string, smooth = true) {
+  const run = () => {
+    if (hash) {
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: smooth && !prefersReducedMotion() ? 'smooth' : 'auto', block: 'start' });
+        return;
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+  window.requestAnimationFrame(() => window.requestAnimationFrame(run));
+}
+
 export function navigate(to: string, options: { replace?: boolean } = {}) {
-  const target = to.startsWith('/') ? to : `/${to}`;
-  // A click on the route you are already on is not a no-op: it jumps back to the top of the page.
-  if (target !== window.location.pathname) {
-    if (options.replace) window.history.replaceState(null, '', target);
-    else window.history.pushState(null, '', target);
+  const hashAt = to.indexOf('#');
+  const hash = hashAt === -1 ? '' : to.slice(hashAt + 1);
+  const pathPart = hashAt === -1 ? to : to.slice(0, hashAt);
+  const target = pathPart === '' ? window.location.pathname : pathPart.startsWith('/') ? pathPart : `/${pathPart}`;
+  const full = hash ? `${target}#${hash}` : target;
+  if (full !== `${window.location.pathname}${window.location.hash}`) {
+    if (options.replace) window.history.replaceState(null, '', full);
+    else window.history.pushState(null, '', full);
     emit();
   }
-  // `behavior: 'auto'` defers to the computed `scroll-behavior` (the stylesheet sets `smooth`), so
-  // a route change would animate a long scroll while the new route renders. 'instant' means jump.
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  scrollToHash(hash);
 }
 
 export function useRoute(): string {
@@ -69,10 +89,8 @@ export function useLinkInterception() {
 }
 
 /**
- * The slug for `/projects/<slug>`, else null. Decoding is guarded: a malformed percent-escape in
- * the pathname must not throw a URIError during render (the component would take the page down and
- * App has no error boundary). The raw segment is returned so the case page renders its honest
- * "no such project" state instead.
+ * The slug for `/projects/<slug>`, else null. Decoding is guarded: a malformed percent-escape must
+ * not throw during render; the raw segment is returned so the case page shows "no such project".
  */
 export function matchProjectRoute(path: string): string | null {
   const match = path.match(/^\/projects\/([^/]+)$/);
@@ -82,8 +100,4 @@ export function matchProjectRoute(path: string): string | null {
   } catch {
     return match[1];
   }
-}
-
-export function isProjectsPath(path: string): boolean {
-  return path === '/projects' || path.startsWith('/projects/');
 }

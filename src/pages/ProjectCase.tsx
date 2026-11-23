@@ -1,170 +1,147 @@
-import { useEffect, useState } from 'react';
-import { ArrowUpRight } from 'lucide-react';
-import SpecimenPlate from '../components/SpecimenPlate';
-import Rail from '../components/Rail';
-import { loadProject, ProjectNotFoundError, type Project, type ProjectStatus } from '../lib/projects';
+import { useEffect } from 'react';
+import { CaseFigure } from '../components/Figures';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from '../components/Icons';
+import { SIGNAL_PATH, profile } from '../data/profile';
+import { bySlug, projects } from '../data/projects';
 
-/**
- * `/projects/<slug>` — one case study: specimen plate + rail, challenge → decisions →
- * evidence. Content comes from the Pages Function (`/api/projects/<slug>`), falling back to the
- * build-time snapshot, so the page renders even with the API down.
- */
-
-const STATUS_LABEL: Record<ProjectStatus, string> = {
-  shipped: 'Shipped',
-  'in-progress': 'In progress',
-  archived: 'Archived',
-};
-
-type State =
-  | { status: 'loading' }
-  | { status: 'ready'; project: Project; source: 'live' | 'snapshot' }
-  | { status: 'missing'; slug: string }
-  | { status: 'error'; message: string };
+/** Keep the document head honest on client-side navigation (the prerender does it for first loads). */
+function useHead(title: string, description: string, path: string) {
+  useEffect(() => {
+    const prev = document.title;
+    const set = (sel: string, attr: string, value: string) => document.querySelector(sel)?.setAttribute(attr, value);
+    document.title = title;
+    set('meta[name="description"]', 'content', description);
+    set('meta[property="og:title"]', 'content', title);
+    set('meta[property="og:description"]', 'content', description);
+    set('meta[property="og:url"]', 'content', `https://prakashsewani.com${path}`);
+    set('link[rel="canonical"]', 'href', `https://prakashsewani.com${path}`);
+    return () => {
+      document.title = prev;
+    };
+  }, [title, description, path]);
+}
 
 export default function ProjectCase({ slug }: { slug: string }) {
-  const [state, setState] = useState<State>({ status: 'loading' });
+  const project = bySlug.get(slug);
+  useHead(
+    project ? `${project.title} — case study | ${profile.name}` : `Not found | ${profile.name}`,
+    project ? project.summary : 'No such project.',
+    `/projects/${slug}`,
+  );
 
-  useEffect(() => {
-    let alive = true;
-    setState({ status: 'loading' });
-    loadProject(slug)
-      .then(({ project, source }) => {
-        if (alive) setState({ status: 'ready', project, source });
-      })
-      .catch((err: unknown) => {
-        if (!alive) return;
-        // Branch on the error *type*, not on a substring of its message.
-        if (err instanceof ProjectNotFoundError) {
-          setState({ status: 'missing', slug });
-          return;
-        }
-        setState({ status: 'error', message: err instanceof Error ? err.message : String(err) });
-      });
-    return () => {
-      alive = false;
-    };
-  }, [slug]);
+  if (!project) {
+    return (
+      <section className="section wrap case-page">
+        <p className="sec-no">404 / No such project</p>
+        <h1 className="case-title">There is no project called “{slug}”.</h1>
+        <p className="lede">
+          <a href="/#archive" data-link>
+            Browse the archive
+          </a>
+          .
+        </p>
+      </section>
+    );
+  }
+
+  const index = projects.findIndex((p) => p.slug === slug);
+  const prev = projects[(index - 1 + projects.length) % projects.length];
+  const next = projects[(index + 1) % projects.length];
+  const stage = SIGNAL_PATH.find((s) => s.id === project.stage);
 
   return (
-    <div className="route-page">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
-        <a href="/" data-link>Index / home</a>
-        <span aria-hidden="true">→</span>
-        <a href="/projects" data-link>Projects</a>
-        <span aria-hidden="true">→</span>
-        <span>{slug}</span>
-      </nav>
+    <article className="section case-page">
+      <div className="wrap">
+        <a className="back" href="/#work" data-link>
+          <ArrowLeft size={14} /> All work
+        </a>
 
-      {state.status === 'loading' && <p className="ledger-empty">Loading the case study…</p>}
-
-      {state.status === 'missing' && (
-        <div className="case-empty">
-          <h2>No project called “{slug}”.</h2>
-          <p>
-            The index in the content service does not have that slug.{' '}
-            <a href="/projects" data-link>See every project →</a>
+        <header className="case-head">
+          <p className="case-meta">
+            {stage && <span>Stage {stage.n} · {stage.label}</span>}
+            <span className="case-status" data-status={project.status}>
+              {project.status.replace('-', ' ')}
+            </span>
+            {project.year && <span>{project.year}</span>}
           </p>
+          <h1 className="case-title">{project.title}</h1>
+          {project.kicker && <p className="case-kicker">{project.kicker}</p>}
+          <p className="lede">{project.summary}</p>
+          <div className="case-links">
+            {project.links.map((l, i) => (
+              <a key={l.href} className={`btn ${i === 0 ? 'btn-primary' : ''}`} href={l.href} target="_blank" rel="noreferrer">
+                {l.label} <ArrowUpRight size={16} />
+              </a>
+            ))}
+          </div>
+        </header>
+
+        <div className="case-body">
+          <div className="case-main">
+            {project.challenge && (
+              <section className="case-section">
+                <span className="label">The problem</span>
+                <p className="case-large">{project.challenge}</p>
+              </section>
+            )}
+            {project.decisions && (
+              <section className="case-section">
+                <span className="label">Decisions</span>
+                <ol className="decisions">
+                  {project.decisions.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ol>
+              </section>
+            )}
+            {project.ownership && (
+              <section className="case-section">
+                <span className="label">My part</span>
+                <p>{project.ownership}</p>
+              </section>
+            )}
+          </div>
+
+          <aside className="case-aside">
+            <CaseFigure project={project} />
+            {project.specimen?.callouts && (
+              <ol className="callouts">
+                {project.specimen.callouts.map((c) => (
+                  <li key={c.n}>{c.text}</li>
+                ))}
+              </ol>
+            )}
+            {project.evidence && (
+              <dl className="evidence">
+                {project.evidence.map((e) => (
+                  <div key={e.label}>
+                    <dt>{e.label}</dt>
+                    <dd>{e.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            <ul className="chips" aria-label="Stack">
+              {project.stack.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+          </aside>
         </div>
-      )}
 
-      {state.status === 'error' && (
-        <div className="case-empty">
-          <h2>This case study could not be loaded.</h2>
-          <p>{state.message} — try again shortly, or <a href="/projects" data-link>open the index</a>.</p>
-        </div>
-      )}
-
-      {state.status === 'ready' && (() => {
-        const { project, source } = state;
-        const specimen = project.specimen;
-
-        return (
-          <>
-            <header className="route-head">
-              <div>
-                <span className="route-kicker">{project.kicker ?? 'Project case study'}</span>
-                <h1>{project.title}</h1>
-              </div>
-              <p className="case-goal">{project.summary}</p>
-            </header>
-
-            <div className="case-grid">
-              <div className="case-main">
-                {project.challenge && (
-                  <section className="case-block">
-                    <h2>The engineering problem</h2>
-                    <p>{project.challenge}</p>
-                  </section>
-                )}
-
-                {project.decisions && project.decisions.length > 0 && (
-                  <section className="case-block">
-                    <h2>Key decisions</h2>
-                    <ol className="case-steps">
-                      {project.decisions.map((decision) => <li key={decision}>{decision}</li>)}
-                    </ol>
-                  </section>
-                )}
-
-                {project.evidence && project.evidence.length > 0 && (
-                  <section className="case-block">
-                    <h2>Evidence</h2>
-                    <ul className="case-evidence">
-                      {project.evidence.map((item) => (
-                        <li key={item.label}>
-                          <b>{item.value}</b>
-                          <span>{item.label}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                )}
-
-                {project.ownership && (
-                  <section className="case-block">
-                    <h2>What I owned</h2>
-                    <p>{project.ownership}</p>
-                  </section>
-                )}
-              </div>
-
-              <aside className="fig-stack">
-                {/* FIG. numbering follows `order`, so a case's figure number matches its ledger
-                    index — the plate is FIG. 05 for the project that sits at position 5. */}
-                <SpecimenPlate
-                  kind={specimen?.kind ?? 'none'}
-                  caption={specimen?.caption ?? project.title}
-                  index={project.order ?? 1}
-                  callouts={specimen?.callouts}
-                  footnote={project.stack.slice(0, 4)}
-                />
-                <Rail
-                  title="Specification"
-                  rows={[
-                    { label: 'Status', value: <span className={`status-pill status-${project.status}`}>{STATUS_LABEL[project.status]}</span> },
-                    { label: 'Year', value: project.year ?? '—' },
-                    { label: 'Context', value: project.kicker ?? '—' },
-                    { label: 'Stack', value: project.stack.join(' · ') },
-                    {
-                      label: 'Links',
-                      value: project.links.map((link) => (
-                        <a key={link.href} href={link.href} target="_blank" rel="noreferrer">
-                          {link.label} <ArrowUpRight size={12} aria-hidden="true" />
-                        </a>
-                      )),
-                    },
-                  ]}
-                />
-                <p className="section-link">
-                  <a href="/projects" data-link>← All projects</a>
-                  {source === 'snapshot' && <span> · live API unavailable, showing the snapshot</span>}
-                </p>
-              </aside>
-            </div>
-          </>
-        );
-      })()}
-    </div>
+        <nav className="case-nav" aria-label="More projects">
+          <a href={`/projects/${prev.slug}`} data-link>
+            <span className="label">Previous</span>
+            <strong>{prev.title}</strong>
+          </a>
+          <a href={`/projects/${next.slug}`} data-link>
+            <span className="label">Next</span>
+            <strong>
+              {next.title} <ArrowRight size={14} />
+            </strong>
+          </a>
+        </nav>
+      </div>
+    </article>
   );
 }

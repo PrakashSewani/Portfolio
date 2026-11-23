@@ -16,6 +16,7 @@
   ],
   "kicker": "Systems / resource monitoring",
   "year": 2026,
+  "stage": "sense",
   "challenge": "Sample CPU, memory, swap, load, network and disk on macOS, Linux and Windows, and keep enough bounded history that a spike is still visible after it has passed.",
   "decisions": [
     "One native binary per platform, shipped through the npm package's optional dependency",
@@ -64,6 +65,6 @@
       }
     ]
   },
-  "featured": false,
-  "order": 15
+  "featured": true,
+  "order": 1
 }

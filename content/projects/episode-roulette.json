@@ -22,6 +22,7 @@
   ],
   "kicker": "Browser extension / Streaming UX",
   "year": 2026,
+  "stage": "screen",
   "challenge": "Discover every episode across all seasons inside SPAs fully controlled by Netflix and Prime Video, with no external APIs, then start playback as if the user had clicked it themselves.",
   "decisions": [
     "MutationObserver-driven detection instead of brittle selectors-on-load",
@@ -61,6 +62,6 @@
       }
     ]
   },
-  "featured": true,
-  "order": 2
+  "featured": false,
+  "order": 7
 }

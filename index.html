@@ -1,83 +1,97 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prakash Sewani | Senior Software Engineer</title>
-    <meta name="description" content="Prakash Sewani is a Senior Software Engineer building modular frontend platforms, dependable APIs, and real-time systems for products growing through complexity." />
-    <meta name="keywords" content="Prakash Sewani, Software Engineer, Senior Software Engineer, Microfrontend Architecture, .NET Core, Node.js, Python, React, GraphQL, WebSockets, Portfolio" />
+    <title>Prakash Sewani — Senior Software Engineer, sensor to screen</title>
+    <meta name="description" content="Prakash Sewani is a senior software engineer building software from the sensor to the screen: edge and native tools in Rust and Go, gateways and APIs, and the interfaces on top." />
     <meta name="author" content="Prakash Sewani" />
-    <meta name="theme-color" content="#fbfaf9" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#0c0d0f" />
+    <meta name="color-scheme" content="dark light" />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://prakashsewani.com/" />
-    <meta property="og:title" content="Prakash Sewani | Senior Software Engineer" />
-    <meta property="og:description" content="Senior software engineering across modular frontend platforms, dependable APIs, and real-time systems." />
+    <meta property="og:title" content="Prakash Sewani — Senior Software Engineer, sensor to screen" />
+    <meta property="og:description" content="Edge and native tools, gateways and APIs, and the interfaces on top. Case files, an archive of 23 projects, and a live telemetry demo." />
     <meta property="og:image" content="https://prakashsewani.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Prakash Sewani — Senior Software Engineer" />
+    <meta property="og:image:alt" content="Prakash Sewani — Software from the sensor to the screen" />
     <meta property="og:site_name" content="Prakash Sewani" />
     <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://prakashsewani.com/" />
-    <meta name="twitter:title" content="Prakash Sewani | Senior Software Engineer" />
-    <meta name="twitter:description" content="Senior software engineering across modular frontend platforms, dependable APIs, and real-time systems." />
+    <meta name="twitter:title" content="Prakash Sewani — Senior Software Engineer, sensor to screen" />
+    <meta name="twitter:description" content="Edge and native tools, gateways and APIs, and the interfaces on top. Case files, an archive of 23 projects, and a live telemetry demo." />
     <meta name="twitter:image" content="https://prakashsewani.com/og-image.png" />
-    <meta name="twitter:image:alt" content="Prakash Sewani — Senior Software Engineer" />
+    <meta name="twitter:image:alt" content="Prakash Sewani — Software from the sensor to the screen" />
     <meta name="twitter:creator" content="@PrakashSewani" />
 
     <link rel="canonical" href="https://prakashsewani.com/" />
-    <!--route-meta-->
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <meta name="apple-mobile-web-app-title" content="Prakash Sewani" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Apply the stored or system theme before first paint, so there is no flash. -->
+    <style>
+      html { background: #0c0d0f; }
+      html[data-theme='light'] { background: #f4f1ea; }
+    </style>
+    <script>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var t;
+        try { t = localStorage.getItem('ps-theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        d.setAttribute('data-theme', t);
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute('content', t === 'light' ? '#f4f1ea' : '#0c0d0f');
+      })();
+    </script>
 
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Prakash Sewani",
-      "jobTitle": "Senior Software Engineer",
-      "url": "https://prakashsewani.com",
-      "sameAs": [
-        "https://www.linkedin.com/in/prakash-s-2a389721a/",
-        "https://github.com/PrakashSewani"
-      ],
-       "knowsAbout": [
-        "Microfrontend Architecture",
-        ".NET Core",
-        "Node.js",
-        "Python",
-        "React",
-        "GraphQL",
-        "WebSockets",
-        "Single-Spa"
-      ],
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Wonderbiz Technologies"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Kalyan",
-        "addressRegion": "Maharashtra",
-        "addressCountry": "IN"
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Prakash Sewani",
+        "jobTitle": "Senior Software Engineer",
+        "url": "https://prakashsewani.com",
+        "sameAs": [
+          "https://www.linkedin.com/in/prakash-s-2a389721a/",
+          "https://github.com/PrakashSewani"
+        ],
+        "knowsAbout": ["Rust", "Go", "TypeScript", ".NET", "Edge computing", "Real-time systems", "Microfrontends", "GraphQL"],
+        "worksFor": { "@type": "Organization", "name": "Wonderbiz Technologies" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Kalyan",
+          "addressRegion": "Maharashtra",
+          "addressCountry": "IN"
+        }
       }
-    }
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <noscript>
+        <main style="max-width: 640px; margin: 0 auto; padding: 96px 24px; font-family: system-ui, sans-serif; color: #ece8df; line-height: 1.6">
+          <h1>Prakash Sewani</h1>
+          <p>Senior Software Engineer. Software from the sensor to the screen: edge and native tools in Rust and Go, gateways and APIs, and the interfaces on top.</p>
+          <p>
+            <a style="color: #f5a524" href="https://github.com/PrakashSewani">GitHub</a> ·
+            <a style="color: #f5a524" href="https://www.linkedin.com/in/prakash-s-2a389721a/">LinkedIn</a> ·
+            <a style="color: #f5a524" href="mailto:contact@prakashsewani.com">contact@prakashsewani.com</a>
+          </p>
+          <p>This site is a React app; enable JavaScript to see the case files and the live telemetry demo.</p>
+        </main>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

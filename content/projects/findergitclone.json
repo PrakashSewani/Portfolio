@@ -15,6 +15,7 @@
   ],
   "kicker": "macOS integration / Finder extension",
   "year": 2026,
+  "stage": "edge",
   "evidence": [
     {
       "label": "License",

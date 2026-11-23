@@ -16,6 +16,7 @@
   ],
   "kicker": "Product engineering / data reconciliation",
   "year": 2026,
+  "stage": "services",
   "evidence": [
     {
       "label": "Tagged releases",
@@ -28,5 +29,5 @@
   ],
   "ownership": "Designed and built the reconciliation flow and its UI end to end.",
   "featured": false,
-  "order": 10
+  "order": 13
 }
