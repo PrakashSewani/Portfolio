@@ -25,8 +25,8 @@ export const LAYERS: Layer[] = [
     name: 'Machine',
     line: 'Devices, operating systems, industrial automation',
     blurb:
-      'Where software meets hardware: device registers, system counters, disks, screens and the OS underneath. Code here has to stay honest when the link, the power or the user does something unexpected.',
-    atWork: 'Real-time device and telemetry data over Modbus, turned into observability flows where a stale reading has to look stale.',
+      'Code that runs close to the hardware or the operating system. In practice that means reading device data, sampling CPU and memory, cleaning up disk space and redacting parts of a screen capture.',
+    atWork: 'Real-time device and telemetry data over Modbus, and the monitoring built on top of it.',
     tech: ['Modbus', 'IoT', 'Telemetry', 'Rust', 'Swift', 'C#', 'Windows', 'macOS', 'Linux'],
   },
   {
@@ -35,8 +35,8 @@ export const LAYERS: Layer[] = [
     name: 'Infrastructure',
     line: 'Containers, caches, gateways, self-hosting',
     blurb:
-      'What everything else stands on. I like infrastructure I can run myself and reason about completely: one source of truth, disposable state kept disposable, and failure modes chosen on purpose.',
-    atWork: 'Event-driven interfaces and WebSockets that keep feedback current between devices and the screens watching them.',
+      'What everything else runs on. I prefer setups I can host and fully understand, usually with one database as the source of truth and anything temporary kept in a cache.',
+    atWork: 'Event-driven interfaces and WebSockets that keep device data up to date on screen.',
     tech: ['Linux', 'Docker', 'Redis', 'PostgreSQL', 'Traefik', 'Cloudflare Workers', 'WebSockets'],
   },
   {
@@ -45,8 +45,8 @@ export const LAYERS: Layer[] = [
     name: 'Software',
     line: 'Services, APIs, integrations',
     blurb:
-      'Application services built around clear contracts, with identity and integration handled as platform concerns instead of per-team folklore. The language follows the problem.',
-    atWork: 'Backend and integration layers in .NET Core, Node.js and Python, with SSO, IAM and OAuth wired into the platform.',
+      'Backend services, APIs and integrations. The language depends on the project: mostly C#, Python and Node.js at work, plus Go and Rust in my own projects.',
+    atWork: 'Backend and integration layers in .NET Core, Node.js and Python, including SSO, IAM and OAuth.',
     tech: ['C# / .NET Core', 'Python', 'Node.js', 'Go', 'Rust', 'GraphQL', 'REST', 'OAuth / SSO'],
   },
   {
@@ -55,8 +55,8 @@ export const LAYERS: Layer[] = [
     name: 'Intelligence',
     line: 'LLMs, agents, AI-assisted engineering',
     blurb:
-      'Models treated as components, not magic: routed, metered, reviewed and kept on infrastructure you control. Most of my AI work is about making engineers faster without handing over the keys.',
-    atWork: 'NLP-driven automation inside production software.',
+      'Mostly LLM tooling for developers: a gateway that routes requests across model providers, a self-hosted code reviewer and a multi-agent tool for auditing repositories.',
+    atWork: 'NLP-based automation in production software.',
     tech: ['LLM routing', 'Multi-agent pipelines', 'OpenAI', 'Anthropic', 'Ollama', 'Transformers', 'Prompt pipelines'],
   },
   {
@@ -65,8 +65,8 @@ export const LAYERS: Layer[] = [
     name: 'Interface',
     line: 'Web apps, extensions, editors, terminals',
     blurb:
-      'The last metre, where a person decides whether the system works. Interfaces that make state obvious at a glance, wherever the person already is: the browser, the editor or the terminal.',
-    atWork: 'Modular webshell and microfrontend architecture, so teams deploy independently without fragmenting the experience.',
+      'Web apps, browser and VS Code extensions, and terminal UIs. I like interfaces that show the state of a system clearly without making you dig for it.',
+    atWork: 'A modular webshell and microfrontend architecture that lets teams deploy independently.',
     tech: ['React', 'TypeScript', 'Angular', 'Single-SPA', 'Microfrontends', 'WebExtensions', 'VS Code API', 'TUIs'],
   },
 ];

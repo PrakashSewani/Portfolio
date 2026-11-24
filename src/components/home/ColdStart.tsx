@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { profile } from '../../data/profile';
+import { career, profile } from '../../data/profile';
 import { languageCounts, projects } from '../../data/projects';
 import { useZonedClock } from '../../lib/motion';
 import { ArrowDown, ArrowUpRight } from '../Icons';
@@ -15,7 +15,10 @@ export default function ColdStart() {
     booted = true;
   }, []);
   const time = useZonedClock(profile.timeZone);
-  const languages = languageCounts().length;
+  const top = languageCounts()
+    .slice(0, 3)
+    .map(([lang]) => lang);
+  const since = career[0].from;
 
   return (
     <section id="top" className={boot ? 'hero is-booting' : 'hero'} aria-labelledby="hero-name">
@@ -31,11 +34,12 @@ export default function ColdStart() {
           </h1>
           <p className="hero-statement">{profile.statement}</p>
           <p className="hero-sub">
-            {profile.role} at {profile.company} · {projects.length} projects of my own, in {languages} languages
+            {profile.role} at {profile.company} since {since}. {projects.length} side projects, mostly in {top.slice(0, -1).join(', ')}{' '}
+            and {top[top.length - 1]}.
           </p>
           <div className="hero-cta">
             <a className="btn btn-signal" href="#work" data-link>
-              Read the case files <ArrowDown />
+              See my work <ArrowDown />
             </a>
             <a className="btn" href={profile.github} target="_blank" rel="noreferrer">
               GitHub <ArrowUpRight />

@@ -41,9 +41,9 @@ export default function BootReadout() {
     <section className="boot" aria-labelledby="boot-title">
       <div className="boot-head">
         <h2 id="boot-title" className="label">
-          Cold start
+          Page load
         </h2>
-        <p className="boot-note">This page, measured in your browser just now.</p>
+        <p className="boot-note">How long this page took to load for you, measured by your browser.</p>
       </div>
       <dl className="boot-steps">
         {steps.map((step, i) => (

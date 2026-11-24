@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 export const ORIGIN = 'https://prakashsewani.com';
-export const SITE_TITLE = 'Prakash Sewani — Software engineer, every layer of the system';
+export const SITE_TITLE = 'Prakash Sewani — Software engineer';
 
 /**
  * Keep the document head in step with client-side routes: title, description, canonical, Open

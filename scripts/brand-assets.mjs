@@ -236,8 +236,8 @@ p{position:absolute;left:64px;top:390px;width:520px;font-size:27px;line-height:1
 <div class="grid"></div>
 <div class="top"><i></i>prakashsewani.com</div>
 <h1>Prakash<br>Sewani</h1>
-<p>Software engineer. I build systems through every layer, from the machine to the interface.</p>
-<div class="foot">${total} projects across ${LAYERS.length} layers</div>
+<p>Software engineer. Industrial telemetry, backend services, AI tooling and web interfaces.</p>
+<div class="foot">${total} side projects · prakashsewani.com/projects</div>
 <div class="stack">${stackSvg(counts)}</div>
 </body></html>`;
 

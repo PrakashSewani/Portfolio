@@ -73,8 +73,7 @@ export default function Palette({ open, onClose }: Props) {
         run: () => [
           { text: `${profile.name} — ${profile.role}, ${profile.company}` },
           { text: `${profile.location} · IST (UTC+5:30)` },
-          { text: `${projects.length} projects of my own · ${langs.join(' · ')}` },
-          { text: 'Every layer: machine, infrastructure, software, intelligence, interface.' },
+          { text: `${projects.length} side projects · ${langs.join(' · ')}` },
         ],
       },
       {
@@ -103,7 +102,7 @@ export default function Palette({ open, onClose }: Props) {
       { id: 'resume', label: 'resume', hint: 'opens in a new tab', group: 'Commands', run: openUrl(profile.resume) },
       { id: 'github', label: 'github', hint: 'opens in a new tab', group: 'Commands', run: openUrl(profile.github) },
       { id: 'linkedin', label: 'linkedin', hint: 'opens in a new tab', group: 'Commands', run: openUrl(profile.linkedin) },
-      { id: 'index', label: 'index', hint: 'every project, searchable', group: 'Commands', run: go('/projects') },
+      { id: 'index', label: 'index', hint: 'all projects, with search', group: 'Commands', run: go('/projects') },
       {
         id: 'projects',
         label: 'projects',

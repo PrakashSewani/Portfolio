@@ -9,7 +9,7 @@ function CaseFile({ project, n }: { project: Project; n: string }) {
       <header className="case-head reveal">
         <div className="case-meta">
           <span className="case-n">
-            Case {n}
+            Featured {n}
             <span className="case-of"> / {String(featured.length).padStart(2, '0')}</span>
           </span>
           <span className={`status status-${project.status}`}>{STATUS_LABEL[project.status]}</span>
@@ -62,7 +62,7 @@ function CaseFile({ project, n }: { project: Project; n: string }) {
 
       {project.evidence && (
         <div className="case-block reveal">
-          <h4 className="label">Facts</h4>
+          <h4 className="label">Details</h4>
           <dl className="facts">
             {project.evidence.map((e) => (
               <div key={e.label}>
@@ -76,7 +76,7 @@ function CaseFile({ project, n }: { project: Project; n: string }) {
 
       <div className="case-links reveal">
         <a className="link" href={`/projects/${project.slug}`} data-link>
-          Full case file <ArrowRight />
+          Read more <ArrowRight />
         </a>
         {project.links.map((l) => (
           <a key={l.href} className="link" href={l.href} target="_blank" rel="noreferrer">
@@ -88,7 +88,7 @@ function CaseFile({ project, n }: { project: Project; n: string }) {
   );
 }
 
-/** The six case files: each one a system and the one rule it never breaks. */
+/** The six featured projects, each led by the rule its design is built around. */
 export default function CaseFiles() {
   return (
     <section id="work" className="section work" aria-labelledby="work-title">
@@ -96,11 +96,11 @@ export default function CaseFiles() {
         <header className="sec-head reveal">
           <p className="sec-index label">03 — Work</p>
           <h2 id="work-title" className="sec-title">
-            Six case files. Six rules that hold.
+            Selected work
           </h2>
           <p className="sec-lede">
-            Each one is a system I designed and built, read as an engineering story: the problem, the invariant it is built
-            around, the decisions that keep it true, and the facts as they stand. Nothing here is a projected number.
+            Six projects in more detail. Each starts with the one rule its design is built around, followed by the problem,
+            the main decisions and where it stands today.
           </p>
         </header>
         <div className="cases">

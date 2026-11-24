@@ -4,7 +4,7 @@ import { PROJECT_STATUSES, STATUS_LABEL, bench, categoryOf, projectsInLayer, typ
 import { ArrowRight } from '../Icons';
 import LayerMark from '../LayerMark';
 
-/** Everything that is not a case file: tools, experiments, and the ones I archived. Filterable. */
+/** Every project that is not featured: tools, experiments and archived work. Filterable. */
 export default function Bench() {
   const [layer, setLayer] = useState<LayerId | 'all'>('all');
   const [status, setStatus] = useState<ProjectStatus | 'all'>('all');
@@ -18,13 +18,12 @@ export default function Bench() {
     <section id="bench" className="section bench" aria-labelledby="bench-title">
       <div className="wrap">
         <header className="sec-head reveal">
-          <p className="sec-index label">04 — Bench</p>
+          <p className="sec-index label">04 — More work</p>
           <h2 id="bench-title" className="sec-title">
-            Everything else on the bench.
+            More projects
           </h2>
           <p className="sec-lede">
-            Tools I wanted to exist, experiments to see whether something could be done, and a few I archived when they fell
-            short. Each one says plainly whether it shipped.
+            Smaller tools, experiments and a few projects I have archived. Each card shows whether it shipped.
           </p>
         </header>
 
@@ -83,7 +82,7 @@ export default function Bench() {
           </ul>
         ) : (
           <div className="bench-empty">
-            <p>Nothing on the bench matches that layer and status.</p>
+            <p>No projects match those filters.</p>
             <button
               type="button"
               className="btn"
@@ -99,7 +98,7 @@ export default function Bench() {
 
         <p className="bench-more reveal">
           <a className="link" href="/projects" data-link>
-            Every project, searchable <ArrowRight />
+            All projects, with search <ArrowRight />
           </a>
         </p>
       </div>

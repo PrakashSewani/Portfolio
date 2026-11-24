@@ -1,60 +1,56 @@
 import { PRINCIPLES, type Principle } from '../../data/principles';
-import { profile } from '../../data/profile';
+import { career, profile } from '../../data/profile';
 import { STATUS_LABEL, bySlug, languageCounts, projects, statusCounts } from '../../data/projects';
 import { ArrowRight } from '../Icons';
 
 function Evidence({ principle }: { principle: Principle }) {
-  const project = principle.evidence ? bySlug.get(principle.evidence.slug) : undefined;
+  const project = principle.slug ? bySlug.get(principle.slug) : undefined;
   const derived =
     principle.derived === 'languages'
-      ? `${projects.length} projects across ${languageCounts()
+      ? languageCounts()
           .map(([lang, n]) => `${lang} ${n}`)
-          .join(' · ')}`
+          .join(' · ')
       : principle.derived === 'status'
         ? Object.entries(statusCounts())
             .map(([status, n]) => `${n} ${STATUS_LABEL[status as keyof typeof STATUS_LABEL].toLowerCase()}`)
             .join(' · ')
         : null;
 
+  if (!derived && !project) return null;
   return (
     <div className="rule-evidence">
       {derived && <p className="rule-derived">{derived}</p>}
-      {project && principle.evidence && (
-        <a className="rule-quote" href={`/projects/${project.slug}`} data-link>
-          <q>{principle.evidence.quote}</q>
-          <span className="rule-src">
-            {project.title} <ArrowRight size={13} />
-          </span>
+      {project && (
+        <a className="rule-src" href={`/projects/${project.slug}`} data-link>
+          {project.title} <ArrowRight size={13} />
         </a>
       )}
     </div>
   );
 }
 
-/** How I think, as rules, each one pointing at the work that shows it. */
+const started = Math.min(...career.filter((c) => c.kind === 'work').map((c) => c.from));
+
+/** Who I am, briefly, and the rules I try to work by. */
 export default function Principles() {
   return (
     <section id="rules" className="section rules" aria-labelledby="rules-title">
       <div className="wrap">
         <header className="sec-head reveal">
-          <p className="sec-index label">01 — Rules</p>
+          <p className="sec-index label">01 — About</p>
           <h2 id="rules-title" className="sec-title">
-            Every system starts with a rule it must never break.
+            A few rules I try to follow
           </h2>
         </header>
 
         <div className="rules-grid">
           <div className="rules-intro reveal">
             <p>
-              I’m Prakash, a software engineer in {profile.city}, just outside Mumbai. At {profile.company} I work on
-              microfrontend platforms, real-time observability over industrial telemetry and NLP-driven automation.
+              I’m Prakash. I live in {profile.city}, near Mumbai, and I’ve worked at {profile.company} since {started}. Day to
+              day I work on microfrontend platforms, real-time monitoring of industrial telemetry and NLP-based automation.
             </p>
-            <p>
-              Outside work I build the tools I want to exist: {projects.length} so far, all of them on GitHub. I care
-              more about the problem, the architecture and whether it actually ships than about which language it is
-              written in.
-            </p>
-            <p className="rules-hint label">These are mine. Each links to where it shows.</p>
+            <p>I also build my own tools: {projects.length} so far, all of them on GitHub.</p>
+            <p className="rules-hint label">Each rule links to a project where I applied it.</p>
           </div>
 
           <ol className="rules-list">

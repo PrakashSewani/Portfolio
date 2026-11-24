@@ -36,9 +36,9 @@ export default function Record() {
     <section id="record" className="section record" aria-labelledby="record-title">
       <div className="wrap">
         <header className="sec-head reveal">
-          <p className="sec-index label">05 — Record</p>
+          <p className="sec-index label">05 — Experience</p>
           <h2 id="record-title" className="sec-title">
-            The record, briefly.
+            Experience
           </h2>
         </header>
 

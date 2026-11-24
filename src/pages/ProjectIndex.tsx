@@ -68,7 +68,7 @@ const SORTS: Array<{ id: SortKey; text: string }> = [
 export default function ProjectIndex() {
   const counts = statusCounts();
   useDocumentMeta({
-    title: 'Every project — Prakash Sewani',
+    title: 'All projects — Prakash Sewani',
     description: `All ${projects.length} projects by Prakash Sewani: ${counts.shipped} shipped, ${counts['in-progress']} in progress, ${counts.archived} archived. Searchable by layer, language and status.`,
   });
 
@@ -102,11 +102,11 @@ export default function ProjectIndex() {
     <div className="page ix">
       <div className="wrap">
         <header className="page-head">
-          <p className="sec-index label">Index</p>
-          <h1 className="sec-title">Every project.</h1>
+          <p className="sec-index label">Projects</p>
+          <h1 className="sec-title">All projects</h1>
           <p className="sec-lede">
-            All {projects.length}: {counts.shipped} shipped, {counts['in-progress']} in progress, {counts.archived} archived.
-            Search by name, stack or summary, or filter by layer, language and status.
+            {projects.length} projects: {counts.shipped} shipped, {counts['in-progress']} in progress and {counts.archived}{' '}
+            archived. Search by name, stack or summary, or filter by layer, language and status.
           </p>
         </header>
 
@@ -160,7 +160,7 @@ export default function ProjectIndex() {
                     <span className="ledger-main">
                       <span className="ledger-title" style={{ viewTransitionName: `title-${p.slug}` }}>
                         {p.title}
-                        {n && <span className="ledger-case">Case {n}</span>}
+                        {n && <span className="ledger-case">Featured</span>}
                       </span>
                       <span className="ledger-summary">{p.summary}</span>
                     </span>
