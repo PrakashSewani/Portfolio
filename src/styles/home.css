@@ -504,10 +504,15 @@
   }
   .stack {
     grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
   }
   .stack-svg {
-    width: 112%;
-    margin-left: -6%;
+    width: 100%;
+    max-width: 440px;
+    margin-inline: auto;
+  }
+  .stack-callouts {
+    justify-self: stretch;
   }
   .plane-stub {
     display: none;
@@ -688,7 +693,9 @@
   color: var(--signal);
 }
 .gauge-name {
-  font-size: 1.5rem;
+  max-width: 100%;
+  font-size: clamp(0.95rem, 1.6vw, 1.5rem);
+  overflow-wrap: anywhere;
   font-weight: 680;
   font-stretch: 122%;
   letter-spacing: -0.01em;

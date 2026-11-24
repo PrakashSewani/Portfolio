@@ -136,7 +136,7 @@ function Callout({ layer, index, count, active, onHover }: { layer: Layer; index
             <span className="sc-pip" aria-hidden="true" />
           </span>
           <span className="sc-meta" id={`sc-meta-${layer.id}`}>
-            {layer.line} · {count} project{count === 1 ? '' : 's'}
+            {count} project{count === 1 ? '' : 's'}
           </span>
         </span>
       </button>
