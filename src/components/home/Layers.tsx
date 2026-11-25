@@ -26,6 +26,20 @@ export default function Layers() {
         </header>
 
         <div className="layers-grid">
+          {/* Phones only: the gauge as a bar pinned under the header while the section is in view. */}
+          <div className="tracker" aria-hidden="true">
+            <LayerMark lit={[current.id]} size={28} className="tracker-mark" />
+            <span className="tracker-n">{current.n} / 05</span>
+            <span key={current.id} className="tracker-name">
+              {current.name}
+            </span>
+            <span className="tracker-steps">
+              {LAYERS_TOP_DOWN.map((l, i) => (
+                <span key={l.id} className={i <= LAYERS_TOP_DOWN.indexOf(current) ? 'is-lit' : undefined} />
+              ))}
+            </span>
+          </div>
+
           <aside className="gauge" aria-hidden="true">
             <div className="gauge-inner">
               <LayerMark lit={[current.id]} size={148} className="gauge-mark" />
@@ -41,7 +55,7 @@ export default function Layers() {
                 <article key={layer.id} id={`layer-${layer.id}`} className={layer.id === active ? 'layer is-active' : 'layer'} aria-labelledby={`layer-${layer.id}-title`}>
                   <header className="layer-head">
                     <span className="layer-n">{layer.n}</span>
-                    <div>
+                    <div className="layer-title">
                       <h3 id={`layer-${layer.id}-title`} className="layer-name">
                         {layer.name}
                       </h3>

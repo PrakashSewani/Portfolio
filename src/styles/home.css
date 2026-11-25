@@ -15,7 +15,8 @@
   flex-direction: column;
   min-height: calc(100svh - var(--bar-h));
   padding-top: clamp(32px, 5vw, 64px);
-  overflow: hidden;
+  /* clip, not hidden: hidden would make the hero a scroll container and freeze the stack's scroll timeline. */
+  overflow: clip;
 }
 .hero::before {
   content: '';
@@ -501,47 +502,109 @@
 @media (max-width: 640px) {
   .hero {
     min-height: auto;
+    padding-top: 20px;
   }
+  /* The copy column dissolves so the diagram can sit between the name and the buttons. */
+  .hero-grid {
+    row-gap: 0;
+  }
+  .hero-copy {
+    display: contents;
+  }
+  .hero-eyebrow {
+    order: 1;
+  }
+  .hero-name {
+    order: 2;
+    margin-block: 14px 0;
+    /* Same fill as 15.8cqi on the copy column, which no longer exists here. */
+    font-size: calc((100vw - 2 * var(--gutter)) * 0.158);
+  }
+  .hero-stack {
+    order: 3;
+  }
+  .hero-cta {
+    order: 4;
+    margin-top: 6px;
+  }
+  .hero-statement {
+    order: 5;
+    margin-top: 34px;
+  }
+  .hero-sub {
+    order: 6;
+  }
+
+  /* The stack runs off the left edge so the planes read large; labels stay beside their planes. */
   .stack {
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
+    grid-template-columns: minmax(0, 1fr) 118px;
   }
   .stack-svg {
-    width: 100%;
-    max-width: 440px;
-    margin-inline: auto;
+    width: calc(100% + var(--gutter) + 44px);
+    max-width: none;
+    margin-left: calc(-1 * (var(--gutter) + 44px));
   }
-  .stack-callouts {
-    justify-self: stretch;
-  }
-  .plane-stub {
+  .sc-n,
+  .sc-pip {
     display: none;
-  }
-  .stack-callouts {
-    display: grid;
-    margin-top: 8px;
-    border-top: 1px solid var(--line);
-  }
-  .stack-callout {
-    position: static;
-    margin-top: 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .sc-btn {
-    padding-block: 12px;
   }
   .sc-lead {
-    display: none;
+    flex-basis: 10px;
+    margin-right: 6px;
   }
-  .sc-text {
-    grid-template-columns: 1fr;
+  .sc-name {
+    font-size: 11px;
+    font-stretch: 100%;
+    letter-spacing: 0.02em;
   }
+  .sc-meta {
+    font-size: 10.5px;
+  }
+
   .boot {
     grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+    padding-block: 16px 20px;
   }
   .boot-steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .boot-step {
+    padding-left: 8px;
+  }
+  .boot-step dt {
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+  }
+  .boot-step dd {
+    font-size: 1rem;
+  }
+}
+
+/* ---------- the stack spreads apart as the hero scrolls away ---------- */
+
+.bus-spread {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+@keyframes spread {
+  to {
+    transform: translateY(var(--spread)) scaleY(var(--stretch, 1));
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .stack {
+      view-timeline: --stack block;
+    }
+    .plane-spread,
+    .bus-spread {
+      animation: spread linear both;
+      animation-timeline: --stack;
+      /* At rest the hero sits at about 50 % of the cover range; spread from the first scroll. */
+      animation-range: cover 52% cover 88%;
+    }
   }
 }
 
@@ -782,6 +845,57 @@
   color: var(--signal);
   border-color: var(--signal);
 }
+/* Phones only: the gauge, as a bar pinned under the header. */
+.tracker {
+  display: none;
+  position: sticky;
+  top: var(--bar-h);
+  z-index: 5;
+  align-items: center;
+  gap: 12px;
+  margin-inline: calc(-1 * var(--gutter));
+  margin-bottom: 8px;
+  padding: 10px var(--gutter);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.tracker-mark .mark-plane {
+  stroke-width: 1;
+}
+.tracker-n {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--signal);
+}
+.tracker-name {
+  font-size: 14px;
+  font-weight: 680;
+  font-stretch: 122%;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  animation: tracker-in 360ms var(--ease) both;
+}
+@keyframes tracker-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.tracker-steps {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.tracker-steps span {
+  width: 14px;
+  height: 2px;
+  background: var(--line-strong);
+  transition: background-color var(--t) var(--ease);
+}
+.tracker-steps .is-lit {
+  background: var(--signal);
+}
 .layer-case {
   font-family: var(--mono);
   font-size: 10.5px;
@@ -806,14 +920,32 @@
   .gauge {
     display: none;
   }
-  .layer-mark {
-    display: block;
+  .tracker {
+    display: flex;
   }
   .layer-head {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
   }
   .layer-n {
     display: none;
+  }
+  /* The name is sized to its own column, so INFRASTRUCTURE always fits. */
+  .layer-title {
+    container-type: inline-size;
+  }
+  .layer-name {
+    font-size: min(clamp(2rem, 1.2rem + 3vw, 3.6rem), 8.2cqi);
+  }
+  .layer-projects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .layer-projects a {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
   }
 }
 
@@ -823,32 +955,108 @@
   }
 }
 
-/* ================= CASE FILES ================= */
+/* ================= CASE FILES: stacked scenes ================= */
 
+/*
+ * One project per screen. The screens are sticky siblings, so each one slides up over the one
+ * before it. --in, --out and --lit come from useScenes (lib/motion.ts) and follow the scroll
+ * exactly; the defaults below are the finished frame, which is also what you get without JS.
+ */
 .cases {
-  display: grid;
-  gap: clamp(112px, 13vw, 200px);
+  margin-top: clamp(16px, 3vh, 40px);
+}
+/* A short hold under the last screen, so it can be read before the section scrolls on. */
+.cases::after {
+  content: '';
+  display: block;
+  height: 35svh;
+}
+.scene-anchor {
+  display: block;
+  height: 0;
+  scroll-margin-top: -24px; /* cancels the page's 24px of scroll padding, so a screen lands exactly in place */
 }
 .case {
+  --in: 1;
+  --out: 0;
+  --lit: 1;
+  position: sticky;
+  top: var(--bar-h);
+  height: calc(100svh - var(--bar-h));
+  overflow: hidden;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+/* Settling back: the screen dims as the next one covers it. */
+.case::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  opacity: calc(var(--out) * 0.72);
+  pointer-events: none;
+}
+.case-in {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  grid-template-rows: repeat(6, auto);
+  align-content: center;
   align-items: start;
   column-gap: clamp(32px, 5vw, 88px);
-  row-gap: 30px;
-  scroll-margin-top: calc(var(--bar-h) + 24px);
+  row-gap: clamp(16px, 2.6vh, 26px);
+  height: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: clamp(20px, 4vh, 44px) var(--gutter);
+  transform-origin: 50% 0;
 }
-.case > * {
+.case-in > * {
   grid-column: 1;
 }
-.case > .case-figure {
+.case-in > .case-figure {
   grid-column: 2;
-  grid-row: 1 / -1;
-  align-self: stretch;
+  grid-row: 1 / span 4;
+  align-self: center;
 }
-.case-figure-sticky {
-  position: sticky;
-  top: calc(var(--bar-h) + 40px);
+
+/*
+ * Easing in. Each part has its own start point (--from) along the screen's rise, so the figure
+ * arrives first, then the title, then the rule, then the links; each lifts a different distance
+ * (--rise), which is the parallax. The words of the rule light up in reading order (--lit).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .case-in {
+    transform: translateY(calc(var(--out) * -3%)) scale(calc(1 - var(--out) * 0.07));
+  }
+  .case-head,
+  .invariant,
+  .case-problem,
+  .case-links,
+  .case-figure {
+    --k: clamp(0, calc((var(--in) - var(--from)) / 0.55), 1);
+    opacity: var(--k);
+    transform: translateY(calc((1 - var(--k)) * var(--rise)));
+  }
+  .case-figure {
+    --from: 0.2;
+    --rise: 140px;
+    transform: translateY(calc((1 - var(--k)) * var(--rise))) scale(calc(0.9 + var(--k) * 0.1));
+  }
+  .case-head {
+    --from: 0.3;
+    --rise: 70px;
+  }
+  .invariant {
+    --from: 0.38;
+    --rise: 90px;
+  }
+  .case-problem {
+    --from: 0.42;
+    --rise: 100px;
+  }
+  .case-links {
+    --from: 0.45;
+    --rise: 110px;
+  }
 }
 .case-meta {
   display: flex;
@@ -965,17 +1173,53 @@
   gap: 12px 26px;
 }
 
-@media (max-width: 960px) {
-  .case {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
+/* Shorter or narrower desktop screens: a screen has to hold everything, so the problem goes first. */
+@media (max-height: 800px) and (min-width: 961px), (max-width: 1100px) {
+  .case-problem {
+    display: none;
   }
-  .case > .case-figure {
+}
+
+/* Tablets and phones: one column; the rule and the figure, the rest is on the project page. */
+@media (max-width: 960px) {
+  .case-in {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .case-in > .case-figure {
     grid-column: 1;
     grid-row: auto;
   }
-  .case-figure-sticky {
-    position: static;
+}
+@media (max-width: 640px) {
+  .case-in {
+    row-gap: 16px;
+    padding-block: 18px;
+  }
+  .case-title {
+    margin-top: 12px;
+    font-size: clamp(2rem, 10.5vw, 2.8rem);
+  }
+  .case-layers,
+  .case .figure-caption {
+    display: none;
+  }
+  .invariant-text {
+    font-size: 1.12rem;
+  }
+}
+
+/* Too short to hold a whole screen (a phone on its side): an ordinary list that still eases in. */
+@media (max-height: 540px) {
+  .case {
+    position: relative;
+    height: auto;
+  }
+  .case::after,
+  .cases::after {
+    display: none;
+  }
+  .case-in {
+    transform: none !important;
   }
 }
 
@@ -1081,6 +1325,16 @@
 .bench-more {
   margin-top: 40px;
 }
+/* Phones: a tighter vertical list. */
+@media (max-width: 640px) {
+  .tile {
+    min-height: 0;
+    padding: 18px 18px 16px;
+  }
+  .tile-invariant {
+    display: none;
+  }
+}
 
 /* ================= RECORD ================= */
 
@@ -1105,6 +1359,25 @@
 }
 .ruler-span.is-now {
   background: var(--signal);
+}
+/* Today, as measured in the visitor's browser. */
+.ruler-today {
+  position: absolute;
+  bottom: -1px;
+  width: 1px;
+  height: 22px;
+  background: var(--signal);
+}
+.ruler-today-label {
+  position: absolute;
+  top: -4px;
+  right: 6px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--signal);
 }
 .ruler-ticks {
   position: relative;
@@ -1135,6 +1408,7 @@
   gap: clamp(32px, 6vw, 112px);
 }
 .record-item {
+  position: relative;
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr);
   gap: 24px;
@@ -1217,7 +1491,7 @@
 /* ================= CONTACT ================= */
 
 .contact {
-  overflow: hidden;
+  overflow: clip; /* not hidden: that would make it a scroll container and freeze its view timelines */
 }
 .contact::before {
   content: '';
@@ -1322,7 +1596,188 @@
   .channel-links li {
     border-bottom: 1px solid var(--line);
   }
+  /* Small, and up beside the section number, so it never meets the title on a narrow screen. */
   .contact-mark {
-    display: none;
+    top: -14px;
+    width: 46px;
+    height: 46px;
+  }
+}
+
+/* ================= SCROLL CHOREOGRAPHY ================= */
+
+/*
+ * Effects tied to the scroll position rather than to time, so they move exactly as fast as the
+ * reader does and run backwards when they scroll back. Only where the browser supports
+ * scroll-driven animation and the reader has not asked for less motion; everywhere else the page
+ * shows the finished frame. The scenes in Selected work and the lit text use JS (lib/motion.ts)
+ * for the same idea, because they need positions CSS cannot see.
+ */
+.lit .w {
+  opacity: clamp(0.2, calc(var(--lit) * (var(--n) + 3) - var(--i)), 1);
+  transition: opacity 160ms linear;
+}
+.bench-grid[data-morph] > li {
+  view-transition-name: var(--vt);
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hero: as you leave, the name condenses again, the boot sequence played backwards. */
+    .hero-name {
+      animation: name-off linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 80vh;
+    }
+
+    /* About: the rule you are reading is in focus; the ones above and below wait in the dark. */
+    .rule {
+      view-timeline: --rule block;
+    }
+    .rule-body {
+      animation: rule-focus linear both;
+      animation-timeline: --rule;
+      animation-range: cover 0% cover 100%;
+    }
+    .rule-n {
+      animation: rule-n-focus linear both;
+      animation-timeline: --rule;
+      animation-range: cover 0% cover 100%;
+    }
+
+    /* Experience: the ruler draws itself left to right, so the years play in order and today lands last. */
+    .ruler-track,
+    .ruler-ticks {
+      animation: ruler-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 50%;
+    }
+    /* The role you are reading gets a live line across its top, which fades as you move on. */
+    .record-item {
+      view-timeline: --role block;
+    }
+    .record-item::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--signal);
+      transform-origin: 0 50%;
+      animation: role-line linear both;
+      animation-timeline: --role;
+      animation-range: cover 0% cover 100%;
+    }
+    .record-item:not(:first-child) .record-period {
+      animation: role-period linear both;
+      animation-timeline: --role;
+      animation-range: cover 0% cover 100%;
+    }
+
+    /* Contact: the mark powers up from the bottom plane to the top as you reach the end of the page. */
+    .contact {
+      view-timeline: --contact block;
+    }
+    .contact-mark .mark-plane {
+      animation: plane-on linear both;
+      animation-timeline: --contact;
+    }
+    .contact-mark .mark-plane:nth-child(1) {
+      animation-range: entry 15% entry 32%;
+    }
+    .contact-mark .mark-plane:nth-child(2) {
+      animation-range: entry 27% entry 44%;
+    }
+    .contact-mark .mark-plane:nth-child(3) {
+      animation-range: entry 39% entry 56%;
+    }
+    .contact-mark .mark-plane:nth-child(4) {
+      animation-range: entry 51% entry 68%;
+    }
+    .contact-mark .mark-plane:nth-child(5) {
+      animation-range: entry 63% entry 80%;
+    }
+  }
+}
+
+@keyframes name-off {
+  to {
+    font-stretch: 78%;
+    font-weight: 300;
+    opacity: 0.25;
+  }
+}
+@keyframes rule-focus {
+  0% {
+    opacity: 0.3;
+  }
+  36%,
+  64% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.42;
+  }
+}
+@keyframes rule-n-focus {
+  0%,
+  32% {
+    color: var(--faint);
+  }
+  40%,
+  60% {
+    color: var(--signal);
+  }
+  68%,
+  100% {
+    color: var(--faint);
+  }
+}
+@keyframes ruler-draw {
+  from {
+    clip-path: inset(-30px 100% -4px 0);
+  }
+  to {
+    clip-path: inset(-30px 0 -4px 0);
+  }
+}
+@keyframes role-line {
+  0%,
+  25% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  45%,
+  70% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  85%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+@keyframes role-period {
+  0%,
+  35% {
+    color: var(--faint);
+  }
+  45%,
+  70% {
+    color: var(--signal);
+  }
+  80%,
+  100% {
+    color: var(--faint);
+  }
+}
+@keyframes plane-on {
+  from {
+    stroke: var(--line-strong);
+    fill: var(--bg);
+    opacity: 0.35;
+    transform: translateY(3px);
   }
 }

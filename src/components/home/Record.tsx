@@ -1,8 +1,25 @@
+import { useEffect, useState } from 'react';
 import { career, certifications } from '../../data/profile';
 import { ArrowUpRight } from '../Icons';
 
-/** The years as a ruler from the first entry to now, with each role and the degree as a span on it. */
+/** Today as a fractional year (2026.9), measured in the visitor's browser after it loads. */
+function useToday(): number | null {
+  const [today, setToday] = useState<number | null>(null);
+  useEffect(() => {
+    const d = new Date();
+    const start = new Date(d.getFullYear(), 0, 1).getTime();
+    const end = new Date(d.getFullYear() + 1, 0, 1).getTime();
+    setToday(d.getFullYear() + (d.getTime() - start) / (end - start));
+  }, []);
+  return today;
+}
+
+/**
+ * The years as a ruler from the first entry to now, with each role and the degree as a span on it
+ * and a needle at today's date. It draws itself left to right as it scrolls into view.
+ */
 function Ruler() {
+  const today = useToday();
   const start = Math.min(...career.map((c) => c.from));
   const now = new Date().getFullYear() + 1;
   const span = now - start;
@@ -19,6 +36,11 @@ function Ruler() {
             style={{ left: pos(c.from), width: `calc(${pos(c.to ?? now)} - ${pos(c.from)})` }}
           />
         ))}
+        {today !== null && (
+          <span className="ruler-today" style={{ left: pos(today) }}>
+            <span className="ruler-today-label">Today</span>
+          </span>
+        )}
       </div>
       <div className="ruler-ticks">
         {years.map((y) => (

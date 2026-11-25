@@ -1,7 +1,10 @@
+import { useRef } from 'react';
 import { PRINCIPLES, type Principle } from '../../data/principles';
 import { career, profile } from '../../data/profile';
 import { STATUS_LABEL, bySlug, languageCounts, projects, statusCounts } from '../../data/projects';
+import { useLit } from '../../lib/motion';
 import { ArrowRight } from '../Icons';
+import LitText from '../LitText';
 
 function Evidence({ principle }: { principle: Principle }) {
   const project = principle.slug ? bySlug.get(principle.slug) : undefined;
@@ -33,6 +36,8 @@ const started = Math.min(...career.filter((c) => c.kind === 'work').map((c) => c
 
 /** Who I am, briefly, and the rules I try to work by. */
 export default function Principles() {
+  const intro = useRef<HTMLDivElement>(null);
+  useLit(intro);
   return (
     <section id="rules" className="section rules" aria-labelledby="rules-title">
       <div className="wrap">
@@ -44,11 +49,10 @@ export default function Principles() {
         </header>
 
         <div className="rules-grid">
-          <div className="rules-intro reveal">
-            <p>
-              I’m Prakash. I live in {profile.city}, near Mumbai, and I’ve worked at {profile.company} since {started}. Day to
-              day I work on microfrontend platforms, real-time monitoring of industrial telemetry and NLP-based automation.
-            </p>
+          <div ref={intro} className="rules-intro reveal">
+            <LitText
+              text={`I’m Prakash. I live in ${profile.city}, near Mumbai, and I’ve worked at ${profile.company} since ${started}. Day to day I work on microfrontend platforms, real-time monitoring of industrial telemetry and NLP-based automation.`}
+            />
             <p>I also build my own tools: {projects.length} so far, all of them on GitHub.</p>
             <p className="rules-hint label">Each rule links to a project where I applied it.</p>
           </div>

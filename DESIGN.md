@@ -42,6 +42,8 @@ signal colour. Wide, industrial display type; mono for anything a machine would 
    (case pages, the index, the palette) read the same content at different densities.
 5. **Motion explains.** Transform and opacity, plus three one-time effects: the plane outlines
    drawing, the bus growing, and the name's width/weight settling. The idle pulse pauses off-screen.
+   Reveals follow the scroll where the browser supports scroll-driven animation (they rise as they
+   come up the screen and go back if you scroll back) and fade in once elsewhere.
    `prefers-reduced-motion` gets the finished frame, no pulse, no smooth scroll, no view transitions.
 6. **Sharp, not soft.** Radius 0–2 px. Shared hairline grids (spec sheets, ledgers) instead of
    floating cards. No glassmorphism, no decorative gradients, no glow.
@@ -75,14 +77,53 @@ Labels are 11–12 px mono, uppercase, letter-spaced. Body is 17 px at 1.6; pros
 
 - **Stack diagram** (`home/StackDiagram.tsx`): five planes drawn flat in a 220-unit space and placed
   with one matrix each, so patterns and glyphs lie on the plane. The SVG is decorative; the five
-  callout buttons beside it are the real control (hover/focus lifts a plane, click jumps to the layer).
+  callout buttons beside it are the real control (hover/focus lifts a plane, click jumps to the layer;
+  on touch the plane lifts for a beat before the jump). As the hero scrolls away the planes drift
+  apart (a CSS scroll-driven animation on `.plane-spread`; static where unsupported or with reduced
+  motion). The hero clips with `overflow: clip`, not `hidden`, or the timeline would freeze.
 - **Cold-start readout** (`home/BootReadout.tsx`, `lib/boot.ts`): server response, first paint, DOM
   ready, interactive. Unknown values stay an em dash. `tests/boot.test.mjs` pins the mapping.
 - **Rules** (`home/Principles.tsx`, `data/principles.ts`): each rule links to a verbatim quote or a
   derived figure.
 - **Layers** (`home/Layers.tsx`): read from the surface down, with a sticky depth gauge (the mark).
-- **Case files** (`home/CaseFiles.tsx`, `Figures.tsx`): text column plus a sticky drawn figure.
-- **Bench** (`home/Bench.tsx`): a ruled spec-sheet grid, filterable by layer and status.
+  On phones the gauge becomes a bar pinned under the header (`.tracker`).
+- **Case files** (`home/CaseFiles.tsx`, `Figures.tsx`, `useScenes` in `lib/motion.ts`): one project
+  per screen, like a product page. The screens are sticky siblings, so each rises into place, holds
+  while you read it, and settles back (scales down, dims) as the next slides over it. While a screen
+  rises, its figure, title, rule and links arrive in turn from different depths; while it holds, the
+  rule lights up word by word. All of it follows the scroll position exactly (`--in`, `--out`,
+  `--lit`), nothing runs on a timer, and the CSS defaults are the finished frame. `#case-<slug>`
+  targets are in-flow anchors before each screen. Desktop shows the problem beside the figure when
+  there is room; smaller screens show the rule and the figure, and the rest is on the case page.
+- **Bench** (`home/Bench.tsx`): a ruled spec-sheet grid, filterable by layer and status. Filtering
+  moves the tiles to their new places (a same-page view transition; tiles are named only while it runs).
+- **Experience** (`home/Record.tsx`): a ruler of the years with each role as a span and a needle at
+  today's date, measured in the visitor's browser.
+
+## Scroll choreography
+
+The page is read like a product page: things arrive as you scroll to them and react to where you
+are, never on a timer, so they move exactly as fast as the reader and run backwards on the way up.
+CSS scroll-driven animation does what it can see (the block at the end of `home.css`); `useScenes`
+and `useLit` in `lib/motion.ts` do what needs measured positions. Unsupported browsers and reduced
+motion get the finished frame.
+
+- **Header:** a signal hairline along the bottom of the bar shows how far down the page you are.
+- **Hero:** leaving it condenses the name again, the boot sequence played backwards.
+- **About:** the intro lights up word by word; the rule nearest the middle of the screen is in focus
+  (full ink, signal number) and the others wait at lower opacity.
+- **Work:** the stacked scenes (above), with each rule lit word by word.
+- **Experience:** the ruler draws left to right, so today lands last; the role you are reading gets a
+  signal line across its top that fades as you move on.
+- **Contact:** the mark powers up plane by plane, Machine to Interface, as you reach the end: the
+  stack that booted at the top is fully online at the bottom.
+
+## Phones
+
+A phone is not a narrow desktop. Below 640 px the hero dissolves its copy column so the name, the
+stack (bleeding off the left edge, labels beside the planes) and the buttons share the first screen.
+Every hover effect needs a touch equivalent: `@media (hover: none)` gives controls a press state.
+Nothing moves sideways: content comes up from below and eases into place as you scroll.
 - **Index** (`pages/ProjectIndex.tsx`) and **case pages** (`pages/ProjectCase.tsx`). Missing content
   fields render nothing in production and a dashed "content slot" in dev.
 - **Palette** (Ctrl/⌘ K or `/`, deliberately unadvertised): search plus a few typed commands; lazy-loaded.

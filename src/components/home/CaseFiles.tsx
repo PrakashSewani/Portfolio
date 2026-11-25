@@ -1,95 +1,83 @@
+import { Fragment, useRef } from 'react';
 import { featured, STATUS_LABEL, type Project } from '../../data/projects';
+import { useScenes } from '../../lib/motion';
 import { CaseFigure } from '../Figures';
 import { ArrowRight, ArrowUpRight } from '../Icons';
 import LayerMark, { layerNames } from '../LayerMark';
+import LitText from '../LitText';
 
-function CaseFile({ project, n }: { project: Project; n: string }) {
+const pad = (n: number) => String(n).padStart(2, '0');
+const TOTAL = pad(featured.length);
+
+/**
+ * One project, one screen. Desktop shows the problem beside the figure; smaller screens show the
+ * rule and the figure. The approach and the details are on the project's own page.
+ */
+function CaseFile({ project, i }: { project: Project; i: number }) {
   return (
-    <article className="case" id={`case-${project.slug}`} aria-labelledby={`case-${project.slug}-title`}>
-      <header className="case-head reveal">
-        <div className="case-meta">
-          <span className="case-n">
-            Featured {n}
-            <span className="case-of"> / {String(featured.length).padStart(2, '0')}</span>
-          </span>
-          <span className={`status status-${project.status}`}>{STATUS_LABEL[project.status]}</span>
-          {project.year && <span className="case-year">{project.year}</span>}
-        </div>
-        <h3 id={`case-${project.slug}-title`} className="case-title" style={{ viewTransitionName: `title-${project.slug}` }}>
-          {project.title}
-        </h3>
-        <p className="case-kicker">{project.kicker}</p>
-        <p className="case-layers">
-          <LayerMark lit={project.layers} size={22} />
-          {layerNames(project.layers)}
-        </p>
-      </header>
+    <article className="case" aria-labelledby={`case-title-${project.slug}`}>
+      <div className="case-in">
+        <header className="case-head">
+          <div className="case-meta">
+            <span className="case-n">
+              Featured {pad(i + 1)}
+              <span className="case-of"> / {TOTAL}</span>
+            </span>
+            <span className={`status status-${project.status}`}>{STATUS_LABEL[project.status]}</span>
+            {project.year && <span className="case-year">{project.year}</span>}
+          </div>
+          <h3 id={`case-title-${project.slug}`} className="case-title" style={{ viewTransitionName: `title-${project.slug}` }}>
+            {project.title}
+          </h3>
+          <p className="case-kicker">{project.kicker}</p>
+          <p className="case-layers">
+            <LayerMark lit={project.layers} size={22} />
+            {layerNames(project.layers)}
+          </p>
+        </header>
 
-      {project.invariant && (
-        <blockquote className="invariant reveal">
-          <p className="label">Invariant</p>
-          <p className="invariant-text">{project.invariant}</p>
-        </blockquote>
-      )}
+        {project.invariant && (
+          <blockquote className="invariant">
+            <p className="label">Invariant</p>
+            <LitText className="invariant-text" text={project.invariant} />
+          </blockquote>
+        )}
 
-      <figure className="case-figure reveal">
-        <div className="case-figure-sticky">
+        <figure className="case-figure">
           <CaseFigure project={project} />
           {project.specimen && <figcaption className="figure-caption">{project.specimen.caption}</figcaption>}
-        </div>
-      </figure>
+        </figure>
 
-      {project.challenge && (
-        <div className="case-block reveal">
-          <h4 className="label">Problem</h4>
-          <p className="prose">{project.challenge}</p>
-        </div>
-      )}
+        {project.challenge && (
+          <div className="case-block case-problem">
+            <h4 className="label">Problem</h4>
+            <p className="prose">{project.challenge}</p>
+          </div>
+        )}
 
-      {project.decisions && (
-        <div className="case-block reveal">
-          <h4 className="label">Approach</h4>
-          <ol className="decisions">
-            {project.decisions.map((d, i) => (
-              <li key={d}>
-                <span className="decision-n">{String(i + 1).padStart(2, '0')}</span>
-                <span>{d}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-
-      {project.evidence && (
-        <div className="case-block reveal">
-          <h4 className="label">Details</h4>
-          <dl className="facts">
-            {project.evidence.map((e) => (
-              <div key={e.label}>
-                <dt>{e.label}</dt>
-                <dd>{e.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      )}
-
-      <div className="case-links reveal">
-        <a className="link" href={`/projects/${project.slug}`} data-link>
-          Read more <ArrowRight />
-        </a>
-        {project.links.map((l) => (
-          <a key={l.href} className="link" href={l.href} target="_blank" rel="noreferrer">
-            {l.label} <ArrowUpRight />
+        <div className="case-links">
+          <a className="link" href={`/projects/${project.slug}`} data-link>
+            Read more <ArrowRight />
           </a>
-        ))}
+          {project.links.map((l) => (
+            <a key={l.href} className="link" href={l.href} target="_blank" rel="noreferrer">
+              {l.label} <ArrowUpRight />
+            </a>
+          ))}
+        </div>
       </div>
     </article>
   );
 }
 
-/** The six featured projects, each led by the rule its design is built around. */
+/**
+ * The six featured projects, one full screen each. Each screen eases in as it rises, holds while
+ * you read it, and settles back as the next one slides over it.
+ */
 export default function CaseFiles() {
+  const scenes = useRef<HTMLDivElement>(null);
+  useScenes(scenes);
+
   return (
     <section id="work" className="section work" aria-labelledby="work-title">
       <div className="wrap">
@@ -103,11 +91,17 @@ export default function CaseFiles() {
             the main decisions and where it stands today.
           </p>
         </header>
-        <div className="cases">
-          {featured.map((project, i) => (
-            <CaseFile key={project.slug} project={project} n={String(i + 1).padStart(2, '0')} />
-          ))}
-        </div>
+      </div>
+
+      <div ref={scenes} className="cases">
+        {/* The screens are siblings so each later one can slide over the ones before it. */}
+        {featured.map((project, i) => (
+          <Fragment key={project.slug}>
+            {/* In the flow, unlike the sticky screen, so #case-<slug> always lands where the screen settles. */}
+            <span id={`case-${project.slug}`} className="scene-anchor" aria-hidden="true" />
+            <CaseFile project={project} i={i} />
+          </Fragment>
+        ))}
       </div>
     </section>
   );

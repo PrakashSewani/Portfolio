@@ -1,5 +1,97 @@
 import { useEffect, useState, type RefObject } from 'react';
 
+const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
+
+/**
+ * Full-screen scenes that stack as you scroll. Each `.case` is sticky; a `.scene-anchor` sits in the
+ * flow just before it, so its position says how far the scene has travelled even once it is stuck.
+ *
+ * Per scene, from the scroll position alone (nothing is time-based, so it is as smooth as the scroll):
+ * `--in`  0 → 1 as the scene rises from the bottom of the screen into place,
+ * `--out` 0 → 1 as the next scene slides over it,
+ * `--lit` 0 → 1 as its rule lights up, word by word, while it holds.
+ * Without JS the stylesheet defaults are the finished frame.
+ */
+export function useScenes(containerRef: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const root = containerRef.current;
+    if (!root) return;
+    const scenes = [...root.querySelectorAll<HTMLElement>('.case')];
+    const anchors = [...root.querySelectorAll<HTMLElement>('.scene-anchor')];
+    const last = scenes.length - 1;
+    let raf = 0;
+
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const bar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar-h')) || 56;
+      const span = Math.max(1, vh - bar);
+      scenes.forEach((scene, i) => {
+        const top = anchors[i]?.getBoundingClientRect().top ?? vh;
+        if (top > vh + 50 || top < bar - span * 2) return; // far away: leave it as it was
+        const t = (vh - top) / span; // 0 entering, 1 in place, 2 fully covered
+        scene.style.setProperty('--in', clamp(t, 0, 1).toFixed(3));
+        // Nothing slides over the last scene; it simply scrolls away with the section.
+        scene.style.setProperty('--out', i < last ? clamp(t - 1, 0, 1).toFixed(3) : '0');
+        scene.style.setProperty('--lit', clamp((t - 0.55) / 0.6, 0, 1).toFixed(3));
+      });
+    };
+    // A first pass for everything, so scenes far away start from the right state.
+    const prime = () => {
+      const vh = window.innerHeight;
+      scenes.forEach((scene, i) => {
+        const top = anchors[i]?.getBoundingClientRect().top ?? vh;
+        const past = top < vh / 2;
+        scene.style.setProperty('--in', past ? '1' : '0');
+        scene.style.setProperty('--out', past && i < last ? '1' : '0');
+        scene.style.setProperty('--lit', past ? '1' : '0');
+      });
+      update();
+    };
+
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    prime();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [containerRef]);
+}
+
+/**
+ * `--lit` on an element, 0 → 1 as its top climbs from `from` to `to` (fractions of the viewport
+ * height), for LitText inside it. Once it is past, it stays lit.
+ */
+export function useLit(ref: RefObject<HTMLElement | null>, from = 0.9, to = 0.42) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const lit = clamp((from * vh - el.getBoundingClientRect().top) / ((from - to) * vh), 0, 1);
+      el.style.setProperty('--lit', lit.toFixed(3));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [ref, from, to]);
+}
+
 /** Live `prefers-reduced-motion`. */
 export function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(
