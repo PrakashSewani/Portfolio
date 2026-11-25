@@ -1,58 +1,62 @@
 /**
- * The rules I build by. Each one points at evidence: either a line quoted verbatim from a project's
- * content file (the tests check that the quote really is in that file), or a figure derived from
- * the whole body of work.
+ * The rules I try to work by. Each one links to a project where it shows (`slug`), or to a figure
+ * derived from all the projects (`derived`). Any project a rule names must exist; the tests check.
  */
 export interface Principle {
   n: string;
   rule: string;
   gloss: string;
-  evidence?: { slug: string; quote: string };
+  /** The project the gloss refers to. */
+  slug?: string;
   derived?: 'languages' | 'status';
 }
 
 export const PRINCIPLES: Principle[] = [
   {
     n: '01',
-    rule: 'Solve the actual problem.',
-    gloss: 'Not the imaginary one, and not the one that demos well. Find where the question is really asked, and answer it there.',
-    evidence: { slug: 'class-spy', quote: 'Low-latency editor feedback — the hover card is the product' },
+    rule: 'Start from the real problem.',
+    gloss:
+      'Before writing code I try to pin down who has the problem and where it happens. With Class-Spy, the answer had to appear in the editor’s hover card, where the developer is already looking.',
+    slug: 'class-spy',
   },
   {
     n: '02',
-    rule: 'Milliseconds are a feature.',
-    gloss: 'When speed is the point, every millisecond is a design decision, so it gets made early and on purpose.',
-    evidence: { slug: 'veil', quote: 'without adding stream delay' },
+    rule: 'Treat speed as a requirement.',
+    gloss: 'If something needs to be fast, I plan for it from the start. Veil has to hide secrets on a live stream without adding any delay.',
+    slug: 'veil',
   },
   {
     n: '03',
-    rule: 'Complexity has to earn its place.',
-    gloss: 'Every moving part has to be deployed, secured and understood by the next person. Architecture serves the product; it does not become it.',
-    evidence: { slug: 'jury-forge', quote: 'One deployable: the Worker serves the dashboard, takes the GitHub webhooks and runs the reviews' },
+    rule: 'Keep it as simple as the problem allows.',
+    gloss:
+      'Every extra service is one more thing to deploy, secure and debug. Jury Forge is a single Cloudflare Worker that serves the dashboard, receives the GitHub webhooks and runs the reviews.',
+    slug: 'jury-forge',
   },
   {
     n: '04',
-    rule: 'Understand the system before you change it.',
-    gloss: 'Read it, measure it, classify it. Then touch it.',
-    evidence: { slug: 'dormant', quote: 'Classify before deleting: nothing goes unless it is confidently regenerable' },
+    rule: 'Understand a system before changing it.',
+    gloss: 'I read and measure before I touch anything. Dormant classifies every file before it deletes a single one.',
+    slug: 'dormant',
   },
   {
     n: '05',
-    rule: 'Fail safe, never silent.',
-    gloss: 'Decide what stops when a dependency dies, before it dies. An honest stop beats a quiet wrong answer.',
-    evidence: { slug: 'nexusrelay', quote: 'Fail closed: losing Redis stops finite limits, losing PostgreSQL stops untracked dispatch' },
+    rule: 'Decide in advance how things fail.',
+    gloss:
+      'When a dependency goes down, I would rather the system stop than carry on with bad data. NexusRelay stops sending requests it cannot record.',
+    slug: 'nexusrelay',
   },
   {
     n: '06',
-    rule: 'Right tool, not favourite tool.',
-    gloss: 'I am not attached to a language or a framework. The problem picks; I learn whatever it picked.',
+    rule: 'Use the right tool for the job.',
+    gloss: 'I don’t have a favourite language, so I choose per project. Here is what my side projects ended up using:',
     derived: 'languages',
   },
   {
     n: '07',
-    rule: 'Build it, ship it, hold it to a bar.',
-    gloss: 'Experiment to find out, ship to learn, and archive what falls short. Knowing when to stop is part of the job.',
+    rule: 'Finish things, and be honest about them.',
+    gloss:
+      'Some projects ship, some are still in progress, and a few don’t work out. I archived TrueContact because it shipped but didn’t meet the bar I had set for it.',
+    slug: 'truecontact',
     derived: 'status',
-    evidence: { slug: 'truecontact', quote: 'it shipped, but the product did not meet the bar I set for it' },
   },
 ];

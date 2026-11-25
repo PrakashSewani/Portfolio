@@ -8,7 +8,7 @@ import Record from '../components/home/Record';
 import { SITE_TITLE, useDocumentMeta } from '../lib/meta';
 
 const DESCRIPTION =
-  'Prakash Sewani is a software engineer who builds systems through every layer: machines and industrial automation, infrastructure, backend services, AI, and the interfaces on top.';
+  'Prakash Sewani is a software engineer in Kalyan, India, working on industrial telemetry, backend services, AI tooling and web interfaces.';
 
 export default function Home() {
   useDocumentMeta({ title: SITE_TITLE, description: DESCRIPTION });

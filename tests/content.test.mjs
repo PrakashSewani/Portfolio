@@ -78,17 +78,14 @@ test('every figure kind a case file names is actually drawn', async () => {
   assert.ok(SPECIMEN_KINDS.includes('none'));
 });
 
-test('every principle’s evidence is quoted verbatim from that project’s content', async () => {
+test('every principle points at a real project, and names it in its text', async () => {
   const bySlug = new Map((await loadContent()).map((p) => [p.slug, p]));
   for (const principle of PRINCIPLES) {
-    if (!principle.evidence) {
-      assert.ok(principle.derived, `principle ${principle.n} has neither a quote nor a derived figure`);
-      continue;
-    }
-    const project = bySlug.get(principle.evidence.slug);
-    assert.ok(project, `principle ${principle.n} cites missing project "${principle.evidence.slug}"`);
-    const text = [project.summary, project.challenge, project.invariant, ...(project.decisions ?? [])].filter(Boolean).join('\n');
-    assert.ok(text.includes(principle.evidence.quote), `principle ${principle.n}: "${principle.evidence.quote}" is not in ${project.slug}.json`);
+    assert.ok(principle.slug || principle.derived, `principle ${principle.n} has neither a project nor a derived figure`);
+    if (!principle.slug) continue;
+    const project = bySlug.get(principle.slug);
+    assert.ok(project, `principle ${principle.n} links to missing project "${principle.slug}"`);
+    assert.ok(principle.gloss.includes(project.title), `principle ${principle.n} links to ${project.title} but its text does not mention it`);
   }
 });
 

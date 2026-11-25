@@ -10,18 +10,17 @@ export default function NotFound({ path, what = 'page' }: { path: string; what?:
     <section className="page nf">
       <div className="wrap nf-inner">
         <LayerMark lit={[]} size={120} />
-        <p className="sec-index label">404 — No signal</p>
-        <h1 className="sec-title">Nothing on any layer at {path}.</h1>
+        <p className="sec-index label">404</p>
+        <h1 className="sec-title">Page not found</h1>
         <p className="sec-lede">
-          {what === 'project' ? 'There is no project by that name.' : 'That address does not lead anywhere.'} The work is
-          all reachable from here:
+          {what === 'project' ? 'There is no project at' : 'There is nothing at'} <code>{path}</code>.
         </p>
         <div className="nf-links">
           <a className="link" href="/" data-link>
             Home <ArrowRight />
           </a>
           <a className="link" href="/projects" data-link>
-            Every project <ArrowRight />
+            All projects <ArrowRight />
           </a>
         </div>
       </div>

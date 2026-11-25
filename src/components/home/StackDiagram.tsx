@@ -21,6 +21,7 @@ const CX = 228;
 const STEP = 86;
 const TOP = 22;
 const W = 460;
+const SPREAD = 16; // extra gap per plane once the hero has scrolled away
 const H = TOP + (LAYERS.length - 1) * STEP + 2 * S * KY + 18;
 
 const planeTop = (i: number) => TOP + (LAYERS.length - 1 - i) * STEP;
@@ -125,7 +126,18 @@ function Callout({ layer, index, count, active, onHover }: { layer: Layer; index
         onMouseLeave={() => onHover(null)}
         onFocus={() => onHover(layer.id)}
         onBlur={() => onHover(null)}
-        onClick={() => navigate(`#layer-${layer.id}`)}
+        onClick={() => {
+          // On a touch screen there is no hover, so lift the plane first and let it be seen.
+          const touch = window.matchMedia('(hover: none)').matches;
+          const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!touch || reduced) return navigate(`#layer-${layer.id}`);
+          onHover(layer.id);
+          window.setTimeout(() => {
+            navigate(`#layer-${layer.id}`);
+            // Touch never sends a mouseleave; drop the lift so the stack is whole when you come back.
+            onHover(null);
+          }, 280);
+        }}
         aria-describedby={`sc-meta-${layer.id}`}
       >
         <span className="sc-lead" aria-hidden="true" />
@@ -136,7 +148,7 @@ function Callout({ layer, index, count, active, onHover }: { layer: Layer; index
             <span className="sc-pip" aria-hidden="true" />
           </span>
           <span className="sc-meta" id={`sc-meta-${layer.id}`}>
-            {layer.line} · {count} project{count === 1 ? '' : 's'}
+            {count} project{count === 1 ? '' : 's'}
           </span>
         </span>
       </button>
@@ -178,21 +190,29 @@ export default function StackDiagram({ boot }: { boot: boolean }) {
           const y = planeCentreY(i);
           const next = i < LAYERS.length - 1 ? planeCentreY(i + 1) : null;
           const lifted = hoverIndex === i;
+          // As the hero scrolls away the planes drift apart from the middle one (see .plane-spread).
+          const spread = { ['--spread' as string]: `${-(i - 2) * SPREAD}px` };
           return (
             <g key={layer.id}>
               <g className={lifted ? 'plane is-lifted' : 'plane'} style={{ ['--i' as string]: i }} data-layer={layer.id}>
-                <g className="plane-boot">
-                  <g transform={matrix(i)}>
-                    <rect className="plane-fill" width={S} height={S} />
-                    <rect className="plane-pattern" width={S} height={S} fill={PATTERN[layer.id]} />
-                    <g className="plane-glyph">{GLYPHS[layer.id]}</g>
-                    <rect className="plane-edge" width={S} height={S} pathLength={1} />
+                <g className="plane-spread" style={spread}>
+                  <g className="plane-boot">
+                    <g transform={matrix(i)}>
+                      <rect className="plane-fill" width={S} height={S} />
+                      <rect className="plane-pattern" width={S} height={S} fill={PATTERN[layer.id]} />
+                      <g className="plane-glyph">{GLYPHS[layer.id]}</g>
+                      <rect className="plane-edge" width={S} height={S} pathLength={1} />
+                    </g>
+                    <path className="plane-stub" d={`M${CX + S * KX} ${y}H${W}`} />
+                    <ellipse className="plane-via" cx={CX} cy={y} rx={12} ry={4} />
                   </g>
-                  <path className="plane-stub" d={`M${CX + S * KX} ${y}H${W}`} />
-                  <ellipse className="plane-via" cx={CX} cy={y} rx={12} ry={4} />
                 </g>
               </g>
-              {next !== null && <path className="bus" style={{ ['--i' as string]: i }} d={`M${CX} ${y}V${next}`} />}
+              {next !== null && (
+                <g className="bus-spread" style={{ ['--spread' as string]: `${-(i - 1.5) * SPREAD}px`, ['--stretch' as string]: (STEP + SPREAD) / STEP }}>
+                  <path className="bus" style={{ ['--i' as string]: i }} d={`M${CX} ${y}V${next}`} />
+                </g>
+              )}
             </g>
           );
         })}

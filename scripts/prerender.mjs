@@ -58,7 +58,7 @@ function projectPage(template, project) {
       project.invariant ? `<h2>Invariant</h2><p>${esc(project.invariant)}</p>` : '',
       decisions ? `<h2>Approach</h2>${decisions}` : '',
       `<p>${links}</p>`,
-      `<p><a style="color:#c8f25c" href="/projects">Every project</a></p>`,
+      `<p><a style="color:#c8f25c" href="/projects">All projects</a></p>`,
     ].join(''),
   });
 }
@@ -68,10 +68,10 @@ function indexPage(template, projects) {
   for (const p of projects) counts[p.status] += 1;
   const list = projects.map((p) => `<li><a style="color:#c8f25c" href="/projects/${p.slug}">${esc(p.title)}</a> — ${esc(p.summary)}</li>`).join('');
   return page(template, {
-    title: `Every project — ${NAME}`,
+    title: `All projects — ${NAME}`,
     description: `All ${projects.length} projects by ${NAME}: ${counts.shipped} shipped, ${counts['in-progress']} in progress, ${counts.archived} archived. Searchable by layer, language and status.`,
     urlPath: '/projects',
-    body: `<h1>Every project</h1><ul>${list}</ul>`,
+    body: `<h1>All projects</h1><ul>${list}</ul>`,
   });
 }
 

@@ -27,7 +27,7 @@ export default function Footer() {
         <dl className="foot-build">
           <div>
             <dt>Built with</dt>
-            <dd>React, Vite and plain CSS. No UI kit, no animation library.</dd>
+            <dd>React, Vite and plain CSS</dd>
           </div>
           {__BUILD_SHA__ && (
             <div>

@@ -65,17 +65,17 @@ export default function ProjectCase({ slug }: { slug: string }) {
       <div className="wrap">
         <nav className="cp-crumbs" aria-label="Breadcrumb">
           <a href={project.featured ? '/#work' : '/#bench'} data-link>
-            <ArrowLeft size={14} /> {project.featured ? 'Case files' : 'Bench'}
+            <ArrowLeft size={14} /> {project.featured ? 'Selected work' : 'More work'}
           </a>
           <span aria-hidden="true">/</span>
           <a href="/projects" data-link>
-            Index
+            All projects
           </a>
         </nav>
 
         <header className="cp-head">
           <p className="cp-meta">
-            {n ? <span className="case-n">Case {n}</span> : <span className="case-n">{project.kicker?.split('/')[0]?.trim()}</span>}
+            {n ? <span className="case-n">Featured {n}</span> : <span className="case-n">{project.kicker?.split('/')[0]?.trim()}</span>}
             <span className={`status status-${project.status}`}>{STATUS_LABEL[project.status]}</span>
             {project.year && <span>{project.year}</span>}
           </p>
@@ -170,7 +170,7 @@ export default function ProjectCase({ slug }: { slug: string }) {
           )}
 
           {project.evidence ? (
-            <Section n={num()} title="Facts">
+            <Section n={num()} title="Details">
               <dl className="facts facts-lg">
                 {project.evidence.map((e) => (
                   <div key={e.label}>
@@ -185,25 +185,24 @@ export default function ProjectCase({ slug }: { slug: string }) {
           )}
 
           {project.ownership && (
-            <Section n={num()} title="My part">
+            <Section n={num()} title="My role">
               <p className="cp-lead">{project.ownership}</p>
             </Section>
           )}
 
           {primary && (
-            <Section n={num()} title="Where it sits">
+            <Section n={num()} title="Layer">
               <p className="prose muted">
-                Primary layer: <strong className="cp-strong">{primary.name}</strong>, {primary.line.toLowerCase()}.{' '}
+                Mainly <strong className="cp-strong">{primary.name}</strong> ({primary.line.toLowerCase()}).{' '}
                 <a className="inline-link" href={`/#layer-${primary.id}`} data-link>
-                  See the layer
+                  More on this layer
                 </a>
-                .
               </p>
             </Section>
           )}
         </div>
 
-        <nav className="cp-pager" aria-label={project.featured ? 'Other case files' : 'Other projects'}>
+        <nav className="cp-pager" aria-label={project.featured ? 'Other featured projects' : 'Other projects'}>
           <a href={`/projects/${prev.slug}`} data-link className="cp-pager-prev">
             <span className="label">
               <ArrowLeft size={13} /> Previous

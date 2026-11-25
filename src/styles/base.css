@@ -357,6 +357,36 @@ kbd,
   transform: none;
 }
 
+/*
+ * Where the browser can tie animation to scroll, the reveal follows the scroll instead of firing
+ * once: things rise and sharpen as they come up the screen, and go back if you scroll back.
+ */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(64px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal,
+    .js .reveal.in,
+    .js .layer > *,
+    .js .bench-grid > li {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 24vh;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -381,4 +411,32 @@ kbd,
 ::view-transition-group(*) {
   animation-duration: 420ms;
   animation-timing-function: var(--ease);
+}
+
+/* ---------- touch ---------- */
+
+/* Hover does nothing on a phone, so every control answers the press instead. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: none) {
+  .btn:active,
+  .chip:active,
+  .bar-menu:active,
+  .layer-projects a:active {
+    transform: scale(0.96);
+    border-color: var(--signal);
+  }
+  .link:active,
+  .rule-src:active,
+  .sc-btn:active .sc-name {
+    color: var(--signal);
+    border-color: var(--signal);
+  }
+  .tile:active,
+  .ledger-row:active,
+  .channel-links a:active,
+  .record-certs a:active {
+    background: var(--raised);
+  }
 }

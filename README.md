@@ -53,7 +53,7 @@ src/
   pages/                    Home, ProjectIndex, ProjectCase, NotFound
   data/                     projects.ts (validated content + derived counts), layers.ts,
                             principles.ts, profile.ts
-  lib/                      projects.js (+ .d.ts, the schema), router.tsx, boot.ts, motion.ts, meta.ts
+  lib/                      projects.js (+ .d.ts, the schema), router.tsx, boot.ts, motion.ts (reveal, active section, useScenes, useLit), meta.ts
   styles/                   tokens, base, shell, home, figures, case, index
 scripts/
   prerender.mjs             post-build: per-project HTML, /projects, sitemap.xml, measured script weight

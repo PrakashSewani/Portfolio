@@ -18,15 +18,28 @@ export default function Layers() {
         <header className="sec-head reveal">
           <p className="sec-index label">02 — Layers</p>
           <h2 id="layers-title" className="sec-title">
-            Five layers, read from the surface down.
+            What I work on
           </h2>
           <p className="sec-lede">
-            I am not attached to one layer. The interesting problems tend to cross two or three of them, so I work in all
-            five.
+            I group my work into five layers, from the hardware up to the interface. Many of my projects touch more than one.
           </p>
         </header>
 
         <div className="layers-grid">
+          {/* Phones only: the gauge as a bar pinned under the header while the section is in view. */}
+          <div className="tracker" aria-hidden="true">
+            <LayerMark lit={[current.id]} size={28} className="tracker-mark" />
+            <span className="tracker-n">{current.n} / 05</span>
+            <span key={current.id} className="tracker-name">
+              {current.name}
+            </span>
+            <span className="tracker-steps">
+              {LAYERS_TOP_DOWN.map((l, i) => (
+                <span key={l.id} className={i <= LAYERS_TOP_DOWN.indexOf(current) ? 'is-lit' : undefined} />
+              ))}
+            </span>
+          </div>
+
           <aside className="gauge" aria-hidden="true">
             <div className="gauge-inner">
               <LayerMark lit={[current.id]} size={148} className="gauge-mark" />
@@ -42,7 +55,7 @@ export default function Layers() {
                 <article key={layer.id} id={`layer-${layer.id}`} className={layer.id === active ? 'layer is-active' : 'layer'} aria-labelledby={`layer-${layer.id}-title`}>
                   <header className="layer-head">
                     <span className="layer-n">{layer.n}</span>
-                    <div>
+                    <div className="layer-title">
                       <h3 id={`layer-${layer.id}-title`} className="layer-name">
                         {layer.name}
                       </h3>
@@ -68,14 +81,14 @@ export default function Layers() {
                     )}
                     <div>
                       <dt className="label">
-                        Built here <span className="layer-count">{here.length}</span>
+                        Projects <span className="layer-count">{here.length}</span>
                       </dt>
                       <dd className="layer-projects">
                         {here.map((p) => {
                           const n = caseNumber(p);
                           return (
                             <a key={p.slug} href={`/projects/${p.slug}`} data-link className={n ? 'is-case' : undefined}>
-                              {n && <span className="layer-case">Case {n}</span>}
+                              {n && <span className="layer-case">Featured</span>}
                               {p.title}
                             </a>
                           );
